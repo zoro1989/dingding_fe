@@ -1,15 +1,15 @@
 <template>
   <transition name="slide">
-    <div class="apply-list">
+    <div class="lszb-list">
       <f7-navbar>
         <!--<f7-nav-left back-link="返回" @back-click="goBack" :sliding="false">-->
         <!--</f7-nav-left>-->
-        <f7-nav-title>终端医疗申请列表</f7-nav-title>
+        <f7-nav-title>连锁总部申请列表</f7-nav-title>
         <f7-nav-right>
           <f7-link @click="addApply">新增</f7-link>
         </f7-nav-right>
       </f7-navbar>
-      <scroll class="apply" @scrollToEnd="searchMore" :pullup="pullup" :data="list">
+      <scroll class="lszb" @scrollToEnd="searchMore" :pullup="pullup" :data="list">
         <f7-list media-list>
           <f7-list-item
             swipeout
@@ -20,20 +20,26 @@
               <div class="item-title-row" slot="before-title">
                 <div class="item-title">{{item.shopName}}</div>
                 <div class="item-subtitle margin-left text-color-gray">{{item.shopType}}</div>
-                <div class="item-after" @click="onView(item.id)">
+                <div class="item-after" >
                   <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
                 </div>
               </div>
-              <div class="item-subtitle">{{item.shopUser}}</div>
+              <div class="item-subtitle">董事长：{{item.shopUser}}</div>
               <div class="item-text">
-                <div>{{item.shopAddr}}</div>
+                <div>药店地址：{{item.shopAddr}}</div>
+                <div>合作时间：{{item.cooperationTime}}</div>
+                <div>连锁门店数量：{{item.shopTotal}}</div>
+                <div>直营店数量：{{item.directlyTotal}}</div>
+                <div>加盟店数量：{{item.joinTotal}}</div>
+                <div>连锁总部：{{item.mainShopAddr}}</div>
+                <div>连锁仓库：{{item.chainWarehous}}</div>
                 <div :class="auditStatusColor(item.auditStatus)">{{auditStatusDisp(item.auditStatus)}}</div>
               </div>
             </div>
             <f7-swipeout-actions right>
               <f7-swipeout-button v-if="item.auditStatus === '1' || item.auditStatus === '2'" color="orange" @click="onEdit(item.id)">编辑</f7-swipeout-button>
               <f7-swipeout-button color="red" v-if="item.auditStatus === '1'" @click="onDelete(item.id)">删除</f7-swipeout-button>
-              <f7-swipeout-button color="blue" v-if="item.auditStatus === '1' || item.auditStatus === '2'" @click="onAudit(item)">审批</f7-swipeout-button>
+              <f7-swipeout-button color="blue" v-if="item.auditStatus === '1' || item.auditStatus === '2'">审批</f7-swipeout-button>
               <f7-swipeout-button color="blue" v-if="item.auditStatus === '4'">结束</f7-swipeout-button>
             </f7-swipeout-actions>
           </f7-list-item>
@@ -76,17 +82,14 @@
       }
     },
     created() {
-      this.initData()
+      fetch('get', api.chaintotalInfo, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
+        console.log(res)
+        this.list = res.data
+        this.maxCount = res.count
+        this.showLoading = false
+      })
     },
     methods: {
-      initData() {
-        fetch('get', api.terminalInfo, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
-          console.log(res)
-          this.list = res.data
-          this.maxCount = res.count
-          this.showLoading = false
-        })
-      },
       auditStatusColor(auditStatus) {
         if (auditStatus === '1') {
           return 'text-color-blue'
@@ -113,12 +116,6 @@
           return '结束流程'
         }
       },
-      onView(id) {
-        this.$router.push({
-            path: `/apply-view/${id}`
-          }
-        )
-      },
       onDelete(id) {
         const app = this.$f7
         let _this = this
@@ -127,39 +124,36 @@
             return item.id === id
           })
           _this.list.splice(index, 1)
-          fetch('delete', api.terminalInfo + id, {}, this).then((res) => {
+          fetch('delete', api.chaintotalInfo + id, {}, this).then((res) => {
             console.log(res)
           })
         })
       },
       onEdit(id) {
         this.$router.push({
-            path: `/apply/${id}`
+            path: `/lszb/${id}`
           }
         )
       },
       addApply() {
         this.$router.push({
-            path: `/apply/0`
+            path: `/lszb/0`
           }
         )
       },
       onAudit(item) {
         const app = this.$f7
         let _this = this
-        app.dialog.confirm('确定要提交审批吗?', '提示', function () {
+        app.dialog.confirm('确定要审批吗?', '提示', function () {
           let params = {
             tableId: item.id,
-            id: item.auditStatus === '2' ? item.auditId : undefined,
+            id: item.auditStatus === '2' ? item.auditId : '',
             auditStep: item.auditStep,
             auditResult: '1',
-            auditStatus: item.auditStatus,
-            auditType: 'merchantTerminal'
+            auditType: 'chainTotal'
           }
           fetch('post', api.terminalAudit, params, _this).then((res) => {
             console.log(res)
-            _this.pageNo = 1
-            this.initData()
           })
         })
       },
@@ -177,7 +171,7 @@
         }
         this.pageNo = this.pageNo + 1
         console.log(this.pageNo)
-        fetch('get', api.terminalInfo, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
+        fetch('get', api.chaintotalInfo, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
           console.log(res)
           this.list = this.list.concat(res.data)
           this.showLoading = false
@@ -191,7 +185,7 @@
     transition: all 0.3s
   .slide-enter, .slide-leave-to
     transform: translate3d(100%, 0, 0)
-  .apply-list
+  .lszb-list
     background: #fff!important
     position: fixed
     z-index: 2
@@ -199,7 +193,7 @@
     left: 0
     right: 0
     bottom: 0
-    .apply
+    .lszb
       background: #fff!important
       position: fixed
       top: 44px

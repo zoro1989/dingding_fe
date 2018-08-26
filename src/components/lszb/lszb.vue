@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div class="apply">
+    <div class="lszb">
       <scroll class="apply-form">
         <div>
           <form class="list" id="apply-form">
@@ -8,9 +8,9 @@
               <li>
                 <div class="item-content item-input">
                   <div class="item-inner">
-                    <div class="item-title item-label">药店名称</div>
+                    <div class="item-title item-label">连锁店名称</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="shopName" placeholder="请输入药店名称" :disabled="isReadonly">
+                      <input type="text" name="shopName" placeholder="请输入连锁店名称" :disabled="isReadonly">
                     </div>
                   </div>
                 </div>
@@ -18,9 +18,9 @@
               <li>
                 <div class="item-content item-input">
                   <div class="item-inner">
-                    <div class="item-title item-label">药店类别</div>
+                    <div class="item-title item-label">连锁店性质</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="shopType" id="shopType" placeholder="请输入药店类别" :disabled="isReadonly">
+                      <input type="text" name="shopType" id="shopType" placeholder="请输入连锁店性质" :disabled="isReadonly">
                     </div>
                   </div>
                 </div>
@@ -40,9 +40,9 @@
               <li>
                 <div class="item-content item-input">
                   <div class="item-inner">
-                    <div class="item-title item-label">药店负责人姓名</div>
+                    <div class="item-title item-label">合作时间</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="shopUser" placeholder="请输入药店负责人姓名" :disabled="isReadonly">
+                      <input type="text" name="cooperationTime" placeholder="请选择合作时间" readonly="readonly" id="cooperationTime" :disabled="isReadonly"/>
                     </div>
                   </div>
                 </div>
@@ -50,9 +50,9 @@
               <li>
                 <div class="item-content item-input">
                   <div class="item-inner">
-                    <div class="item-title item-label">药店负责人电话</div>
+                    <div class="item-title item-label">董事长姓名</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="shopUserPhone" placeholder="请输入药店负责人电话" :disabled="isReadonly">
+                      <input type="text" name="chairmanName" placeholder="请输入董事长姓名" :disabled="isReadonly">
                     </div>
                   </div>
                 </div>
@@ -60,9 +60,90 @@
               <li>
                 <div class="item-content item-input">
                   <div class="item-inner">
-                    <div class="item-title item-label">药店合作时间</div>
+                    <div class="item-title item-label">董事长性别</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="cooperationTime" placeholder="请选择药店合作时间" readonly="readonly" :disabled="isReadonly" id="cooperationTime"/>
+                      <input type="text" name="chairmanSex" id="chairmanSex" placeholder="请输入董事长性别" :disabled="isReadonly">
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">董事长出生日期</div>
+                    <div class="item-input-wrap">
+                      <input type="text" placeholder="请选择董事长出生日期" name="chairmanBirth" readonly="readonly" id="chairmanBirth" :disabled="isReadonly"/>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">董事长电话</div>
+                    <div class="item-input-wrap">
+                      <input type="text" name="chairmanPhone" placeholder="请输入董事长电话" :disabled="isReadonly">
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">连锁门店数量</div>
+                    <div class="item-input-wrap">
+                      <input type="text" name="shopTotal" placeholder="请输入连锁门店数量" :disabled="isReadonly">
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">直营店数量</div>
+                    <div class="item-input-wrap">
+                      <input type="text" name="directlyTotal" placeholder="请输入直营店数量" :disabled="isReadonly">
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">加盟店数量</div>
+                    <div class="item-input-wrap">
+                      <input type="text" name="joinTotal" placeholder="请输入加盟店数量" :disabled="isReadonly">
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">库管员</div>
+                    <div class="item-input-wrap">
+                      <input type="text" name="houseKeeper" placeholder="请输入库管员" :disabled="isReadonly">
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">连锁总部地址</div>
+                    <div class="item-input-wrap">
+                      <input type="text" name="mainShopAddr" placeholder="请输入连锁总部地址" :disabled="isReadonly">
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">连锁仓库地址</div>
+                    <div class="item-input-wrap">
+                      <input type="text" name="chainWarehous" placeholder="请输入连锁仓库地址" :disabled="isReadonly">
                     </div>
                   </div>
                 </div>
@@ -80,19 +161,9 @@
               <li>
                 <div class="item-content item-input">
                   <div class="item-inner">
-                    <div class="item-title item-label">营业员人数</div>
+                    <div class="item-title item-label">本年度是否与万通签订销售协议</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="personCount" placeholder="请输入营业员人数" :disabled="isReadonly">
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">药店负责人生日</div>
-                    <div class="item-input-wrap">
-                      <input type="text" placeholder="请选择药店负责人生日" name="shopUserBirth" readonly="readonly" :disabled="isReadonly" id="shopUserBirth"/>
+                      <input type="text" name="isSigned" id="isSigned" placeholder="请选择本年度是否与万通签订销售协议" :disabled="isReadonly">
                     </div>
                   </div>
                 </div>
@@ -132,18 +203,18 @@
         listId: this.$route.params.id || '',
         mapAddr: '',
         longitude: '',
-        latitude: ''
+        latitude: ' '
       }
     },
     mounted() {
       const self = this
       const app = self.$f7
       if (this.listId && this.listId !== '0') {
-        fetch('get', api.terminalInfoGetDetail + this.listId, {}, this).then((res) => {
+        fetch('get', api.chaintotalInfoGetDetail + this.listId, {}, this).then((res) => {
           app.form.fillFromData('#apply-form', res.data)
         })
       }
-      if (this.$route.name === 'apply-view') {
+      if (this.$route.name === 'lszb-view') {
         return
       }
       let today = new Date()
@@ -189,8 +260,8 @@
           }
         }
       })
-      self.shopUserBirthDatePiker = app.picker.create({
-        inputEl: '#shopUserBirth',
+      self.chairmanBirthDatePiker = app.picker.create({
+        inputEl: '#chairmanBirth',
         toolbar: true,
         rotateEffect: true,
         routableModals: false,
@@ -237,7 +308,35 @@
         routableModals: false,
         source: function (query, render) {
           let results = []
-          let types = ['医疗', '单体']
+          let types = ['国有', '股份', '个体']
+          for (let i = 0; i < types.length; i++) {
+            if (types[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(types[i])
+          }
+          // Render items by passing array with result items
+          render(results)
+        }
+      })
+      self.chairmanSexPiker = app.autocomplete.create({
+        inputEl: '#chairmanSex',
+        openIn: 'dropdown',
+        routableModals: false,
+        source: function (query, render) {
+          let results = []
+          let types = ['男', '女']
+          for (let i = 0; i < types.length; i++) {
+            if (types[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(types[i])
+          }
+          // Render items by passing array with result items
+          render(results)
+        }
+      })
+      self.isSignedPiker = app.autocomplete.create({
+        inputEl: '#isSigned',
+        openIn: 'dropdown',
+        routableModals: false,
+        source: function (query, render) {
+          let results = []
+          let types = ['签订', '未签订']
           for (let i = 0; i < types.length; i++) {
             if (types[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(types[i])
           }
@@ -248,12 +347,14 @@
     },
     destroyed() {
       this.cooperationTimeDatePiker && this.cooperationTimeDatePiker.destroy()
-      this.shopUserBirthDatePiker && this.shopUserBirthDatePiker.destroy()
+      this.chairmanBirthDatePiker && this.chairmanBirthDatePiker.destroy()
       this.shopTypePiker && this.shopTypePiker.destroy()
+      this.chairmanSexPiker && this.chairmanSexPiker.destroy()
+      this.isSignedPiker && this.isSignedPiker.destroy()
     },
     computed: {
       isReadonly () {
-        return this.$route.name === 'apply-view'
+        return this.$route.name === 'lszb-view'
       }
     },
     methods: {
@@ -263,13 +364,18 @@
       onSave() {
         const app = this.$f7
         let formData = app.form.convertToData('#apply-form')
+        if (formData['isSigned'] === '签订') {
+          formData['isSigned'] = '0'
+        } else if (formData['isSigned'] === '未签订') {
+          formData['isSigned'] = '1'
+        }
         if (this.listId && this.listId !== '0') {
-          fetch('put', api.terminalInfo + this.listId, formData, this).then((res) => {
-            this.$router.replace('/apply-list')
+          fetch('put', api.chaintotalInfo + this.listId, formData, this).then((res) => {
+            this.$router.replace('/lszb-list')
           })
         } else {
-          fetch('post', api.terminalInfoSave, formData, this).then((res) => {
-            this.$router.replace('/apply-list')
+          fetch('post', api.chaintotalInfoSave, formData, this).then((res) => {
+            this.$router.replace('/lszb-list')
           })
         }
       },
@@ -289,7 +395,7 @@
     transition: all 0.3s
   .slide-enter, .slide-leave-to
     transform: translate3d(0, -100%, 0)
-  .apply
+  .lszb
     position: fixed
     top: 0
     left: 0

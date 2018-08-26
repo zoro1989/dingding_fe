@@ -1,15 +1,15 @@
 <template>
   <transition name="slide">
-    <div class="apply-list">
+    <div class="yhsq-list">
       <f7-navbar>
         <!--<f7-nav-left back-link="返回" @back-click="goBack" :sliding="false">-->
         <!--</f7-nav-left>-->
-        <f7-nav-title>终端医疗申请列表</f7-nav-title>
+        <f7-nav-title>要货申请列表</f7-nav-title>
         <f7-nav-right>
           <f7-link @click="addApply">新增</f7-link>
         </f7-nav-right>
       </f7-navbar>
-      <scroll class="apply" @scrollToEnd="searchMore" :pullup="pullup" :data="list">
+      <scroll class="yhsq" @scrollToEnd="searchMore" :pullup="pullup" :data="list">
         <f7-list media-list>
           <f7-list-item
             swipeout
@@ -18,15 +18,18 @@
           >
             <div slot="inner-start">
               <div class="item-title-row" slot="before-title">
-                <div class="item-title">{{item.shopName}}</div>
-                <div class="item-subtitle margin-left text-color-gray">{{item.shopType}}</div>
+                <div class="item-title">客商名称：{{item.merchantsName}}</div>
                 <div class="item-after" @click="onView(item.id)">
                   <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
                 </div>
               </div>
-              <div class="item-subtitle">{{item.shopUser}}</div>
+              <div class="item-subtitle">
+                <div>要货人名称：{{item.requireGoodsName}}</div>
+                <div>要货人分公司：{{item.requireGoodsOffice}}</div>
+                <div>要货人支公司：{{item.requireGoodsBranchOffice}}</div>
+              </div>
               <div class="item-text">
-                <div>{{item.shopAddr}}</div>
+                <div>产品名称：{{item.goodsName}}</div>
                 <div :class="auditStatusColor(item.auditStatus)">{{auditStatusDisp(item.auditStatus)}}</div>
               </div>
             </div>
@@ -76,17 +79,14 @@
       }
     },
     created() {
-      this.initData()
+      fetch('get', api.requireGoodsInfo, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
+        console.log(res)
+        this.list = res.data
+        this.maxCount = res.count
+        this.showLoading = false
+      })
     },
     methods: {
-      initData() {
-        fetch('get', api.terminalInfo, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
-          console.log(res)
-          this.list = res.data
-          this.maxCount = res.count
-          this.showLoading = false
-        })
-      },
       auditStatusColor(auditStatus) {
         if (auditStatus === '1') {
           return 'text-color-blue'
@@ -115,7 +115,7 @@
       },
       onView(id) {
         this.$router.push({
-            path: `/apply-view/${id}`
+            path: `/yhsq-view/${id}`
           }
         )
       },
@@ -127,39 +127,36 @@
             return item.id === id
           })
           _this.list.splice(index, 1)
-          fetch('delete', api.terminalInfo + id, {}, this).then((res) => {
+          fetch('delete', api.requireGoodsInfo + id, {}, this).then((res) => {
             console.log(res)
           })
         })
       },
       onEdit(id) {
         this.$router.push({
-            path: `/apply/${id}`
+            path: `/yhsq/${id}`
           }
         )
       },
       addApply() {
         this.$router.push({
-            path: `/apply/0`
+            path: `/yhsq/0`
           }
         )
       },
       onAudit(item) {
         const app = this.$f7
         let _this = this
-        app.dialog.confirm('确定要提交审批吗?', '提示', function () {
+        app.dialog.confirm('确定要审批吗?', '提示', function () {
           let params = {
             tableId: item.id,
-            id: item.auditStatus === '2' ? item.auditId : undefined,
+            id: item.auditStatus === '2' ? item.auditId : '',
             auditStep: item.auditStep,
             auditResult: '1',
-            auditStatus: item.auditStatus,
-            auditType: 'merchantTerminal'
+            auditType: 'requireGoods'
           }
           fetch('post', api.terminalAudit, params, _this).then((res) => {
             console.log(res)
-            _this.pageNo = 1
-            this.initData()
           })
         })
       },
@@ -176,8 +173,7 @@
           return
         }
         this.pageNo = this.pageNo + 1
-        console.log(this.pageNo)
-        fetch('get', api.terminalInfo, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
+        fetch('get', api.requireGoodsInfo, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
           console.log(res)
           this.list = this.list.concat(res.data)
           this.showLoading = false
@@ -191,7 +187,7 @@
     transition: all 0.3s
   .slide-enter, .slide-leave-to
     transform: translate3d(100%, 0, 0)
-  .apply-list
+  .yhsq-list
     background: #fff!important
     position: fixed
     z-index: 2
@@ -199,7 +195,7 @@
     left: 0
     right: 0
     bottom: 0
-    .apply
+    .yhsq
       background: #fff!important
       position: fixed
       top: 44px

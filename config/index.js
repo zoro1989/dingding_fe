@@ -18,6 +18,10 @@ module.exports = {
       '/dingtalk': {
         target: 'http://127.0.0.1:8081/',
         changeOrigin: true
+      },
+      '/api': {
+        target: 'http://127.0.0.1:8081/',
+        changeOrigin: true
       }
     },
     // Various Dev Server settings
