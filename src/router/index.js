@@ -99,7 +99,7 @@ export default new Router({
       component: ZdylspList
     },
     {
-      path: '/zdylsp/:id/:auditId/:auditStep',
+      path: '/zdylsp/:id/:auditId/:auditStep/:auditStatus',
       name: 'zdylsp',
       component: Zdylsp
     },
@@ -109,7 +109,7 @@ export default new Router({
       component: LszbspList
     },
     {
-      path: '/lszbsp/:id/:auditId/:auditStep',
+      path: '/lszbsp/:id/:auditId/:auditStep/:auditStatus',
       name: 'lszbsp',
       component: Lszbsp
     },
@@ -119,7 +119,7 @@ export default new Router({
       component: LsmdspList
     },
     {
-      path: '/lsmdsp/:id/:auditId/:auditStep',
+      path: '/lsmdsp/:id/:auditId/:auditStep/:auditStatus',
       name: 'lsmdsp',
       component: Lsmdsp
     },
@@ -189,7 +189,7 @@ export default new Router({
       component: YhsqspList
     },
     {
-      path: '/yhsqsp/:id/:auditId/:auditStep',
+      path: '/yhsqsp/:id/:auditId/:auditStep/:auditStatus',
       name: 'yhsqsp',
       component: Yhsqsp
     },
@@ -199,7 +199,7 @@ export default new Router({
       component: DhsqspList
     },
     {
-      path: '/dhsqsp/:id/:auditId/:auditStep',
+      path: '/dhsqsp/:id/:auditId/:auditStep/:auditStatus',
       name: 'dhsqsp',
       component: Dhsqsp
     },
@@ -209,7 +209,7 @@ export default new Router({
       component: ThsqspList
     },
     {
-      path: '/thsqsp/:id/:auditId/:auditStep',
+      path: '/thsqsp/:id/:auditId/:auditStep/:auditStatus',
       name: 'thsqsp',
       component: Thsqsp
     }

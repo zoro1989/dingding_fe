@@ -21,9 +21,15 @@
                   <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
                 </div>
               </div>
-              <div class="item-subtitle">{{item.shopUser}}</div>
+              <div class="item-subtitle">董事长：{{item.chairmanName}}</div>
               <div class="item-text">
-                <div>{{item.shopAddr}}</div>
+                <div>药店地址：{{item.shopAddr}}</div>
+                <div>合作时间：{{item.cooperationTime}}</div>
+                <div>连锁门店数量：{{item.shopTotal}}</div>
+                <div>直营店数量：{{item.directlyTotal}}</div>
+                <div>加盟店数量：{{item.joinTotal}}</div>
+                <div>连锁总部：{{item.mainShopAddr}}</div>
+                <div>连锁仓库：{{item.chainWarehous}}</div>
                 <div :class="auditStatusColor(item.audit_status)">{{item.audit_status}}</div>
               </div>
             </div>
@@ -65,7 +71,7 @@
       }
     },
     created() {
-      fetch('get', api.terminalInfoApprove, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
+      fetch('get', api.chaintotalInfoApprove, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
         console.log(res)
         this.list = res.data
         this.maxCount = res.count
@@ -84,7 +90,7 @@
       },
       onAudit(item) {
         this.$router.push({
-            path: `/zdylsp/${item.id}/${item.audit_id}/${item.audit_step}`
+            path: `/zdylsp/${item.id}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
           }
         )
       },
@@ -102,7 +108,7 @@
         }
         this.pageNo = this.pageNo + 1
         console.log(this.pageNo)
-        fetch('get', api.terminalInfoApprove, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
+        fetch('get', api.chaintotalInfoApprove, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
           console.log(res)
           this.list = this.list.concat(res.data)
           this.showLoading = false

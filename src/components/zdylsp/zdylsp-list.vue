@@ -84,7 +84,7 @@
       },
       onAudit(item) {
         this.$router.push({
-            path: `/zdylsp/${item.id}/${item.audit_id}/${item.audit_step}`
+            path: `/zdylsp/${item.id}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
           }
         )
       },

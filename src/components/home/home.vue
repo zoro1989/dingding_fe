@@ -150,15 +150,20 @@
               console.log(result)
               fetch('post', api.dingtalkAuth, {code: result.code}, this).then((res) => {
                 console.log(res)
+              }).catch(() => {
+                EventBus.isNeedLogin = true
+                _this.$router.replace('/login')
               })
             },
             onFail: function (err) {
               console.log(err)
+              EventBus.isNeedLogin = true
+              _this.$router.replace('/login')
             }
           }).catch(() => {
             console.log('不在钉钉环境内')
             EventBus.isNeedLogin = true
-            _this.$router.replace('login')
+            _this.$router.replace('/login')
           })
         })
     },

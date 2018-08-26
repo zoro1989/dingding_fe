@@ -15,18 +15,18 @@
           >
             <div slot="inner-start">
               <div class="item-title-row" slot="before-title">
-                <div class="item-title">客商名称：{{item.merchantsName}}</div>
+                <div class="item-title">客商名称：{{item.merchants_name}}</div>
                 <div class="item-after">
                   <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
                 </div>
               </div>
               <div class="item-subtitle">
-                <div>要货人名称：{{item.requireGoodsName}}</div>
-                <div>要货人分公司：{{item.requireGoodsOffice}}</div>
-                <div>要货人支公司：{{item.requireGoodsBranchOffice}}</div>
+                <div>要货人名称：{{item.require_goods_name}}</div>
+                <div>要货人分公司：{{item.require_goods_office}}</div>
+                <div>要货人支公司：{{item.require_goods_branch_office}}</div>
               </div>
               <div class="item-text">
-                <div>产品名称：{{item.goodsName}}</div>
+                <div>产品名称：{{item.goods_name}}</div>
                 <div :class="auditStatusColor(item.audit_status)">{{item.audit_status}}</div>
               </div>
             </div>
@@ -87,7 +87,7 @@
       },
       onAudit(item) {
         this.$router.push({
-            path: `/yhsqsp/${item.id}/${item.audit_id}/${item.audit_step}`
+            path: `/yhsqsp/${item.id}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
           }
         )
       },

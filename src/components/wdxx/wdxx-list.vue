@@ -94,39 +94,39 @@
       onAudit(item) {
         if (item.type !== '生日提醒') {
           switch (item.auditType) {
-            case 'arrangeGoods':
+            case 'merchantTerminal':
               this.$router.push({
-                  path: `/zdylsp/${item.tableId}/${item.audit_id}/${item.audit_step}`
+                  path: `/zdylsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
                 }
               )
               break
             case 'chainTotal':
               this.$router.push({
-                  path: `/lszbsp/${item.tableId}/${item.audit_id}/${item.audit_step}`
-                }
-              )
-              break
-            case 'merchantTerminal':
-              this.$router.push({
-                  path: `/zdylsp/${item.tableId}/${item.audit_id}/${item.audit_step}`
-                }
-              )
-              break
-            case 'requireGoods':
-              this.$router.push({
-                  path: `/zdylsp/${item.tableId}/${item.audit_id}/${item.audit_step}`
-                }
-              )
-              break
-            case 'returnGoods':
-              this.$router.push({
-                  path: `/zdylsp/${item.tableId}/${item.audit_id}/${item.audit_step}`
+                  path: `/lszbsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
                 }
               )
               break
             case 'chainCustom':
               this.$router.push({
-                  path: `/lsmdsp/${item.tableId}/${item.audit_id}/${item.audit_step}`
+                  path: `/lsmdsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
+                }
+              )
+              break
+            case 'requireGoods':
+              this.$router.push({
+                  path: `/yhsqsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
+                }
+              )
+              break
+            case 'arrangeGoods':
+              this.$router.push({
+                  path: `/dhsqsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
+                }
+              )
+              break
+            case 'returnGoods':
+              this.$router.push({
+                  path: `/thsqsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
                 }
               )
               break

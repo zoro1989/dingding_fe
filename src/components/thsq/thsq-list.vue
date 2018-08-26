@@ -80,14 +80,17 @@
       }
     },
     created() {
-      fetch('get', api.returnGoodsInfo, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
-        console.log(res)
-        this.list = res.data
-        this.maxCount = res.count
-        this.showLoading = false
-      })
+      this.initData()
     },
     methods: {
+      initData() {
+        fetch('get', api.returnGoodsInfo, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
+          console.log(res)
+          this.list = res.data
+          this.maxCount = res.count
+          this.showLoading = false
+        })
+      },
       auditStatusColor(auditStatus) {
         if (auditStatus === '1') {
           return 'text-color-blue'
@@ -151,13 +154,15 @@
         app.dialog.confirm('确定要审批吗?', '提示', function () {
           let params = {
             tableId: item.id,
-            id: item.auditStatus === '2' ? item.auditId : '',
+            id: item.auditStatus === '2' ? item.auditId : undefined,
             auditStep: item.auditStep,
             auditResult: '1',
+            auditStatus: item.auditStatus,
             auditType: 'returnGoods'
           }
           fetch('post', api.terminalAudit, params, _this).then((res) => {
-            console.log(res)
+            _this.pageNo = 1
+            _this.initData()
           })
         })
       },

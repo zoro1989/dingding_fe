@@ -157,9 +157,8 @@
             auditType: 'merchantTerminal'
           }
           fetch('post', api.terminalAudit, params, _this).then((res) => {
-            console.log(res)
             _this.pageNo = 1
-            this.initData()
+            _this.initData()
           })
         })
       },

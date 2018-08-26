@@ -24,7 +24,7 @@
                   <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
                 </div>
               </div>
-              <div class="item-subtitle">董事长：{{item.shopUser}}</div>
+              <div class="item-subtitle">董事长：{{item.chairmanName}}</div>
               <div class="item-text">
                 <div>药店地址：{{item.shopAddr}}</div>
                 <div>合作时间：{{item.cooperationTime}}</div>
@@ -82,14 +82,17 @@
       }
     },
     created() {
-      fetch('get', api.chaintotalInfo, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
-        console.log(res)
-        this.list = res.data
-        this.maxCount = res.count
-        this.showLoading = false
-      })
+      this.initData()
     },
     methods: {
+      initData() {
+        fetch('get', api.chaintotalInfo, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
+          console.log(res)
+          this.list = res.data
+          this.maxCount = res.count
+          this.showLoading = false
+        })
+      },
       auditStatusColor(auditStatus) {
         if (auditStatus === '1') {
           return 'text-color-blue'
@@ -147,13 +150,15 @@
         app.dialog.confirm('确定要审批吗?', '提示', function () {
           let params = {
             tableId: item.id,
-            id: item.auditStatus === '2' ? item.auditId : '',
+            id: item.auditStatus === '2' ? item.auditId : undefined,
             auditStep: item.auditStep,
             auditResult: '1',
+            auditStatus: item.auditStatus,
             auditType: 'chainTotal'
           }
           fetch('post', api.terminalAudit, params, _this).then((res) => {
-            console.log(res)
+            _this.pageNo = 1
+            _this.initData()
           })
         })
       },
@@ -172,7 +177,6 @@
         this.pageNo = this.pageNo + 1
         console.log(this.pageNo)
         fetch('get', api.chaintotalInfo, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
-          console.log(res)
           this.list = this.list.concat(res.data)
           this.showLoading = false
         })

@@ -43,6 +43,8 @@
       line-height: 10px!important
       overflow: hidden!important
       text-overflow: ellipsis!important
+    .item-text
+      max-height: none!important
     .smart-select
       .item-content
         padding-left: 0!important
@@ -52,4 +54,7 @@
     .smart-select-popup
       .item-title
         white-space: normal!important
+    .merchant-select, .goods-select
+      .page-content
+        padding-top: 88px!important
 </style>

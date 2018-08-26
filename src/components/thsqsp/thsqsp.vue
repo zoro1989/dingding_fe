@@ -119,7 +119,7 @@
               </div>
             </div>
           </div>
-          <div>
+          <div v-if="auditStatus === '待审核' || auditStatus === 'wait'">
             <form class="list" id="audit-form">
               <ul>
                 <li class="item-content item-input">
@@ -145,7 +145,7 @@
               </ul>
             </form>
           </div>
-          <div class="block">
+          <div class="block" v-if="auditStatus === '待审核' || auditStatus === 'wait'">
             <div class="row">
               <f7-button fill class="col btn-save" @click="onSave">保存</f7-button>
               <f7-button outline class="col btn-cancel" @click="onCancel">取消</f7-button>
@@ -175,6 +175,7 @@
         tableId: this.$route.params.id || '',
         auditId: this.$route.params.auditId || '',
         auditStep: this.$route.params.auditStep || '',
+        auditStatus: this.$route.params.auditStatus || '',
         timelines: [],
         isPass: true
       }
@@ -186,7 +187,7 @@
         fetch('get', api.returnGoodsInfoGetDetail + this.tableId, {}, this).then((res) => {
           app.form.fillFromData('#apply-form', res.data)
         })
-        fetch('get', api.returnGoodsInfo + this.tableId, {}, this).then((res) => {
+        fetch('get', api.returnGoodsAuditInfo + this.tableId, {}, this).then((res) => {
           this.timelines = res.data
         })
       }

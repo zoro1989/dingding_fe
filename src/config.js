@@ -5,7 +5,7 @@ let apiPath = '/'
 const api = {
   // 登录
   authLogin: apiPath + 'dingtalk/auth/login',
-  dingtalkAuth: apiPath + 'dingtalk/auth',
+  dingtalkAuth: apiPath + 'dingtalk/auth/',
   // 终端医疗
   terminalInfo: apiPath + 'merchants/terminal/info/',
   terminalInfoSave: apiPath + 'merchants/terminal/info/save',

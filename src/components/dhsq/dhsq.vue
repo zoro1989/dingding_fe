@@ -10,16 +10,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">客商名称</div>
                     <div class="item-input-wrap">
-                      <a href="#" class="item-link smart-select" data-open-in="popup"  data-searchbar="true" data-searchbar-placeholder="Search car" :disabled="isReadonly" id="merchantsName">
-                        <select name="merchantsName" ref="merchantsSelect" >
-                          <option v-for="item in merchants" :key="item.shop_name" :value="item.shop_name">{{item.shop_name}}</option>
-                        </select>
-                        <div class="item-content">
-                          <div class="item-inner">
-                            <div class="item-title"></div>
-                          </div>
-                        </div>
-                      </a>
+                      <input type="text" name="merchantsName" :value="merchantsName" placeholder="请选择客商名称" readonly @click="onClickMerchant">
                     </div>
                   </div>
                 </div>
@@ -39,7 +30,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">调货人姓名</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="arrangeGoodsName" placeholder="请输入调货人姓名" :disabled="isReadonly">
+                      <input type="text" name="arrangeGoodsName" placeholder="请输入调货人姓名" :value="autoData.userName" :disabled="isReadonly">
                     </div>
                   </div>
                 </div>
@@ -49,7 +40,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">调货人分公司</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="arrangeGoodsOffice" placeholder="请输入调货人分公司" :disabled="isReadonly">
+                      <input type="text" name="arrangeGoodsOffice" placeholder="请输入调货人分公司" :value="autoData.officeName" :disabled="isReadonly">
                     </div>
                   </div>
                 </div>
@@ -59,7 +50,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">调货人支公司</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="arrangeGoodsBranchOffice" placeholder="请输入调货人支公司" :disabled="isReadonly">
+                      <input type="text" name="arrangeGoodsBranchOffice" placeholder="请输入调货人支公司" :value="autoData.branchOfficeName" :disabled="isReadonly">
                     </div>
                   </div>
                 </div>
@@ -69,18 +60,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">调货产品名称</div>
                     <div class="item-input-wrap">
-                      <a href="#" class="item-link smart-select" data-open-in="popup"  data-searchbar="true" data-searchbar-placeholder="Search car" :enable="isReadonly" id="goodsName">
-                        <select name="goodsName" ref="goodsSelect" :disabled="isReadonly">
-                          <option v-for="item in goods" :value="item.goods_name" :key="item.goods_name + item.goods_spec">
-                            {{item.goods_name}}({{item.goods_spec}})
-                          </option>
-                        </select>
-                        <div class="item-content">
-                          <div class="item-inner">
-                            <div class="item-title"></div>
-                          </div>
-                        </div>
-                      </a>
+                      <input type="text" name="goodsName" :value="goodsName" placeholder="请选择产品名称" readonly @click="onClickGood">
                     </div>
                   </div>
                 </div>
@@ -90,7 +70,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">调货产品规格</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="goodsSpecifications" placeholder="请输入调货产品规格" :disabled="isReadonly">
+                      <input type="text" name="goodsSpecifications" :value="goodsSpecifications" placeholder="请输入退货产品规格" readonly>
                     </div>
                   </div>
                 </div>
@@ -135,12 +115,16 @@
           </div>
         </div>
       </scroll>
+      <merchant-select-list v-if="merchants.length > 0" :list="merchants" ref="merchants" @selectMerchants="selectMerchants"></merchant-select-list>
+      <goods-select-list v-if="goods.length > 0" :list="goods" ref="goods" @selectGoods="selectGoods"></goods-select-list>
     </div>
   </transition>
 </template>
 <script>
   import { f7Page, f7List, f7ListItem, f7Button, f7Searchbar } from 'framework7-vue'
   import Scroll from 'base/scroll/scroll'
+  import MerchantSelectList from 'base/merchants-select-list/merchants-select-list'
+  import GoodsSelectList from 'base/goods-select-list/goods-select-list'
   import { api } from '@/config'
   import fetch from 'utils/fetch'
   export default {
@@ -150,6 +134,8 @@
       f7ListItem,
       f7Button,
       Scroll,
+      MerchantSelectList,
+      GoodsSelectList,
       f7Searchbar
     },
     data() {
@@ -163,7 +149,11 @@
         pageSize: 10,
         goods: [],
         merchants: [],
-        data: {}
+        data: {},
+        autoData: {},
+        merchantsName: '',
+        goodsName: '',
+        goodsSpecifications: ''
       }
     },
     mounted() {
@@ -175,48 +165,29 @@
           this.data = res.data
         })
       }
-      fetch('get', api.findMerchants, {page: this.pageNoGoods, limit: this.pageSize}, this).then((res) => {
+      fetch('get', api.findMerchants, {page: this.pageNoMerchants, limit: this.pageSize}, this).then((res) => {
         this.merchants = res.data
         this.$nextTick(() => {
-          self.merchantsNamePiker = app.smartSelect.create({
-            el: '#merchantsName',
-            routableModals: false,
-            openIn: 'popup',
-            searchbar: true,
-            searchbarPlaceholder: '请输入客商名称',
-            closeOnSelect: true,
-            pageBackLinkText: '返回',
-            popupCloseLinkText: '关闭',
-            sheetCloseLinkText: '完成'
-          })
-          this.$refs.merchantsSelect.value = this.data.merchantsName
+          if (this.data.merchantsName) {
+            this.$refs.merchantsSelect.value = this.data.merchantsName
+          }
         })
       })
       fetch('get', api.goodsAutoFindInfo, {page: this.pageNoGoods, limit: this.pageSize}, this).then((res) => {
         this.goods = res.data
         this.$nextTick(() => {
-          self.goodsNamePiker = app.smartSelect.create({
-            el: '#goodsName',
-            routableModals: false,
-            openIn: 'popup',
-            searchbar: true,
-            searchbarPlaceholder: '请输入商品名称',
-            closeOnSelect: true,
-            pageBackLinkText: '返回',
-            popupCloseLinkText: '关闭',
-            sheetCloseLinkText: '完成'
-          })
-          this.$refs.goodsSelect.value = this.data.goodsName
+          if (this.data.goodsName) {
+            this.$refs.goodsSelect.value = this.data.goodsName
+          }
         })
+      })
+      fetch('get', api.findRequireGoodsUserBaseInfo, {}, this).then((res) => {
+        this.autoData = res.data
       })
       if (this.$route.name === 'dhsq-view') {
          // return
       }
       // self.goodsNamePiker.open()
-    },
-    destroyed() {
-      this.merchantsNamePiker && this.merchantsNamePiker.destroy()
-      this.goodsNamePiker && this.goodsNamePiker.destroy()
     },
     computed: {
       isReadonly () {
@@ -224,8 +195,18 @@
       }
     },
     methods: {
-      onClickAddr() {
-        this.$refs.addrSelect.show()
+      onClickMerchant() {
+        this.$refs.merchants.show()
+      },
+      selectMerchants(value) {
+        this.merchantsName = value
+      },
+      onClickGood() {
+        this.$refs.goods.show()
+      },
+      selectGoods(good) {
+        this.goodsName = good.goods_name
+        this.goodsSpecifications = good.goods_spec
       },
       onSave() {
         const app = this.$f7
