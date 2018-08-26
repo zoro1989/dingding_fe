@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div class="yhsq">
+    <div class="thsq">
       <scroll class="apply-form">
         <div>
           <form class="list" id="apply-form">
@@ -27,9 +27,9 @@
               <li>
                 <div class="item-content item-input">
                   <div class="item-inner">
-                    <div class="item-title item-label">要货人姓名</div>
+                    <div class="item-title item-label">门店名称</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="requireGoodsName" placeholder="请输入要货人姓名" :disabled="isReadonly">
+                      <input type="text" name="storeName" placeholder="请输入门店名称" :disabled="isReadonly">
                     </div>
                   </div>
                 </div>
@@ -37,9 +37,9 @@
               <li>
                 <div class="item-content item-input">
                   <div class="item-inner">
-                    <div class="item-title item-label">要货人分公司</div>
+                    <div class="item-title item-label">退货人姓名</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="requireGoodsOffice" placeholder="请输入要货人分公司" :disabled="isReadonly">
+                      <input type="text" name="returnGoodsName" placeholder="请输入退货人姓名" :disabled="isReadonly">
                     </div>
                   </div>
                 </div>
@@ -47,9 +47,9 @@
               <li>
                 <div class="item-content item-input">
                   <div class="item-inner">
-                    <div class="item-title item-label">要货人支公司</div>
+                    <div class="item-title item-label">退货人分公司</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="requireGoodsBranchOffice" placeholder="请输入要货人支公司" :disabled="isReadonly">
+                      <input type="text" name="returnGoodsOffice" placeholder="请输入退货人分公司" :disabled="isReadonly">
                     </div>
                   </div>
                 </div>
@@ -57,7 +57,17 @@
               <li>
                 <div class="item-content item-input">
                   <div class="item-inner">
-                    <div class="item-title item-label">产品名称</div>
+                    <div class="item-title item-label">退货人支公司</div>
+                    <div class="item-input-wrap">
+                      <input type="text" name="returnGoodsBranchOffice" placeholder="请输入退货人支公司" :disabled="isReadonly">
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">退货产品名称</div>
                     <div class="item-input-wrap">
                       <a href="#" class="item-link smart-select" data-open-in="popup"  data-searchbar="true" data-searchbar-placeholder="Search car" :enable="isReadonly" id="goodsName">
                         <select name="goodsName" ref="goodsSelect" :disabled="isReadonly">
@@ -78,9 +88,9 @@
               <li>
                 <div class="item-content item-input">
                   <div class="item-inner">
-                    <div class="item-title item-label">产品规格</div>
+                    <div class="item-title item-label">退货产品规格</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="goodsSpecifications" placeholder="请输入产品规格" :disabled="isReadonly">
+                      <input type="text" name="goodsSpecifications" placeholder="请输入退货产品规格" :disabled="isReadonly">
                     </div>
                   </div>
                 </div>
@@ -88,9 +98,9 @@
               <li>
                 <div class="item-content item-input">
                   <div class="item-inner">
-                    <div class="item-title item-label">产品数量</div>
+                    <div class="item-title item-label">退货产品数量</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="goodsNumber" placeholder="请输入产品数量" :disabled="isReadonly">
+                      <input type="text" name="goodsNumber" placeholder="请输入退货产品数量" :disabled="isReadonly">
                     </div>
                   </div>
                 </div>
@@ -98,9 +108,9 @@
               <li>
                 <div class="item-content item-input">
                   <div class="item-inner">
-                    <div class="item-title item-label">产品批号</div>
+                    <div class="item-title item-label">退货产品批号</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="goodsBatchNumber" placeholder="请输入产品批号" :disabled="isReadonly">
+                      <input type="text" name="goodsBatchNumber" placeholder="请输入退货产品批号" :disabled="isReadonly">
                     </div>
                   </div>
                 </div>
@@ -108,49 +118,9 @@
               <li>
                 <div class="item-content item-input">
                   <div class="item-inner">
-                    <div class="item-title item-label">开票价格</div>
+                    <div class="item-title item-label">退货原因</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="invoicePrice" placeholder="请输入开票价格" :disabled="isReadonly">
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">零售价格</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="retailPrice" placeholder="请输入零售价格" :disabled="isReadonly">
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">比例</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="scale" placeholder="请输入比例" :disabled="isReadonly">
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">形式</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="shape" id="shape" placeholder="请选择形式" :disabled="isReadonly">
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">备注</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="remark" placeholder="请输入备注" :disabled="isReadonly">
+                      <input type="text" name="returnRemarks" placeholder="请输入退货原因" :disabled="isReadonly">
                     </div>
                   </div>
                 </div>
@@ -200,7 +170,7 @@
       const self = this
       const app = self.$f7
       if (this.listId && this.listId !== '0') {
-        fetch('get', api.requireGoodsInfoGetDetail + this.listId, {}, this).then((res) => {
+        fetch('get', api.returnGoodsInfoGetDetail + this.listId, {}, this).then((res) => {
           app.form.fillFromData('#apply-form', res.data)
           this.data = res.data
         })
@@ -239,33 +209,18 @@
           this.$refs.goodsSelect.value = this.data.goodsName
         })
       })
-      if (this.$route.name === 'yhsq-view') {
-        return
+      if (this.$route.name === 'thsq-view') {
+        // return
       }
-      self.shapePiker = app.autocomplete.create({
-        inputEl: '#shape',
-        openIn: 'dropdown',
-        routableModals: false,
-        source: function (query, render) {
-          let results = []
-          let types = ['买赠', '礼品赠送', '抽奖', '圆桌会议', '分销活动', '检测活动']
-          for (let i = 0; i < types.length; i++) {
-            if (types[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(types[i])
-          }
-          // Render items by passing array with result items
-          render(results)
-        }
-      })
       // self.goodsNamePiker.open()
     },
     destroyed() {
-      this.shapePiker && this.shapePiker.destroy()
       this.merchantsNamePiker && this.merchantsNamePiker.destroy()
       this.goodsNamePiker && this.goodsNamePiker.destroy()
     },
     computed: {
       isReadonly () {
-        return this.$route.name === 'yhsq-view'
+        return this.$route.name === 'thsq-view'
       }
     },
     methods: {
@@ -277,11 +232,11 @@
         let formData = app.form.convertToData('#apply-form')
         if (this.listId && this.listId !== '0') {
           fetch('put', api.requireGoodsInfo + this.listId, formData, this).then((res) => {
-            this.$router.replace('/yhsq-list')
+            this.$router.replace('/thsq-list')
           })
         } else {
           fetch('post', api.requireGoodsInfoSave, formData, this).then((res) => {
-            this.$router.replace('/yhsq-list')
+            this.$router.replace('/thsq-list')
           })
         }
       },
@@ -296,7 +251,7 @@
     transition: all 0.3s
   .slide-enter, .slide-leave-to
     transform: translate3d(0, -100%, 0)
-  .yhsq
+  .thsq
     position: fixed
     top: 0
     left: 0

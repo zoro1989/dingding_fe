@@ -89,13 +89,13 @@
         </div>
         <div class="row">
           <div class="link-box">
-            <f7-button fill class="button-link" @click="OnClick('yhsq-list')">
+            <f7-button fill class="button-link" @click="OnClick('dhsq-list')">
               <i class="fa fa-address-card-o"></i>
             </f7-button>
             <span>调货申请</span>
           </div>
           <div class="link-box">
-            <f7-button color="green" fill class="button-link" @click="OnClick('yhsqsp-list')">
+            <f7-button color="green" fill class="button-link" @click="OnClick('dhsqsp-list')">
               <i class="fa fa-pencil"></i>
             </f7-button>
             <span>调货审批</span>
@@ -109,13 +109,13 @@
         </div>
         <div class="row">
           <div class="link-box">
-            <f7-button fill class="button-link" @click="OnClick('yhsq-list')">
+            <f7-button fill class="button-link" @click="OnClick('thsq-list')">
               <i class="fa fa-address-card-o"></i>
             </f7-button>
             <span>退货申请</span>
           </div>
           <div class="link-box">
-            <f7-button color="green" fill class="button-link" @click="OnClick('yhsqsp-list')">
+            <f7-button color="green" fill class="button-link" @click="OnClick('thsqsp-list')">
               <i class="fa fa-pencil"></i>
             </f7-button>
             <span>退货审批</span>

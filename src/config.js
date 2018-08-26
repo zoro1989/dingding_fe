@@ -69,6 +69,7 @@ const api = {
   returnGoodsInfoApprove: apiPath + 'merchants/returnGoods/info/approve/',
   // 流转列表
   returnGoodsAuditInfo: apiPath + 'merchants/auditInfo/info/form/returnGoods/',
+
   // 查找货商信息
   findMerchants: apiPath + 'merchants/requireGoods/info/findMerchants',
   // 查找产品信息

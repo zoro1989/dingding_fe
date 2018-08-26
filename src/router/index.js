@@ -19,6 +19,16 @@ const Tzgg = () => import('components/tzgg/tzgg')
 const WdxxList = () => import('components/wdxx/wdxx-list')
 const Yhsq = () => import('components/yhsq/yhsq')
 const YhsqList = () => import('components/yhsq/yhsq-list')
+const Dhsq = () => import('components/dhsq/dhsq')
+const DhsqList = () => import('components/dhsq/dhsq-list')
+const Thsq = () => import('components/thsq/thsq')
+const ThsqList = () => import('components/thsq/thsq-list')
+const YhsqspList = () => import('components/yhsqsp/yhsqsp-list')
+const Yhsqsp = () => import('components/yhsqsp/yhsqsp')
+const DhsqspList = () => import('components/dhsqsp/dhsqsp-list')
+const Dhsqsp = () => import('components/dhsqsp/dhsqsp')
+const ThsqspList = () => import('components/thsqsp/thsqsp-list')
+const Thsqsp = () => import('components/thsqsp/thsqsp')
 
 Vue.use(Router)
 
@@ -142,6 +152,66 @@ export default new Router({
       path: '/yhsq-view/:id',
       name: 'yhsq-view',
       component: Yhsq
+    },
+    {
+      path: '/dhsq-list',
+      name: 'dhsq-list',
+      component: DhsqList
+    },
+    {
+      path: '/dhsq/:id',
+      name: 'dhsq',
+      component: Dhsq
+    },
+    {
+      path: '/dhsq-view/:id',
+      name: 'dhsq-view',
+      component: Dhsq
+    },
+    {
+      path: '/thsq-list',
+      name: 'thsq-list',
+      component: ThsqList
+    },
+    {
+      path: '/thsq/:id',
+      name: 'thsq',
+      component: Thsq
+    },
+    {
+      path: '/thsq-view/:id',
+      name: 'thsq-view',
+      component: Thsq
+    },
+    {
+      path: '/yhsqsp-list',
+      name: 'yhsqsp-list',
+      component: YhsqspList
+    },
+    {
+      path: '/yhsqsp/:id/:auditId/:auditStep',
+      name: 'yhsqsp',
+      component: Yhsqsp
+    },
+    {
+      path: '/dhsqsp-list',
+      name: 'dhsqsp-list',
+      component: DhsqspList
+    },
+    {
+      path: '/dhsqsp/:id/:auditId/:auditStep',
+      name: 'dhsqsp',
+      component: Dhsqsp
+    },
+    {
+      path: '/thsqsp-list',
+      name: 'thsqsp-list',
+      component: ThsqspList
+    },
+    {
+      path: '/thsqsp/:id/:auditId/:auditStep',
+      name: 'thsqsp',
+      component: Thsqsp
     }
   ]
 })
