@@ -1,7 +1,8 @@
 <template>
-  <scroll class="scroll">
-    <div class="home">
-      <f7-navbar title="客商管理"></f7-navbar>
+  <div class="home">
+    <f7-navbar title="万通营销" class="header-bar"></f7-navbar>
+    <div class="wrapper">
+      <div class="list-group-title">消息公告</div>
       <div class="block">
         <div class="row">
           <div class="link-box">
@@ -18,11 +19,8 @@
           </div>
         </div>
       </div>
-      <div class="item-divider"></div>
+      <div class="list-group-title">客商管理</div>
       <div class="block">
-        <div>
-          客商管理
-        </div>
         <div class="row">
           <div class="link-box">
             <f7-button fill class="button-link" @click="OnClick('apply-list')">
@@ -62,11 +60,8 @@
           </div>
         </div>
       </div>
-      <div class="item-divider"></div>
+      <div class="list-group-title">要货管理</div>
       <div class="block">
-        <div>
-          要货管理
-        </div>
         <div class="row">
           <div class="link-box">
             <f7-button fill class="button-link" @click="OnClick('yhsq-list')">
@@ -82,11 +77,8 @@
           </div>
         </div>
       </div>
-      <div class="item-divider"></div>
+      <div class="list-group-title">调货管理</div>
       <div class="block">
-        <div>
-          调货管理
-        </div>
         <div class="row">
           <div class="link-box">
             <f7-button fill class="button-link" @click="OnClick('dhsq-list')">
@@ -102,11 +94,8 @@
           </div>
         </div>
       </div>
-      <div class="item-divider"></div>
+      <div class="list-group-title">退货管理</div>
       <div class="block">
-        <div>
-          退货管理
-        </div>
         <div class="row">
           <div class="link-box">
             <f7-button fill class="button-link" @click="OnClick('thsq-list')">
@@ -123,20 +112,20 @@
         </div>
       </div>
     </div>
-  </scroll>
+  </div>
 </template>
 <script>
   import { api } from '@/config'
   import fetch from 'utils/fetch'
   import * as dd from 'dingtalk-jsapi'
-  import { f7Navbar, f7Button } from 'framework7-vue'
+  import { f7Navbar, f7BlockTitle, f7Button, f7Page } from 'framework7-vue'
   import EventBus from 'common/js/event-bus'
-  import Scroll from 'base/scroll/scroll'
   export default {
     components: {
       f7Navbar,
+      f7BlockTitle,
       f7Button,
-      Scroll
+      f7Page
     },
     created() {
       if (!EventBus.isNeedLogin) {
@@ -175,24 +164,32 @@
   }
 </script>
 <style scoped lang="stylus">
-  .scroll
-    position: fixed
-    top: 0
-    left: 0
-    right: 0
-    bottom: 0
-    .home
-      padding-bottom: 40px
-      .fa
-        font-size: 20px
-      .link-box
-        display: flex
-        flex-direction: column
-        align-items: center
-        margin: 0 10px
-      .button-link
-        width: 50px!important
-        height: 50px!important
-        line-height: 50px!important
-        margin: 10px!important
+  .home
+    height: 100%
+    .header-bar
+      position: absolute!important
+      right: 0!important
+      left: 0!important
+      -webkit-backface-visibility: hidden!important
+      backface-visibility: hidden!important
+    .wrapper
+      position: absolute
+      top: 44px
+      left: 0
+      right: 0
+      bottom: 0
+      overflow: scroll
+      -webkit-overflow-scrolling: touch
+    .fa
+      font-size: 20px
+    .link-box
+      display: flex
+      flex-direction: column
+      align-items: center
+      margin: 0 10px
+    .button-link
+      width: 50px!important
+      height: 50px!important
+      line-height: 50px!important
+      margin: 10px!important
 </style>

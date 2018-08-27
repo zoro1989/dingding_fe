@@ -1,7 +1,7 @@
 <template>
   <transition name="slide">
     <div class="lszb">
-      <scroll class="apply-form">
+      <div class="apply-form">
         <div>
           <form class="list" id="apply-form">
             <ul>
@@ -20,7 +20,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">连锁店性质</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="shopType" id="shopType" placeholder="请输入连锁店性质" :disabled="isReadonly">
+                      <input type="text" name="shopType" :value="shopType" placeholder="请输入连锁店性质" readonly @click="onClickSelectShopType">
                     </div>
                   </div>
                 </div>
@@ -62,7 +62,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">董事长性别</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="chairmanSex" id="chairmanSex" placeholder="请输入董事长性别" :disabled="isReadonly">
+                      <input type="text" name="chairmanSex" :value="chairmanSex" placeholder="请输入董事长性别" readonly @click="onClickSelectChairmanSex">
                     </div>
                   </div>
                 </div>
@@ -163,7 +163,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">本年度是否与万通签订销售协议</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="isSigned" id="isSigned" placeholder="请选择本年度是否与万通签订销售协议" :disabled="isReadonly">
+                      <input type="text" name="isSigned" :value="isSigned" placeholder="请选择本年度是否与万通签订销售协议" readonly @click="onClickSelectIsSigned">
                     </div>
                   </div>
                 </div>
@@ -177,14 +177,18 @@
             </div>
           </div>
         </div>
-      </scroll>
+      </div>
       <addr-select ref="addrSelect" @addrchange="addrChange" v-if="!isReadonly"></addr-select>
+      <auto-select-list v-if="shopTypeSelectList.length > 0" :list="shopTypeSelectList" ref="shopTypeSelectList" @selectedItem="selectedShopTypeItem" title="连锁店性质"></auto-select-list>
+      <auto-select-list v-if="chairmanSexSelectList.length > 0" :list="chairmanSexSelectList" ref="chairmanSexSelectList" @selectedItem="selectedChairmanSexItem" title="董事长性别"></auto-select-list>
+      <auto-select-list v-if="isSignedSelectList.length > 0" :list="isSignedSelectList" ref="isSignedSelectList" @selectedItem="selectedIsSignedItem" title="是否签约"></auto-select-list>
     </div>
   </transition>
 </template>
 <script>
   import { f7Page, f7List, f7ListItem, f7Button, f7Searchbar } from 'framework7-vue'
   import AddrSelect from 'base/addr-select/addr-select'
+  import AutoSelectList from 'base/auto-select-list/auto-select-list'
   import Scroll from 'base/scroll/scroll'
   import { api } from '@/config'
   import fetch from 'utils/fetch'
@@ -196,6 +200,7 @@
       f7Button,
       Scroll,
       AddrSelect,
+      AutoSelectList,
       f7Searchbar
     },
     data() {
@@ -203,7 +208,13 @@
         listId: this.$route.params.id || '',
         mapAddr: '',
         longitude: '',
-        latitude: ' '
+        latitude: '',
+        shopTypeSelectList: ['国有', '股份', '个体'],
+        shopType: '',
+        chairmanSexSelectList: ['男', '女'],
+        chairmanSex: '',
+        isSignedSelectList: ['签订', '未签订'],
+        isSigned: ''
       }
     },
     mounted() {
@@ -302,55 +313,10 @@
           }
         }
       })
-      self.shopTypePiker = app.autocomplete.create({
-        inputEl: '#shopType',
-        openIn: 'dropdown',
-        routableModals: false,
-        source: function (query, render) {
-          let results = []
-          let types = ['国有', '股份', '个体']
-          for (let i = 0; i < types.length; i++) {
-            if (types[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(types[i])
-          }
-          // Render items by passing array with result items
-          render(results)
-        }
-      })
-      self.chairmanSexPiker = app.autocomplete.create({
-        inputEl: '#chairmanSex',
-        openIn: 'dropdown',
-        routableModals: false,
-        source: function (query, render) {
-          let results = []
-          let types = ['男', '女']
-          for (let i = 0; i < types.length; i++) {
-            if (types[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(types[i])
-          }
-          // Render items by passing array with result items
-          render(results)
-        }
-      })
-      self.isSignedPiker = app.autocomplete.create({
-        inputEl: '#isSigned',
-        openIn: 'dropdown',
-        routableModals: false,
-        source: function (query, render) {
-          let results = []
-          let types = ['签订', '未签订']
-          for (let i = 0; i < types.length; i++) {
-            if (types[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(types[i])
-          }
-          // Render items by passing array with result items
-          render(results)
-        }
-      })
     },
     destroyed() {
       this.cooperationTimeDatePiker && this.cooperationTimeDatePiker.destroy()
       this.chairmanBirthDatePiker && this.chairmanBirthDatePiker.destroy()
-      this.shopTypePiker && this.shopTypePiker.destroy()
-      this.chairmanSexPiker && this.chairmanSexPiker.destroy()
-      this.isSignedPiker && this.isSignedPiker.destroy()
     },
     computed: {
       isReadonly () {
@@ -360,6 +326,24 @@
     methods: {
       onClickAddr() {
         this.$refs.addrSelect.show()
+      },
+      onClickSelectShopType() {
+        this.$refs.shopTypeSelectList.show()
+      },
+      selectedShopTypeItem(item) {
+        this.shopType = item
+      },
+      onClickSelectChairmanSex() {
+        this.$refs.chairmanSexSelectList.show()
+      },
+      selectedChairmanSexItem(item) {
+        this.chairmanSex = item
+      },
+      onClickSelectIsSigned() {
+        this.$refs.isSignedSelectList.show()
+      },
+      selectedIsSignedItem(item) {
+        this.isSigned = item
       },
       onSave() {
         const app = this.$f7
@@ -396,19 +380,14 @@
   .slide-enter, .slide-leave-to
     transform: translate3d(0, -100%, 0)
   .lszb
-    position: fixed
-    top: 0
-    left: 0
-    right: 0
-    bottom: 0
-    background: #fff
-    z-index: 1
     .apply-form
-      position: fixed
+      position: absolute
       top: 0
       left: 0
       right: 0
       bottom: 0
       background: #fff
       z-index: 1
+      overflow: scroll
+      -webkit-overflow-scrolling: touch
 </style>

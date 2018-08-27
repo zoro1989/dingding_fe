@@ -20,16 +20,12 @@
                   <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
                 </div>
               </div>
-              <div class="item-subtitle">
-                <div>门店名称：{{item.storeName}}</div>
-                <div>退货人名称：{{item.returnGoodsName}}</div>
-                <div>退货人分公司：{{item.returnGoodsOffice}}</div>
-                <div>退货人支公司：{{item.returnGoodsBranchOffice}}</div>
-              </div>
-              <div class="item-text">
-                <div>产品名称：{{item.goodsName}}</div>
-                <div :class="auditStatusColor(item.audit_status)">{{item.audit_status}}</div>
-              </div>
+              <div class="item-subtitle">门店名称：{{item.storeName}}</div>
+              <div class="item-text">产品名称：{{item.goodsName}}</div>
+              <div class="item-text">退货人名称：{{item.returnGoodsName}}</div>
+              <div class="item-text">退货人分公司：{{item.returnGoodsOffice}}</div>
+              <div class="item-text">退货人支公司：{{item.returnGoodsBranchOffice}}</div>
+              <div class="item-text" :class="auditStatusColor(item.audit_status)">{{item.audit_status}}</div>
             </div>
           </f7-list-item>
           <loading v-show="showLoading" title=""></loading>

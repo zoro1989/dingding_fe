@@ -15,6 +15,7 @@
     "babel-runtime": "^6.26.0",
     "better-scroll": "^1.12.6",
     "dingtalk-jsapi": "^2.0.69",
+    "fastclick": "^1.0.6",
     "framework7": "^3.1.1",
     "framework7-vue": "^3.1.1",
     "moment": "^2.22.2",

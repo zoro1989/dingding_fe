@@ -1,7 +1,7 @@
 <template>
   <transition name="slide">
     <div class="apply">
-      <scroll class="apply-form">
+      <div class="apply-form">
         <div>
           <form class="list" id="apply-form">
             <ul>
@@ -20,7 +20,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">药店类别</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="shopType" id="shopType" placeholder="请输入药店类别" :disabled="isReadonly">
+                      <input type="text" name="shopType" :value="shopType" placeholder="请输入药店类别" readonly @click="onClickSelect">
                     </div>
                   </div>
                 </div>
@@ -106,14 +106,16 @@
             </div>
           </div>
         </div>
-      </scroll>
+      </div>
       <addr-select ref="addrSelect" @addrchange="addrChange" v-if="!isReadonly"></addr-select>
+      <auto-select-list v-if="selectList.length > 0" :list="selectList" ref="selectList" @selectedItem="selectedItem" title="药店类别"></auto-select-list>
     </div>
   </transition>
 </template>
 <script>
   import { f7Page, f7List, f7ListItem, f7Button, f7Searchbar } from 'framework7-vue'
   import AddrSelect from 'base/addr-select/addr-select'
+  import AutoSelectList from 'base/auto-select-list/auto-select-list'
   import Scroll from 'base/scroll/scroll'
   import { api } from '@/config'
   import fetch from 'utils/fetch'
@@ -125,6 +127,7 @@
       f7Button,
       Scroll,
       AddrSelect,
+      AutoSelectList,
       f7Searchbar
     },
     data() {
@@ -132,7 +135,9 @@
         listId: this.$route.params.id || '',
         mapAddr: '',
         longitude: '',
-        latitude: ''
+        latitude: '',
+        selectList: ['单体', '医疗'],
+        shopType: ''
       }
     },
     mounted() {
@@ -231,25 +236,10 @@
           }
         }
       })
-      self.shopTypePiker = app.autocomplete.create({
-        inputEl: '#shopType',
-        openIn: 'dropdown',
-        routableModals: false,
-        source: function (query, render) {
-          let results = []
-          let types = ['医疗', '单体']
-          for (let i = 0; i < types.length; i++) {
-            if (types[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(types[i])
-          }
-          // Render items by passing array with result items
-          render(results)
-        }
-      })
     },
     destroyed() {
       this.cooperationTimeDatePiker && this.cooperationTimeDatePiker.destroy()
       this.shopUserBirthDatePiker && this.shopUserBirthDatePiker.destroy()
-      this.shopTypePiker && this.shopTypePiker.destroy()
     },
     computed: {
       isReadonly () {
@@ -259,6 +249,12 @@
     methods: {
       onClickAddr() {
         this.$refs.addrSelect.show()
+      },
+      onClickSelect() {
+        this.$refs.selectList.show()
+      },
+      selectedItem(item) {
+        this.shopType = item
       },
       onSave() {
         const app = this.$f7
@@ -290,19 +286,14 @@
   .slide-enter, .slide-leave-to
     transform: translate3d(0, -100%, 0)
   .apply
-    position: fixed
-    top: 0
-    left: 0
-    right: 0
-    bottom: 0
-    background: #fff
-    z-index: 1
     .apply-form
-      position: fixed
+      position: absolute
       top: 0
       left: 0
       right: 0
       bottom: 0
       background: #fff
       z-index: 1
+      overflow: scroll
+      -webkit-overflow-scrolling: touch
 </style>

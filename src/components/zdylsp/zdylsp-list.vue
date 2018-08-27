@@ -22,10 +22,8 @@
                 </div>
               </div>
               <div class="item-subtitle">{{item.shopUser}}</div>
-              <div class="item-text">
-                <div>{{item.shopAddr}}</div>
-                <div :class="auditStatusColor(item.audit_status)">{{item.audit_status}}</div>
-              </div>
+              <div class="item-text">{{item.shopAddr}}</div>
+              <div class="item-text" :class="auditStatusColor(item.audit_status)">{{item.audit_status}}</div>
             </div>
           </f7-list-item>
           <loading v-show="showLoading" title=""></loading>

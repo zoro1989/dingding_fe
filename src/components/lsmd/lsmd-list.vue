@@ -28,12 +28,10 @@
                 <span>店长：{{item.shopUser}}</span>
                 <span>店长电话：{{item.shopUserPhone}}</span>
               </div>
-              <div class="item-text">
-                <div>连锁门店：{{item.shopAddr}}</div>
-                <div>店员数量：{{item.cooperationTime}}</div>
-                <div>上年度销售额：{{item.chairmanName}}</div>
-                <div :class="auditStatusColor(item.auditStatus)">{{auditStatusDisp(item.auditStatus)}}</div>
-              </div>
+              <div class="item-text">连锁门店：{{item.shopAddr}}</div>
+              <div class="item-text">店员数量：{{item.cooperationTime}}</div>
+              <div class="item-text">上年度销售额：{{item.chairmanName}}</div>
+              <div class="item-text" :class="auditStatusColor(item.auditStatus)">{{auditStatusDisp(item.auditStatus)}}</div>
             </div>
             <f7-swipeout-actions right>
               <f7-swipeout-button v-if="item.auditStatus === '1' || item.auditStatus === '2'" color="orange" @click="onEdit(item.id)">编辑</f7-swipeout-button>

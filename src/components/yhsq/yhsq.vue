@@ -1,7 +1,7 @@
 <template>
   <transition name="slide">
     <div class="yhsq">
-      <scroll class="apply-form">
+      <div class="apply-form">
         <div>
           <form class="list" id="apply-form">
             <ul>
@@ -120,7 +120,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">形式</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="shape" id="shape" placeholder="请选择形式" :disabled="isReadonly">
+                      <input type="text" name="shape" :value="shape" placeholder="请选择形式" readonly @click="onClickSelect">
                     </div>
                   </div>
                 </div>
@@ -144,9 +144,10 @@
             </div>
           </div>
         </div>
-      </scroll>
+      </div>
       <merchant-select-list v-if="merchants.length > 0" :list="merchants" ref="merchants" @selectMerchants="selectMerchants"></merchant-select-list>
       <goods-select-list v-if="goods.length > 0" :list="goods" ref="goods" @selectGoods="selectGoods"></goods-select-list>
+      <auto-select-list v-if="selectList.length > 0" :list="selectList" ref="selectList" @selectedItem="selectedItem" title="选择形式"></auto-select-list>
     </div>
   </transition>
 </template>
@@ -155,6 +156,7 @@
   import Scroll from 'base/scroll/scroll'
   import MerchantSelectList from 'base/merchants-select-list/merchants-select-list'
   import GoodsSelectList from 'base/goods-select-list/goods-select-list'
+  import AutoSelectList from 'base/auto-select-list/auto-select-list'
   import { api } from '@/config'
   import fetch from 'utils/fetch'
   export default {
@@ -166,6 +168,7 @@
       Scroll,
       MerchantSelectList,
       GoodsSelectList,
+      AutoSelectList,
       f7Searchbar
     },
     data() {
@@ -183,7 +186,9 @@
         autoData: {},
         merchantsName: '',
         goodsName: '',
-        goodsSpecifications: ''
+        goodsSpecifications: '',
+        selectList: ['买赠', '礼品赠送', '抽奖', '圆桌会议', '分销活动', '检测活动'],
+        shape: ''
       }
     },
     mounted() {
@@ -199,7 +204,7 @@
         this.merchants = res.data
         this.$nextTick(() => {
           if (this.data.merchantsName) {
-            this.$refs.merchantsSelect.value = this.data.merchantsName
+            this.merchantsName = this.data.merchantsName
           }
         })
       })
@@ -207,34 +212,14 @@
         this.goods = res.data
         this.$nextTick(() => {
           if (this.data.goodsName) {
-            this.$refs.goodsSelect.value = this.data.goodsName
+            this.goodsName = this.data.goodsName
+            this.goodsSpecifications = this.data.goodsSpecifications
           }
         })
       })
       fetch('get', api.findRequireGoodsUserBaseInfo, {}, this).then((res) => {
         this.autoData = res.data
       })
-      if (this.$route.name === 'yhsq-view') {
-        return
-      }
-      self.shapePiker = app.autocomplete.create({
-        inputEl: '#shape',
-        openIn: 'dropdown',
-        routableModals: false,
-        source: function (query, render) {
-          let results = []
-          let types = ['买赠', '礼品赠送', '抽奖', '圆桌会议', '分销活动', '检测活动']
-          for (let i = 0; i < types.length; i++) {
-            if (types[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(types[i])
-          }
-          // Render items by passing array with result items
-          render(results)
-        }
-      })
-      // self.goodsNamePiker.open()
-    },
-    destroyed() {
-      this.shapePiker && this.shapePiker.destroy()
     },
     computed: {
       isReadonly () {
@@ -254,6 +239,12 @@
       selectGoods(good) {
         this.goodsName = good.goods_name
         this.goodsSpecifications = good.goods_spec
+      },
+      onClickSelect() {
+        this.$refs.selectList.show()
+      },
+      selectedItem(item) {
+        this.shape = item
       },
       onSave() {
         const app = this.$f7
@@ -280,21 +271,14 @@
   .slide-enter, .slide-leave-to
     transform: translate3d(0, -100%, 0)
   .yhsq
-    position: fixed
-    top: 0
-    left: 0
-    right: 0
-    bottom: 0
-    background: #fff
-    z-index: 1
     .apply-form
-      position: fixed
+      position: absolute
       top: 0
       left: 0
       right: 0
       bottom: 0
       background: #fff
       z-index: 1
-      .block
-        padding-bottom: 40px
+      overflow: scroll
+      -webkit-overflow-scrolling: touch
 </style>

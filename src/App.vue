@@ -1,7 +1,9 @@
 <template>
-  <f7-app id="app" :params="f7Params">
-    <router-view></router-view>
-  </f7-app>
+  <div id="app">
+    <f7-app :params="f7Params">
+      <router-view></router-view>
+    </f7-app>
+  </div>
 </template>
 
 <script>
@@ -13,7 +15,13 @@
     data() {
       return {
         f7Params: {
-          theme: 'ios'
+          theme: 'ios',
+          touch: {
+            fastClicks: false,
+            tapHoldPreventClicks: false,
+            activeState: false,
+            materialRipple: false
+          }
         }
       }
     }

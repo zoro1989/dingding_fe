@@ -25,10 +25,8 @@
                 </div>
               </div>
               <div class="item-subtitle">{{item.shopUser}}</div>
-              <div class="item-text">
-                <div>{{item.shopAddr}}</div>
-                <div :class="auditStatusColor(item.auditStatus)">{{auditStatusDisp(item.auditStatus)}}</div>
-              </div>
+              <div class="item-text">{{item.shopAddr}}</div>
+              <div class="item-text" :class="auditStatusColor(item.auditStatus)">{{auditStatusDisp(item.auditStatus)}}</div>
             </div>
             <f7-swipeout-actions right>
               <f7-swipeout-button v-if="item.auditStatus === '1' || item.auditStatus === '2'" color="orange" @click="onEdit(item.id)">编辑</f7-swipeout-button>

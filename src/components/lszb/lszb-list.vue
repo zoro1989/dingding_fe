@@ -24,17 +24,15 @@
                   <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
                 </div>
               </div>
-              <div class="item-subtitle">董事长：{{item.chairmanName}}</div>
-              <div class="item-text">
-                <div>药店地址：{{item.shopAddr}}</div>
-                <div>合作时间：{{item.cooperationTime}}</div>
-                <div>连锁门店数量：{{item.shopTotal}}</div>
-                <div>直营店数量：{{item.directlyTotal}}</div>
-                <div>加盟店数量：{{item.joinTotal}}</div>
-                <div>连锁总部：{{item.mainShopAddr}}</div>
-                <div>连锁仓库：{{item.chainWarehous}}</div>
-                <div :class="auditStatusColor(item.auditStatus)">{{auditStatusDisp(item.auditStatus)}}</div>
-              </div>
+              <div class="item-subtitle">药店地址：{{item.shopAddr}}</div>
+              <div class="item-text">董事长：{{item.chairmanName}}</div>
+              <div class="item-text">合作时间：{{item.cooperationTime}}</div>
+              <div class="item-text">连锁门店数量：{{item.shopTotal}}</div>
+              <div class="item-text">直营店数量：{{item.directlyTotal}}</div>
+              <div class="item-text">加盟店数量：{{item.joinTotal}}</div>
+              <div class="item-text">连锁总部：{{item.mainShopAddr}}</div>
+              <div class="item-text">连锁仓库：{{item.chainWarehous}}</div>
+              <div class="item-text" :class="auditStatusColor(item.auditStatus)">{{auditStatusDisp(item.auditStatus)}}</div>
             </div>
             <f7-swipeout-actions right>
               <f7-swipeout-button v-if="item.auditStatus === '1' || item.auditStatus === '2'" color="orange" @click="onEdit(item.id)">编辑</f7-swipeout-button>

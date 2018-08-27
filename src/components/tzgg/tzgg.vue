@@ -1,7 +1,7 @@
 <template>
   <transition name="slide">
     <div class="lsmdsp">
-      <scroll class="apply-form">
+      <div class="apply-form">
         <div>
           <form class="list" id="apply-form">
             <ul>
@@ -28,7 +28,7 @@
             </ul>
           </form>
         </div>
-      </scroll>
+      </div>
     </div>
   </transition>
 </template>
@@ -69,21 +69,16 @@
   .slide-enter, .slide-leave-to
     transform: translate3d(0, -100%, 0)
   .lsmdsp
-    position: fixed
-    top: 0
-    left: 0
-    right: 0
-    bottom: 0
-    background: #fff
-    z-index: 1
     .apply-form
-      position: fixed
+      position: absolute
       top: 0
       left: 0
       right: 0
       bottom: 0
       background: #fff
       z-index: 1
+      overflow: scroll
+      -webkit-overflow-scrolling: touch
   .toggle
     margin: 10px!important
   .block

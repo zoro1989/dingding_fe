@@ -1,7 +1,7 @@
 <template>
   <transition name="slide">
     <div class="thsq">
-      <scroll class="apply-form">
+      <div class="apply-form">
         <div>
           <form class="list" id="apply-form">
             <ul>
@@ -114,7 +114,7 @@
             </div>
           </div>
         </div>
-      </scroll>
+      </div>
       <merchant-select-list v-if="merchants.length > 0" :list="merchants" ref="merchants" @selectMerchants="selectMerchants"></merchant-select-list>
       <goods-select-list v-if="goods.length > 0" :list="goods" ref="goods" @selectGoods="selectGoods"></goods-select-list>
     </div>
@@ -169,7 +169,7 @@
         this.merchants = res.data
         this.$nextTick(() => {
           if (this.data.merchantsName) {
-            this.$refs.merchantsSelect.value = this.data.merchantsName
+            this.merchantsName = this.data.merchantsName
           }
         })
       })
@@ -177,17 +177,14 @@
         this.goods = res.data
         this.$nextTick(() => {
           if (this.data.goodsName) {
-            this.$refs.goodsSelect.value = this.data.goodsName
+            this.goodsName = this.data.goodsName
+            this.goodsSpecifications = this.data.goodsSpecifications
           }
         })
       })
       fetch('get', api.findRequireGoodsUserBaseInfo, {}, this).then((res) => {
         this.autoData = res.data
       })
-      if (this.$route.name === 'thsq-view') {
-        // return
-      }
-      // self.goodsNamePiker.open()
     },
     computed: {
       isReadonly () {
@@ -233,21 +230,14 @@
   .slide-enter, .slide-leave-to
     transform: translate3d(0, -100%, 0)
   .thsq
-    position: fixed
-    top: 0
-    left: 0
-    right: 0
-    bottom: 0
-    background: #fff
-    z-index: 1
     .apply-form
-      position: fixed
+      position: absolute
       top: 0
       left: 0
       right: 0
       bottom: 0
       background: #fff
       z-index: 1
-      .block
-        padding-bottom: 40px
+      overflow: scroll
+      -webkit-overflow-scrolling: touch
 </style>

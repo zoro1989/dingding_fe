@@ -23,16 +23,12 @@
                   <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
                 </div>
               </div>
-              <div class="item-subtitle">
-                <div>门店名称：{{item.storeName}}</div>
-                <div>退货人名称：{{item.returnGoodsName}}</div>
-                <div>退货人分公司：{{item.returnGoodsOffice}}</div>
-                <div>退货人支公司：{{item.returnGoodsBranchOffice}}</div>
-              </div>
-              <div class="item-text">
-                <div>产品名称：{{item.goodsName}}</div>
-                <div :class="auditStatusColor(item.auditStatus)">{{auditStatusDisp(item.auditStatus)}}</div>
-              </div>
+              <div class="item-subtitle">门店名称：{{item.storeName}}</div>
+              <div class="item-text">产品名称：{{item.goodsName}}</div>
+              <div class="item-text">退货人名称：{{item.returnGoodsName}}</div>
+              <div class="item-text">退货人分公司：{{item.returnGoodsOffice}}</div>
+              <div class="item-text">退货人支公司：{{item.returnGoodsBranchOffice}}</div>
+              <div class="item-text" :class="auditStatusColor(item.auditStatus)">{{auditStatusDisp(item.auditStatus)}}</div>
             </div>
             <f7-swipeout-actions right>
               <f7-swipeout-button v-if="item.auditStatus === '1' || item.auditStatus === '2'" color="orange" @click="onEdit(item.id)">编辑</f7-swipeout-button>
