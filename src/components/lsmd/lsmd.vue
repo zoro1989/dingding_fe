@@ -118,7 +118,6 @@
   import { f7Page, f7List, f7ListItem, f7Button, f7Searchbar } from 'framework7-vue'
   import AddrSelect from 'base/addr-select/addr-select'
   import AutoSelectList from 'base/auto-select-list/auto-select-list'
-  import Scroll from 'base/scroll/scroll'
   import { api } from '@/config'
   import fetch from 'utils/fetch'
   export default {
@@ -127,7 +126,6 @@
       f7List,
       f7ListItem,
       f7Button,
-      Scroll,
       AddrSelect,
       AutoSelectList,
       f7Searchbar

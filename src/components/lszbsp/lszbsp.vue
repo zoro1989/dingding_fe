@@ -219,7 +219,6 @@
 </template>
 <script>
   import { f7Page, f7List, f7ListItem, f7Button, f7Searchbar } from 'framework7-vue'
-  import Scroll from 'base/scroll/scroll'
   import { api } from '@/config'
   import fetch from 'utils/fetch'
   export default {
@@ -228,7 +227,6 @@
       f7List,
       f7ListItem,
       f7Button,
-      Scroll,
       f7Searchbar
     },
     data() {

@@ -13,7 +13,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "babel-runtime": "^6.26.0",
-    "better-scroll": "^1.12.6",
+    "cube-ui": "^1.10.13",
     "dingtalk-jsapi": "^2.0.69",
     "fastclick": "^1.0.6",
     "framework7": "^3.1.1",
@@ -32,6 +32,7 @@
     "babel-plugin-component": "^1.1.1",
     "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
+    "babel-plugin-transform-modules": "^0.1.1",
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-plugin-transform-vue-jsx": "^3.5.0",
     "babel-polyfill": "^6.26.0",
@@ -65,8 +66,6 @@
     "rimraf": "^2.6.0",
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
-    "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.2",
     "uglifyjs-webpack-plugin": "^1.1.1",
     "url-loader": "^1.1.1",
     "vue-loader": "^13.3.0",
@@ -75,8 +74,15 @@
     "webpack": "^3.8.0",
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.9.7",
-    "webpack-merge": "^4.1.0"
+    "webpack-merge": "^4.1.0",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^2.1.1",
+    "webpack-post-compile-plugin": "^0.4.1",
+    "webpack-transform-modules-plugin": "^0.3.5"
   },
+  "compileDependencies": [
+    "cube-ui"
+  ],
   "engines": {
     "node": ">= 6.0.0",
     "npm": ">= 3.0.0"

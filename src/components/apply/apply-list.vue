@@ -9,42 +9,41 @@
           <f7-link @click="addApply">新增</f7-link>
         </f7-nav-right>
       </f7-navbar>
-      <scroll class="apply" @scrollToEnd="searchMore" :pullup="pullup" :data="list">
-        <f7-list media-list>
-          <f7-list-item
-            swipeout
-            v-for="item in list"
-            :key="item.id"
-          >
-            <div slot="inner-start">
-              <div class="item-title-row" slot="before-title">
-                <div class="item-title">{{item.shopName}}</div>
-                <div class="item-subtitle margin-left text-color-gray">{{item.shopType}}</div>
-                <div class="item-after" @click="onView(item.id)">
-                  <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
+      <div class="apply">
+        <cube-scroll @pulling-up="searchMore" :options="scrollOptions" :data="list">
+          <f7-list media-list>
+            <f7-list-item
+              swipeout
+              v-for="item in list"
+              :key="item.id"
+            >
+              <div slot="inner-start">
+                <div class="item-title-row" slot="before-title">
+                  <div class="item-title">{{item.shopName}}</div>
+                  <div class="item-subtitle margin-left text-color-gray">{{item.shopType}}</div>
+                  <div class="item-after" @click="onView(item.id)">
+                    <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
+                  </div>
                 </div>
+                <div class="item-subtitle">{{item.shopUser}}</div>
+                <div class="item-text">{{item.shopAddr}}</div>
+                <div class="item-text" :class="auditStatusColor(item.auditStatus)">{{auditStatusDisp(item.auditStatus)}}</div>
               </div>
-              <div class="item-subtitle">{{item.shopUser}}</div>
-              <div class="item-text">{{item.shopAddr}}</div>
-              <div class="item-text" :class="auditStatusColor(item.auditStatus)">{{auditStatusDisp(item.auditStatus)}}</div>
-            </div>
-            <f7-swipeout-actions right>
-              <f7-swipeout-button v-if="item.auditStatus === '1' || item.auditStatus === '2'" color="orange" @click="onEdit(item.id)">编辑</f7-swipeout-button>
-              <f7-swipeout-button color="red" v-if="item.auditStatus === '1'" @click="onDelete(item.id)">删除</f7-swipeout-button>
-              <f7-swipeout-button color="blue" v-if="item.auditStatus === '1' || item.auditStatus === '2'" @click="onAudit(item)">审批</f7-swipeout-button>
-              <f7-swipeout-button color="blue" v-if="item.auditStatus === '4'">结束</f7-swipeout-button>
-            </f7-swipeout-actions>
-          </f7-list-item>
-          <loading v-show="showLoading" title=""></loading>
-        </f7-list>
-      </scroll>
+              <f7-swipeout-actions right>
+                <f7-swipeout-button v-if="item.auditStatus === '1' || item.auditStatus === '2'" color="orange" @click="onEdit(item.id)">编辑</f7-swipeout-button>
+                <f7-swipeout-button color="red" v-if="item.auditStatus === '1'" @click="onDelete(item.id)">删除</f7-swipeout-button>
+                <f7-swipeout-button color="blue" v-if="item.auditStatus === '1' || item.auditStatus === '2'" @click="onAudit(item)">审批</f7-swipeout-button>
+                <f7-swipeout-button color="blue" v-if="item.auditStatus === '4'">结束</f7-swipeout-button>
+              </f7-swipeout-actions>
+            </f7-list-item>
+          </f7-list>
+        </cube-scroll>
+      </div>
     </div>
   </transition>
 </template>
 <script>
   import { f7Navbar, f7NavTitle, f7Link, f7NavLeft, f7NavRight, f7Page, f7List, f7ListItem, f7SwipeoutActions, f7SwipeoutButton } from 'framework7-vue'
-  import Scroll from 'base/scroll/scroll'
-  import Loading from 'base/loading/loading'
   import { api } from '@/config'
   import fetch from 'utils/fetch'
   export default {
@@ -58,9 +57,7 @@
       f7List,
       f7ListItem,
       f7SwipeoutActions,
-      f7SwipeoutButton,
-      Scroll,
-      Loading
+      f7SwipeoutButton
     },
     data() {
       return {
@@ -68,8 +65,12 @@
         pageNo: 1,
         pageSize: 10,
         maxItems: 200,
-        pullup: true,
-        showLoading: true,
+        scrollOptions: {
+          pullUpLoad: {
+            threshold: 0,
+            txt: ''
+          }
+        },
         maxCount: 0
       }
     },
@@ -79,10 +80,8 @@
     methods: {
       initData() {
         fetch('get', api.terminalInfo, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
-          console.log(res)
           this.list = res.data
           this.maxCount = res.count
-          this.showLoading = false
         })
       },
       auditStatusColor(auditStatus) {
@@ -124,9 +123,8 @@
           let index = _this.list.findIndex((item) => {
             return item.id === id
           })
-          _this.list.splice(index, 1)
           fetch('delete', api.terminalInfo + id, {}, this).then((res) => {
-            console.log(res)
+            _this.list.splice(index, 1)
           })
         })
       },
@@ -164,20 +162,12 @@
         this.$router.go(-1)
       },
       searchMore() {
-        if (this.showLoading) {
-          return
-        }
-        this.showLoading = true
         if (this.list.length >= this.maxCount) {
-          this.showLoading = false
           return
         }
-        this.pageNo = this.pageNo + 1
-        console.log(this.pageNo)
+        this.pageNo++
         fetch('get', api.terminalInfo, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
-          console.log(res)
           this.list = this.list.concat(res.data)
-          this.showLoading = false
         })
       }
     }
@@ -190,21 +180,21 @@
     transform: translate3d(100%, 0, 0)
   .apply-list
     background: #fff!important
-    position: fixed
+    position: absolute
     z-index: 2
     top: 0
     left: 0
     right: 0
     bottom: 0
     .apply
-      background: #fff!important
-      position: fixed
+      height: 100%
+      width: 100%
+      transform: rotate(0deg) // fix 子元素超出边框圆角部分不隐藏的问题
+      position: absolute
       top: 44px
-      left: 0
-      right: 0
       bottom: 0
+      overflow: hidden
       .list
-        padding-bottom: 40px
         .item-after
           .fa
             padding-left: 5px

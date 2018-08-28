@@ -30,13 +30,11 @@
 </template>
 <script>
   import { f7Page, f7List, f7ListItem, f7Searchbar, f7Navbar, f7NavRight, f7NavLeft, f7NavTitle, f7Link, f7Subnavbar } from 'framework7-vue'
-  import Scroll from 'base/scroll/scroll'
   export default {
     components: {
       f7Page,
       f7List,
       f7ListItem,
-      Scroll,
       f7Searchbar,
       f7Navbar,
       f7Subnavbar,
@@ -87,7 +85,7 @@
   .slide-enter, .slide-leave-to
     transform: translate3d(0, 100%, 0)
   .goods-select
-    position: fixed
+    position: absolute
     top: 0
     left: 0
     right: 0

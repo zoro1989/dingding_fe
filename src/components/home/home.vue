@@ -184,6 +184,7 @@
       font-size: 20px
     .link-box
       display: flex
+      width: 25%
       flex-direction: column
       align-items: center
       margin: 0 10px

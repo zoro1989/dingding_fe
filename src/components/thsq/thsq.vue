@@ -122,7 +122,6 @@
 </template>
 <script>
   import { f7Page, f7List, f7ListItem, f7Button, f7Searchbar } from 'framework7-vue'
-  import Scroll from 'base/scroll/scroll'
   import MerchantSelectList from 'base/merchants-select-list/merchants-select-list'
   import GoodsSelectList from 'base/goods-select-list/goods-select-list'
   import { api } from '@/config'
@@ -133,7 +132,6 @@
       f7List,
       f7ListItem,
       f7Button,
-      Scroll,
       f7Searchbar,
       MerchantSelectList,
       GoodsSelectList

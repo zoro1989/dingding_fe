@@ -23,26 +23,26 @@
         @change="doSearch"
       ></f7-searchbar>
       <div id="allmap" style="width: 100%; height: calc(100% - 44px);"></div>
-      <scroll :data="addressList" class="scroll-addr">
-        <f7-list media-list>
-          <f7-list-item @click="addrItemClick(item)" v-for="item in addressList" :key="item.uid" :title="item.title" :subtitle="item.address">
-            <i slot="media" class="fa fa-location-arrow text-color-red" />
-          </f7-list-item>
-        </f7-list>
-      </scroll>
+      <div class="scroll-addr">
+        <cube-scroll :data="addressList">
+          <f7-list media-list>
+            <f7-list-item @click="addrItemClick(item)" v-for="item in addressList" :key="item.uid" :title="item.title" :subtitle="item.address">
+              <i slot="media" class="fa fa-location-arrow text-color-red" />
+            </f7-list-item>
+          </f7-list>
+        </cube-scroll>
+      </div>
     </div>
   </transition>
 </template>
 <script>
   import { f7Page, f7List, f7ListItem, f7Searchbar } from 'framework7-vue'
   import BMap from 'BMap'
-  import Scroll from 'base/scroll/scroll'
   export default {
     components: {
       f7Page,
       f7List,
       f7ListItem,
-      Scroll,
       f7Searchbar
     },
     data() {
@@ -128,10 +128,15 @@
           if (local.getStatus() === 0) {
             for (let i = 0; i < results.getCurrentNumPois(); i++) {
               let poi = results.getPoi(i)
-              _this.addressList.push(poi)
+              _this.addressList.push({
+                address: poi.address,
+                lng: poi.lng,
+                lat: poi.lat
+              })
             }
           }
         })
+        console.log(this.addressList)
       },
       addrItemClick(item) {
         let point = new BMap.Point(item.lng, item.lat)
@@ -149,7 +154,7 @@
   .slide-enter, .slide-leave-to
     transform: translate3d(0, 100%, 0)
   .addr-select
-    position: fixed
+    position: absolute
     top: 0
     left: 0
     right: 0
@@ -162,12 +167,15 @@
       margin: 0!important
       padding: 10px
     .scroll-addr
-      position: fixed
+      position: absolute
       z-index: 1
       bottom: 0
       left: 0
       width: 100%
       height: 100px
+      transform: rotate(0deg) // fix 子元素超出边框圆角部分不隐藏的问题
+      .cube-scroll-wrapper
+        overflow: visible
       .fa
         font-size: 20px
         padding-top: 8px

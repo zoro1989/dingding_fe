@@ -6,37 +6,36 @@
         <!--</f7-nav-left>-->
         <f7-nav-title>要货审批列表</f7-nav-title>
       </f7-navbar>
-      <scroll class="yhsqsp" @scrollToEnd="searchMore" :pullup="pullup" :data="list">
-        <f7-list media-list>
-          <f7-list-item
-            v-for="item in list"
-            :key="item.id"
-            @click="onAudit(item)"
-          >
-            <div slot="inner-start">
-              <div class="item-title-row" slot="before-title">
-                <div class="item-title">客商名称：{{item.merchants_name}}</div>
-                <div class="item-after">
-                  <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
+      <div class="yhsqsp">
+        <cube-scroll @pulling-up="searchMore" :options="scrollOptions" :data="list">
+          <f7-list media-list>
+            <f7-list-item
+              v-for="item in list"
+              :key="item.id"
+              @click="onAudit(item)"
+            >
+              <div slot="inner-start">
+                <div class="item-title-row" slot="before-title">
+                  <div class="item-title">客商名称：{{item.merchants_name}}</div>
+                  <div class="item-after">
+                    <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
+                  </div>
                 </div>
+                <div class="item-subtitle">产品名称：{{item.goods_name}}</div>
+                <div class="item-text">要货人名称：{{item.require_goods_name}}</div>
+                <div class="item-text">要货人分公司：{{item.require_goods_office}}</div>
+                <div class="item-text">要货人支公司：{{item.require_goods_branch_office}}</div>
+                <div class="item-text" :class="auditStatusColor(item.audit_status)">{{item.audit_status}}</div>
               </div>
-              <div class="item-subtitle">产品名称：{{item.goods_name}}</div>
-              <div class="item-text">要货人名称：{{item.require_goods_name}}</div>
-              <div class="item-text">要货人分公司：{{item.require_goods_office}}</div>
-              <div class="item-text">要货人支公司：{{item.require_goods_branch_office}}</div>
-              <div class="item-text" :class="auditStatusColor(item.audit_status)">{{item.audit_status}}</div>
-            </div>
-          </f7-list-item>
-          <loading v-show="showLoading" title=""></loading>
-        </f7-list>
-      </scroll>
+            </f7-list-item>
+          </f7-list>
+        </cube-scroll>
+      </div>
     </div>
   </transition>
 </template>
 <script>
   import { f7Navbar, f7NavTitle, f7Link, f7NavLeft, f7NavRight, f7Page, f7List, f7ListItem } from 'framework7-vue'
-  import Scroll from 'base/scroll/scroll'
-  import Loading from 'base/loading/loading'
   import { api } from '@/config'
   import fetch from 'utils/fetch'
   export default {
@@ -48,9 +47,7 @@
       f7NavRight,
       f7Page,
       f7List,
-      f7ListItem,
-      Scroll,
-      Loading
+      f7ListItem
     },
     data() {
       return {
@@ -58,17 +55,19 @@
         pageNo: 1,
         pageSize: 10,
         maxItems: 200,
-        pullup: true,
-        showLoading: true,
+        scrollOptions: {
+          pullUpLoad: {
+            threshold: 0,
+            txt: ''
+          }
+        },
         maxCount: 0
       }
     },
     created() {
       fetch('get', api.requireGoodsInfoApprove, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
-        console.log(res)
         this.list = res.data
         this.maxCount = res.count
-        this.showLoading = false
       })
     },
     methods: {
@@ -91,20 +90,12 @@
         this.$router.go(-1)
       },
       searchMore() {
-        if (this.showLoading) {
-          return
-        }
-        this.showLoading = true
         if (this.list.length >= this.maxCount) {
-          this.showLoading = false
           return
         }
-        this.pageNo = this.pageNo + 1
-        console.log(this.pageNo)
+        this.pageNo++
         fetch('get', api.requireGoodsInfoApprove, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
-          console.log(res)
           this.list = this.list.concat(res.data)
-          this.showLoading = false
         })
       }
     }
@@ -117,21 +108,21 @@
     transform: translate3d(100%, 0, 0)
   .yhsqsp-list
     background: #fff!important
-    position: fixed
+    position: absolute
     z-index: 2
     top: 0
     left: 0
     right: 0
     bottom: 0
     .yhsqsp
-      background: #fff!important
-      position: fixed
+      height: 100%
+      width: 100%
+      transform: rotate(0deg) // fix 子元素超出边框圆角部分不隐藏的问题
+      position: absolute
       top: 44px
-      left: 0
-      right: 0
       bottom: 0
+      overflow: hidden
       .list
-        padding-bottom: 40px
         .item-after
           .fa
             padding-left: 5px
