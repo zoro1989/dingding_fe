@@ -187,7 +187,6 @@
     right: 0
     bottom: 0
     .lszb
-      height: 100%
       width: 100%
       transform: rotate(0deg) // fix 子元素超出边框圆角部分不隐藏的问题
       position: absolute

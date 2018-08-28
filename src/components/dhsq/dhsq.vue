@@ -115,8 +115,8 @@
           </div>
         </div>
       </div>
-      <merchant-select-list v-if="merchants.length > 0" :list="merchants" ref="merchants" @selectMerchants="selectMerchants"></merchant-select-list>
-      <goods-select-list v-if="goods.length > 0" :list="goods" ref="goods" @selectGoods="selectGoods"></goods-select-list>
+      <merchant-select-list v-if="merchants.length > 0" :list="merchants" ref="merchants" @selectMerchants="selectMerchants" @searchMore="searchMoreMerchant"></merchant-select-list>
+      <goods-select-list v-if="goods.length > 0" :list="goods" ref="goods" @selectGoods="selectGoods" @searchMore="searchMoreGoods"></goods-select-list>
     </div>
   </transition>
 </template>
@@ -144,6 +144,8 @@
         latitude: '',
         pageNoGoods: 1,
         pageNoMerchants: 1,
+        maxMerchantsCount: 0,
+        maxGoodsCount: 0,
         pageSize: 10,
         goods: [],
         merchants: [],
@@ -165,6 +167,7 @@
       }
       fetch('get', api.findMerchants, {page: this.pageNoMerchants, limit: this.pageSize}, this).then((res) => {
         this.merchants = res.data
+        this.maxMerchantsCount = res.count
         this.$nextTick(() => {
           if (this.data.merchantsName) {
             this.merchantsName = this.data.merchantsName
@@ -173,6 +176,7 @@
       })
       fetch('get', api.goodsAutoFindInfo, {page: this.pageNoGoods, limit: this.pageSize}, this).then((res) => {
         this.goods = res.data
+        this.maxGoodsCount = res.count
         this.$nextTick(() => {
           if (this.data.goodsName) {
             this.goodsName = this.data.goodsName
@@ -196,12 +200,30 @@
       selectMerchants(value) {
         this.merchantsName = value
       },
+      searchMoreMerchant() {
+        if (this.merchants.length >= this.maxMerchantsCount) {
+          return
+        }
+        this.pageNoMerchants++
+        fetch('get', api.findMerchants, {page: this.pageNoMerchants, limit: this.pageSize}, this).then((res) => {
+          this.merchants = this.merchants.concat(res.data)
+        })
+      },
       onClickGood() {
         this.$refs.goods.show()
       },
       selectGoods(good) {
         this.goodsName = good.goods_name
         this.goodsSpecifications = good.goods_spec
+      },
+      searchMoreGoods() {
+        if (this.goods.length >= this.maxGoodsCount) {
+          return
+        }
+        this.pageNoGoods++
+        fetch('get', api.goodsAutoFindInfo, {page: this.pageNoGoods, limit: this.pageSize}, this).then((res) => {
+          this.goods = this.goods.concat(res.data)
+        })
       },
       onSave() {
         const app = this.$f7

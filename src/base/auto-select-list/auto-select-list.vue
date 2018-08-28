@@ -8,15 +8,13 @@
         <f7-nav-right>
           <f7-link ></f7-link>
         </f7-nav-right>
-        <f7-subnavbar :inner="false">
-          <f7-searchbar
-            placeholder="请输入"
-            disable-button-text="取消"
-            search-container=".search-list"
-            search-in=".item-title"
-          ></f7-searchbar>
-        </f7-subnavbar>
       </f7-navbar>
+      <f7-searchbar
+        placeholder="请输入"
+        disable-button-text="取消"
+        search-container=".search-list"
+        search-in=".item-title"
+      ></f7-searchbar>
       <f7-list class="searchbar-not-found">
         <f7-list-item title="未找到数据"></f7-list-item>
       </f7-list>

@@ -62,7 +62,10 @@
     .smart-select-popup
       .item-title
         white-space: normal!important
-    .merchant-select, .goods-select
+    .scroll-wrapper-box
+      .cube-scroll-content
+        padding-bottom: 30px!important
+    .goods-select
       .page-content
         padding-top: 88px!important
 </style>
