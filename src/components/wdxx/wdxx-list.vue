@@ -17,11 +17,11 @@
               <div slot="inner-start">
                 <div class="item-title-row" slot="before-title">
                   <div class="item-title">{{item.title || item.content}}</div>
-                  <div class="item-subtitle margin-left text-color-gray">{{item.type}}</div>
                   <div class="item-after" v-if="item.type !== '生日提醒'">
                     <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
                   </div>
                 </div>
+                <div class="item-subtitle">{{item.type}}</div>
                 <div class="item-subtitle">{{item.name}}</div>
                 <div class="item-text">{{item.auditDate}}</div>
                 <div class="item-text" :class="auditStatusColor(item.audit_status)">{{auditStatusDisp(item.audit_status)}}</div>
@@ -138,7 +138,7 @@
           return
         }
         this.pageNo++
-        fetch('get', api.terminalInfoApprove, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
+        fetch('get', api.msgList, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
           this.list = this.list.concat(res.data)
         })
       }

@@ -54,7 +54,7 @@
       const self = this
       const app = self.$f7
       if (this.tableId && this.tableId !== '0') {
-        fetch('get', api.chainCustomInfoGetDetail + this.tableId, {}, this).then((res) => {
+        fetch('get', api.noticeInfo + this.tableId, {}, this).then((res) => {
           app.form.fillFromData('#apply-form', res.data)
         })
       }

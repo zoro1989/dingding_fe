@@ -81,7 +81,7 @@
           return
         }
         this.pageNo++
-        fetch('get', api.terminalInfoApprove, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
+        fetch('get', api.noticeInfoList, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
           this.list = this.list.concat(res.data)
         })
       }

@@ -64,12 +64,16 @@
       }
     },
     created() {
-      fetch('get', api.terminalInfoApprove, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
-        this.list = res.data
-        this.maxCount = res.count
-      })
+     this.initData()
     },
     methods: {
+      initData() {
+        this.pageNo = 1
+        fetch('get', api.chainCustomInfoApprove, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
+          this.list = res.data
+          this.maxCount = res.count
+        })
+      },
       auditStatusColor(auditStatus) {
         if (auditStatus === '待审核') {
           return 'text-color-blue'
@@ -81,7 +85,7 @@
       },
       onAudit(item) {
         this.$router.push({
-            path: `/zdylsp/${item.id}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
+            path: `/lsmdsp/${item.id}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
           }
         )
       },
@@ -93,7 +97,7 @@
           return
         }
         this.pageNo++
-        fetch('get', api.terminalInfoApprove, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
+        fetch('get', api.chainCustomInfoApprove, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
           this.list = this.list.concat(res.data)
         })
       }

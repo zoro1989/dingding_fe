@@ -64,12 +64,16 @@
       }
     },
     created() {
-      fetch('get', api.terminalInfoApprove, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
-        this.list = res.data
-        this.maxCount = res.count
-      })
+      this.initData()
     },
     methods: {
+      initData() {
+        this.pageNo = 1
+        fetch('get', api.terminalInfoApprove, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
+          this.list = res.data
+          this.maxCount = res.count
+        })
+      },
       auditStatusColor(auditStatus) {
         if (auditStatus === '待审核') {
           return 'text-color-blue'

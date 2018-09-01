@@ -6,6 +6,11 @@ const api = {
   // 登录
   authLogin: apiPath + 'dingtalk/auth/login',
   dingtalkAuth: apiPath + 'dingtalk/auth/',
+  selfFunc: apiPath + 'api/base/self/func',
+  // 同步位置
+  terminalUploadLocation: apiPath + 'merchants/terminal/info/uploadLocation/',
+  chaintotalUploadLocation: apiPath + 'merchants/chaintotal/info/uploadLocation/',
+  chainCustomUploadLocation: apiPath + 'merchants/chainCustom/info/uploadLocation/',
   // 终端医疗
   terminalInfo: apiPath + 'merchants/terminal/info/',
   terminalInfoSave: apiPath + 'merchants/terminal/info/save',
@@ -21,7 +26,7 @@ const api = {
   // 连锁总部审批列表
   chaintotalInfoApprove: apiPath + 'merchants/chaintotal/info/approve/',
   // 流转列表
-  chainTotalAuditInfo: apiPath + 'merchants/audioInfo/info/form/chainTotal/',
+  chainTotalAuditInfo: apiPath + 'merchants/auditInfo/info/form/chainTotal/',
   // 连锁门店
   chainCustomInfo: apiPath + 'merchants/chainCustom/info/',
   chainCustomInfoSave: apiPath + 'merchants/chainCustom/info/save',
@@ -29,7 +34,7 @@ const api = {
   // 连锁门店审批列表
   chainCustomInfoApprove: apiPath + 'merchants/chainCustom/info/approve/',
   // 流转列表
-  chainCustomAuditInfo: apiPath + 'merchants/audioInfo/info/form/chainCustom/',
+  chainCustomAuditInfo: apiPath + 'merchants/auditInfo/info/form/chainCustom/',
 
   // 审批
   terminalAudit: apiPath + 'merchants/auditInfo/info/commitNextApproveUser',

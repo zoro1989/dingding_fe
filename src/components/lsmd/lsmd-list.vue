@@ -38,7 +38,8 @@
                 <f7-swipeout-button v-if="item.auditStatus === '1' || item.auditStatus === '2'" color="orange" @click="onEdit(item.id)">编辑</f7-swipeout-button>
                 <f7-swipeout-button color="red" v-if="item.auditStatus === '1'" @click="onDelete(item.id)">删除</f7-swipeout-button>
                 <f7-swipeout-button color="blue" v-if="item.auditStatus === '1' || item.auditStatus === '2'" @click="onAudit(item)">审批</f7-swipeout-button>
-                <f7-swipeout-button color="blue" v-if="item.auditStatus === '4'">结束</f7-swipeout-button>
+                <f7-swipeout-button color="green" v-if="item.auditStatus === '4'">结束</f7-swipeout-button>
+                <f7-swipeout-button color="blue" v-if="item.auditStatus === '5'" @click="onUploadLocation(item.id)">同步位置</f7-swipeout-button>
               </f7-swipeout-actions>
             </f7-list-item>
           </f7-list>
@@ -49,6 +50,7 @@
 </template>
 <script>
   import { f7Navbar, f7NavTitle, f7Link, f7NavLeft, f7NavRight, f7Page, f7List, f7ListItem, f7SwipeoutActions, f7SwipeoutButton } from 'framework7-vue'
+  import BMap from 'BMap'
   import { api } from '@/config'
   import fetch from 'utils/fetch'
   export default {
@@ -175,6 +177,41 @@
         fetch('get', api.chainCustomInfo, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
           this.list = this.list.concat(res.data)
         })
+      },
+
+      onUploadLocation(id) {
+        let _this = this
+        let geolocation = new BMap.Geolocation()
+        geolocation.getCurrentPosition(function(r) {
+          if (this.getStatus() === 0) {
+            // 以指定的经度与纬度创建一个坐标点
+            let pt = new BMap.Point(r.point.lng, r.point.lat)
+            // 创建一个地理位置解析器
+            let geoc = new BMap.Geocoder()
+            geoc.getLocation(pt, function(rs) {
+              // 解析格式：城市，区县，街道
+              let addComp = rs.addressComponents
+              let shopAddr = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber
+              fetch('post', api.chainCustomUploadLocation + id, {shopAddr: shopAddr, longitude: pt.lng, latitude: pt.lat}, this).then((res) => {
+                let toast = _this.$f7.toast.create({
+                  text: '同步位置成功，地址：' + shopAddr,
+                  position: 'center',
+                  closeTimeout: 2000
+                })
+                toast.open()
+                _this.pageNo = 1
+                _this.initData()
+              })
+            })
+          } else {
+            let toast = this.$f7.toast.create({
+              text: '定位失败',
+              position: 'center',
+              closeTimeout: 2000
+            })
+            toast.open()
+          }
+        }, {enableHighAccuracy: true})
       }
     }
   }

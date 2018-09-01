@@ -7,7 +7,7 @@
         <f7-nav-title>连锁总部审批列表</f7-nav-title>
       </f7-navbar>
       <div class="zdylsp">
-        <scroll @pulling-up="searchMore" :options="scrollOptions" :data="list">
+        <cube-scroll @pulling-up="searchMore" :options="scrollOptions" :data="list">
           <f7-list media-list>
             <f7-list-item
               v-for="item in list"
@@ -34,13 +34,13 @@
               </div>
             </f7-list-item>
           </f7-list>
-        </scroll>
+        </cube-scroll>
       </div>
     </div>
   </transition>
 </template>
 <script>
-  import { f7Navbar, f7NavTitle, f7Link, f7NavLeft, f7NavRight, f7Page, f7List, f7ListItem } from 'framework7-vue'
+  import { f7Navbar, f7NavTitle, f7Link, f7NavLeft, f7NavRight, f7Page, f7List, f7ListItem, f7SwipeoutActions, f7SwipeoutButton } from 'framework7-vue'
   import { api } from '@/config'
   import fetch from 'utils/fetch'
   export default {
@@ -52,7 +52,9 @@
       f7NavRight,
       f7Page,
       f7List,
-      f7ListItem
+      f7ListItem,
+      f7SwipeoutActions,
+      f7SwipeoutButton
     },
     data() {
       return {
@@ -70,12 +72,16 @@
       }
     },
     created() {
-      fetch('get', api.chaintotalInfoApprove, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
-        this.list = res.data
-        this.maxCount = res.count
-      })
+      this.initData()
     },
     methods: {
+      initData() {
+        this.pageNo = 1
+        fetch('get', api.chaintotalInfoApprove, {page: this.pageNo, limit: this.pageSize}, this).then((res) => {
+          this.list = res.data
+          this.maxCount = res.count
+        })
+      },
       auditStatusColor(auditStatus) {
         if (auditStatus === '待审核') {
           return 'text-color-blue'
@@ -87,7 +93,7 @@
       },
       onAudit(item) {
         this.$router.push({
-            path: `/zdylsp/${item.id}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
+            path: `/lszbsp/${item.id}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
           }
         )
       },
