@@ -10,7 +10,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">客商名称</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="merchantsName" :value="merchantsName" placeholder="请选择客商名称" readonly @click="onClickMerchant">
+                      <input type="text" name="merchantsName" :value="merchantsName" placeholder="请选择客商名称" :disabled="isReadonly" @click="onClickMerchant">
                     </div>
                   </div>
                 </div>
@@ -50,7 +50,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">产品名称</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="goodsName" :value="goodsName" placeholder="请选择产品名称" readonly @click="onClickGood">
+                      <input type="text" name="goodsName" :value="goodsName" placeholder="请选择产品名称" :disabled="isReadonly" @click="onClickGood">
                     </div>
                   </div>
                 </div>
@@ -60,7 +60,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">产品规格</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="goodsSpecifications" :value="goodsSpecifications" placeholder="请输入退货产品规格" readonly>
+                      <input type="text" name="goodsSpecifications" :value="goodsSpecifications" placeholder="请输入退货产品规格" disabled>
                     </div>
                   </div>
                 </div>
@@ -105,38 +105,55 @@
                   </div>
                 </div>
               </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">比例</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="scale" placeholder="请输入比例" :disabled="isReadonly">
+              <div class="card" v-if="!formType || formType === '1'">
+                <div class="card-header">政策后实际采购扣率（按零售价计算）</div>
+                <div class="card-content card-content-padding">
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">比例</div>
+                        <div class="item-input-wrap">
+                          <input type="text" name="scale" placeholder="请输入比例" :disabled="isReadonly">
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">形式</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="shape" :value="shape" placeholder="请选择形式" readonly @click="onClickSelect">
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">形式</div>
+                        <div class="item-input-wrap">
+                          <input type="text" name="shape" :value="shape" placeholder="请选择形式" :disabled="isReadonly" @click="onClickSelect">
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">备注</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="remark" placeholder="请输入备注" :disabled="isReadonly">
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">备注</div>
+                        <div class="item-input-wrap">
+                          <input type="text" name="remark" placeholder="请输入备注" :disabled="isReadonly">
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </li>
                 </div>
-              </li>
+              </div>
             </ul>
           </form>
+          <div class="timeline">
+            <div class="timeline-item" v-for="item in timelines" :key="item.audit_date">
+              <div class="timeline-item-date">{{item.audit_date}}</div>
+              <div class="timeline-item-divider"></div>
+              <div class="timeline-item-content">
+                <div class="timeline-item-inner">
+                  <div class="timeline-item-title">{{item.roleName}}：{{item.audit_user_name}}</div>
+                  <div class="timeline-item-subtitle">{{item.audioRes}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="block" v-if="!isReadonly">
             <div class="row">
               <f7-button fill class="col btn-save" @click="onSave">保存</f7-button>
@@ -188,7 +205,9 @@
         goodsName: '',
         goodsSpecifications: '',
         selectList: ['买赠', '礼品赠送', '抽奖', '圆桌会议', '分销活动', '检测活动'],
-        shape: ''
+        shape: '',
+        timelines: [],
+        formType: ''
       }
     },
     mounted() {
@@ -197,27 +216,23 @@
       if (this.listId && this.listId !== '0') {
         fetch('get', api.requireGoodsInfoGetDetail + this.listId, {}, this).then((res) => {
           app.form.fillFromData('#apply-form', res.data)
-          this.data = res.data
+          this.formType = res.data.formType
+          this.merchantsName = res.data.merchantsName
+          this.goodsName = res.data.goodsName
+          this.goodsSpecifications = res.data.goodsSpecifications
+          this.shape = res.data.shape
+        })
+        fetch('get', api.requireGoodsAuditInfo + this.listId, {}, this).then((res) => {
+          this.timelines = res.data
         })
       }
       fetch('get', api.findMerchants, {page: this.pageNoMerchants, limit: this.pageSize}, this).then((res) => {
         this.merchants = res.data
         this.maxMerchantsCount = res.count
-        this.$nextTick(() => {
-          if (this.data.merchantsName) {
-            this.merchantsName = this.data.merchantsName
-          }
-        })
       })
       fetch('get', api.goodsAutoFindInfo, {page: this.pageNoGoods, limit: this.pageSize}, this).then((res) => {
         this.goods = res.data
         this.maxGoodsCount = res.count
-        this.$nextTick(() => {
-          if (this.data.goodsName) {
-            this.goodsName = this.data.goodsName
-            this.goodsSpecifications = this.data.goodsSpecifications
-          }
-        })
       })
       fetch('get', api.findRequireGoodsUserBaseInfo, {}, this).then((res) => {
         this.autoData = res.data
@@ -230,7 +245,16 @@
     },
     methods: {
       onClickMerchant() {
-        this.$refs.merchants.show()
+        if (this.merchants.length > 0) {
+          this.$refs.merchants.show()
+        } else {
+          let toast = this.$f7.toast.create({
+            text: '没有检索到客商数据！',
+            position: 'center',
+            closeTimeout: 2000
+          })
+          toast.open()
+        }
       },
       selectMerchants(value) {
         this.merchantsName = value
@@ -245,7 +269,16 @@
         })
       },
       onClickGood() {
-        this.$refs.goods.show()
+        if (this.goods.length > 0) {
+          this.$refs.goods.show()
+        } else {
+          let toast = this.$f7.toast.create({
+            text: '没有检索到商品数据！',
+            position: 'center',
+            closeTimeout: 2000
+          })
+          toast.open()
+        }
       },
       selectGoods(good) {
         this.goodsName = good.goods_name

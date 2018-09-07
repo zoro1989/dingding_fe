@@ -20,7 +20,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">门店类别</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="shopType" :value="shopType" placeholder="请输入门店类别" readonly @click="onClickSelectShopType">
+                      <input type="text" name="shopType" :value="shopType" placeholder="请输入门店类别" :disabled="isReadonly" @click="onClickSelectShopType">
                     </div>
                   </div>
                 </div>
@@ -30,7 +30,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">连锁门店地址</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="shopAddr" :value="mapAddr" id="shopAddr" placeholder="请输入连锁门店地址" readonly @click="onClickAddr" :disabled="isReadonly">
+                      <input type="text" name="shopAddr" :value="shopAddr" id="shopAddr" placeholder="请输入连锁门店地址" @click="onClickAddr" :disabled="isReadonly">
                       <input name="longitude" type="hidden" :value="longitude"/>
                       <input name="latitude" type="hidden" :value="latitude"/>
                     </div>
@@ -52,7 +52,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">店长性别</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="shopUserSex" :value="shopUserSex" placeholder="请输入店长性别" readonly @click="onClickSelectShopUserSex">
+                      <input type="text" name="shopUserSex" :value="shopUserSex" placeholder="请输入店长性别" :disabled="isReadonly" @click="onClickSelectShopUserSex">
                     </div>
                   </div>
                 </div>
@@ -62,7 +62,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">店长出生日期</div>
                     <div class="item-input-wrap">
-                      <input type="text" placeholder="请选择店长出生日期" name="shopUserBirth" readonly="readonly" id="shopUserBirth" :disabled="isReadonly"/>
+                      <input type="text" placeholder="请选择店长出生日期" name="shopUserBirth" id="shopUserBirth" :disabled="isReadonly"/>
                     </div>
                   </div>
                 </div>
@@ -100,6 +100,18 @@
               </li>
             </ul>
           </form>
+          <div class="timeline">
+            <div class="timeline-item" v-for="item in timelines" :key="item.audit_date">
+              <div class="timeline-item-date">{{item.audit_date}}</div>
+              <div class="timeline-item-divider"></div>
+              <div class="timeline-item-content">
+                <div class="timeline-item-inner">
+                  <div class="timeline-item-title">{{item.roleName}}：{{item.audit_user_name}}</div>
+                  <div class="timeline-item-subtitle">{{item.audioRes}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="block" v-if="!isReadonly">
             <div class="row">
               <f7-button fill class="col btn-save" @click="onSave">保存</f7-button>
@@ -133,13 +145,14 @@
     data() {
       return {
         listId: this.$route.params.id || '',
-        mapAddr: '',
+        shopAddr: '',
         longitude: '',
         latitude: '',
         shopTypeSelectList: ['直营', '加盟'],
         shopType: '',
         shopUserSexSelectList: ['男', '女'],
-        shopUserSex: ''
+        shopUserSex: '',
+        timelines: []
       }
     },
     mounted() {
@@ -148,6 +161,12 @@
       if (this.listId && this.listId !== '0') {
         fetch('get', api.chainCustomInfoGetDetail + this.listId, {}, this).then((res) => {
           app.form.fillFromData('#apply-form', res.data)
+          this.shopType = res.data.shopType
+          this.shopUserSex = res.data.shopUserSex
+          this.shopAddr = res.data.shopAddr
+        })
+        fetch('get', api.chainCustomAuditInfo + this.listId, {}, this).then((res) => {
+          this.timelines = res.data
         })
       }
       if (this.$route.name === 'lsmd-view') {
@@ -238,7 +257,7 @@
         this.$router.go(-1)
       },
       addrChange(addrObj) {
-        this.mapAddr = addrObj.addr
+        this.shopAddr = addrObj.addr
         this.longitude = addrObj.lng
         this.latitude = addrObj.lat
       }

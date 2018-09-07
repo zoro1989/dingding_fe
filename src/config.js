@@ -80,7 +80,10 @@ const api = {
   // 查找产品信息
   goodsAutoFindInfo: apiPath + 'merchants/requireGoods/info/goodsAutoFindInfo',
   // 获取要货人分公司支公司信息
-  findRequireGoodsUserBaseInfo: apiPath + 'merchants/requireGoods/info/findRequireGoodsUserBaseInfo'
+  findRequireGoodsUserBaseInfo: apiPath + 'merchants/requireGoods/info/findRequireGoodsUserBaseInfo',
+
+  // 开票人列表
+  findNextApproveUserByOpenPage: apiPath + 'merchants/auditInfo/info/findNextApproveUserByOpenPage'
 }
 
 const apiDict = {

@@ -21,7 +21,7 @@
                 <div class="item-title-row" slot="before-title">
                   <div class="item-title">{{item.shopName}}</div>
                   <div class="item-subtitle margin-left text-color-gray">{{item.shopType}}</div>
-                  <div class="item-after" >
+                  <div class="item-after" @click="onView(item.id)">
                     <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
                   </div>
                 </div>
@@ -38,8 +38,7 @@
               <f7-swipeout-actions right>
                 <f7-swipeout-button v-if="item.auditStatus === '1' || item.auditStatus === '2'" color="orange" @click="onEdit(item.id)">编辑</f7-swipeout-button>
                 <f7-swipeout-button color="red" v-if="item.auditStatus === '1'" @click="onDelete(item.id)">删除</f7-swipeout-button>
-                <f7-swipeout-button color="blue" v-if="item.auditStatus === '1' || item.auditStatus === '2'">审批</f7-swipeout-button>
-                <f7-swipeout-button color="green" v-if="item.auditStatus === '4'">结束</f7-swipeout-button>
+                <f7-swipeout-button color="blue" v-if="item.auditStatus === '1' || item.auditStatus === '2'" @click="onAudit(item)">审批</f7-swipeout-button>
                 <f7-swipeout-button color="blue" v-if="item.auditStatus === '5'" @click="onUploadLocation(item.id)">同步位置</f7-swipeout-button>
               </f7-swipeout-actions>
             </f7-list-item>
@@ -117,6 +116,12 @@
         } else if (auditStatus === '5') {
           return '结束流程'
         }
+      },
+      onView(id) {
+        this.$router.push({
+            path: `/lszb-view/${id}`
+          }
+        )
       },
       onDelete(id) {
         const app = this.$f7

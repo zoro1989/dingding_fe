@@ -1,10 +1,11 @@
 import axios from 'axios'
 import { apiStatus } from '@/config'
+import EventBus from 'common/js/event-bus'
 
 axios.defaults.withCredentials = true
 let fetch = (type, url, params, vm, data = false, isFormat = true) => {
   let service = axios.create({
-    timeout: 10000
+    timeout: 20000
   })
 
   axios.defaults.headers.post['Content-Type'] = isFormat ? 'application/x-www-form-urlencoded;charset=utf-8' : 'application/json;charset=utf-8'
@@ -27,7 +28,12 @@ let fetch = (type, url, params, vm, data = false, isFormat = true) => {
         closeTimeout: 2000
       })
       toast.open()
-      return Promise.reject(res)
+      if (res.code === 50001 || res.code === 50002 || res.code === 50003) {
+        EventBus.isNeedLogin = true
+        vm.$router.replace('/login')
+      } else {
+        return Promise.reject(res)
+      }
     } else {
       return res
     }

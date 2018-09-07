@@ -34,8 +34,8 @@
               <f7-swipeout-actions right>
                 <f7-swipeout-button v-if="item.auditStatus === '1' || item.auditStatus === '2'" color="orange" @click="onEdit(item.id)">编辑</f7-swipeout-button>
                 <f7-swipeout-button color="red" v-if="item.auditStatus === '1'" @click="onDelete(item.id)">删除</f7-swipeout-button>
-                <f7-swipeout-button color="blue" v-if="item.auditStatus === '1' || item.auditStatus === '2'" @click="onAudit(item)">审批</f7-swipeout-button>
-                <f7-swipeout-button color="blue" v-if="item.auditStatus === '4'">结束</f7-swipeout-button>
+                <f7-swipeout-button color="blue" v-if="item.auditStatus === '1' || item.auditStatus === '2'" @click="onAudit(item, '提交')">审批</f7-swipeout-button>
+                <f7-swipeout-button color="blue" v-if="item.auditStatus === '4'" @click="onAudit(item, '结束')">结束</f7-swipeout-button>
               </f7-swipeout-actions>
             </f7-list-item>
           </f7-list>
@@ -142,10 +142,10 @@
           }
         )
       },
-      onAudit(item) {
+      onAudit(item, txt) {
         const app = this.$f7
         let _this = this
-        app.dialog.confirm('确定要审批吗?', '提示', function () {
+        app.dialog.confirm('确定要' + txt + '审批吗?', '提示', function () {
           let params = {
             tableId: item.id,
             id: item.auditStatus === '2' ? item.auditId : undefined,

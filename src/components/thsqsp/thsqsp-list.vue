@@ -16,16 +16,16 @@
             >
               <div slot="inner-start">
                 <div class="item-title-row" slot="before-title">
-                  <div class="item-title">客商名称：{{item.merchantsName}}</div>
+                  <div class="item-title">客商名称：{{item.merchants_name}}</div>
                   <div class="item-after">
                     <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
                   </div>
                 </div>
-                <div class="item-subtitle">门店名称：{{item.storeName}}</div>
-                <div class="item-text">产品名称：{{item.goodsName}}</div>
-                <div class="item-text">退货人名称：{{item.returnGoodsName}}</div>
-                <div class="item-text">退货人分公司：{{item.returnGoodsOffice}}</div>
-                <div class="item-text">退货人支公司：{{item.returnGoodsBranchOffice}}</div>
+                <div class="item-subtitle">门店名称：{{item.store_name}}</div>
+                <div class="item-text">产品名称：{{item.goods_name}}</div>
+                <div class="item-text">退货人名称：{{item.return_goods_name}}</div>
+                <div class="item-text">退货人分公司：{{item.return_goods_office}}</div>
+                <div class="item-text">退货人支公司：{{item.return_goods_branch_office}}</div>
                 <div class="item-text" :class="auditStatusColor(item.audit_status)">{{item.audit_status}}</div>
               </div>
             </f7-list-item>

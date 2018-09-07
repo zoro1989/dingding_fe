@@ -70,7 +70,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">董事长出生日期</div>
                     <div class="item-input-wrap">
-                      <input type="text" placeholder="无" name="chairmanBirth" readonly/>
+                      <input type="text" placeholder="无" name="chairmanBirthday" readonly/>
                     </div>
                   </div>
                 </div>
@@ -161,7 +161,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">本年度是否与万通签订销售协议</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="isSigned" placeholder="无" >
+                      <input type="text" name="isSigned" :value="isSigned" placeholder="无" >
                     </div>
                   </div>
                 </div>
@@ -203,6 +203,15 @@
                     </div>
                   </div>
                 </li>
+                <li class="item-content item-input" v-if="auditStep === '3'">
+                  <div class="item-inner">
+                    <div class="item-title item-label">开票员</div>
+                    <div class="item-input-wrap">
+                      <input type="text" name="auditUserName" v-model="auditUserName" placeholder="请选择下级审批人" readonly @click="onclickAuditUser">
+                      <input type="hidden" name="auditUserId" v-model="auditUserId">
+                    </div>
+                  </div>
+                </li>
               </ul>
             </form>
           </div>
@@ -214,11 +223,13 @@
           </div>
         </div>
       </div>
+      <audituser-select-list v-if="auditUsers.length > 0" :list="auditUsers" ref="auditUsers" @onSelectItem="selectAuditUser" @searchMore="searchMoreAuditUser"></audituser-select-list>
     </div>
   </transition>
 </template>
 <script>
   import { f7Page, f7List, f7ListItem, f7Button, f7Searchbar } from 'framework7-vue'
+  import AudituserSelectList from 'base/audituser-select-list/audituser-select-list'
   import { api } from '@/config'
   import fetch from 'utils/fetch'
   export default {
@@ -227,7 +238,8 @@
       f7List,
       f7ListItem,
       f7Button,
-      f7Searchbar
+      f7Searchbar,
+      AudituserSelectList
     },
     data() {
       return {
@@ -236,7 +248,14 @@
         auditStep: this.$route.params.auditStep || '',
         auditStatus: this.$route.params.auditStatus || '',
         timelines: [],
-        isPass: true
+        isPass: true,
+        auditUsers: [],
+        maxAuditUsersCount: 0,
+        pageNoAuditUser: 1,
+        pageSize: 10,
+        auditUserId: '',
+        auditUserName: '',
+        isSigned: ''
       }
     },
     mounted() {
@@ -245,16 +264,60 @@
       if (this.tableId && this.tableId !== '0') {
         fetch('get', api.chaintotalInfoGetDetail + this.tableId, {}, this).then((res) => {
           app.form.fillFromData('#apply-form', res.data)
+          if (res.data.isSigned === '1') {
+            this.isSigned = '未签订'
+          } else if (res.data.isSigned === '0') {
+            this.isSigned = '签订'
+          }
         })
         fetch('get', api.chainTotalAuditInfo + this.tableId, {}, this).then((res) => {
           this.timelines = res.data
         })
       }
+
+      fetch('get', api.findNextApproveUserByOpenPage, {page: this.pageNoAuditUser, limit: this.pageSize}, this).then((res) => {
+        this.auditUsers = res.data
+        this.maxAuditUsersCount = res.count
+      })
     },
     methods: {
+      onclickAuditUser() {
+        if (this.auditUsers.length > 0) {
+          this.$refs.auditUsers.show()
+        } else {
+          let toast = this.$f7.toast.create({
+            text: '没有检索到下级审批人数据！',
+            position: 'center',
+            closeTimeout: 2000
+          })
+          toast.open()
+        }
+      },
+      selectAuditUser(item) {
+        this.auditUserId = item.auditUserId
+        this.auditUserName = item.auditUserName
+      },
+      searchMoreAuditUser() {
+        if (this.auditUsers.length >= this.maxAuditUsersCount) {
+          return
+        }
+        this.pageNoAuditUser++
+        fetch('get', api.findNextApproveUserByOpenPage, {page: this.pageNoAuditUser, limit: this.pageSize}, this).then((res) => {
+          this.auditUsers = this.auditUsers.concat(res.data)
+        })
+      },
       onSave() {
         const app = this.$f7
         if (this.tableId && this.auditId && this.auditStep) {
+          if (this.auditStep === '3' && (!this.auditUserId || !this.auditUserName)) {
+            let toast = this.$f7.toast.create({
+              text: '请选择开票人！',
+              position: 'center',
+              closeTimeout: 2000
+            })
+            toast.open()
+            return
+          }
           let formData = app.form.convertToData('#audit-form')
           formData['tableId'] = this.tableId
           formData['id'] = this.auditId
@@ -262,7 +325,7 @@
           formData['auditResult'] = formData['auditResult'] ? '1' : '0'
           formData['auditType'] = 'chainTotal'
           fetch('post', api.terminalAuditForm, formData, this).then((res) => {
-            this.$router.replace('/lszb-list')
+            this.$router.replace('/lszbsp-list')
           })
         }
       },

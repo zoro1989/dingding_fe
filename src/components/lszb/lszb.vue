@@ -20,7 +20,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">连锁店性质</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="shopType" :value="shopType" placeholder="请输入连锁店性质" readonly @click="onClickSelectShopType">
+                      <input type="text" name="shopType" :value="shopType" placeholder="请输入连锁店性质" :disabled="isReadonly" @click="onClickSelectShopType">
                     </div>
                   </div>
                 </div>
@@ -30,7 +30,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">药店地址</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="shopAddr" :value="mapAddr" id="shopAddr" placeholder="请输入药店地址" readonly @click="onClickAddr" :disabled="isReadonly">
+                      <input type="text" name="shopAddr" :value="shopAddr" id="shopAddr" placeholder="请输入药店地址" @click="onClickAddr" :disabled="isReadonly">
                       <input name="longitude" type="hidden" :value="longitude"/>
                       <input name="latitude" type="hidden" :value="latitude"/>
                     </div>
@@ -42,7 +42,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">合作时间</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="cooperationTime" placeholder="请选择合作时间" readonly="readonly" id="cooperationTime" :disabled="isReadonly"/>
+                      <input type="text" name="cooperationTime" placeholder="请选择合作时间" id="cooperationTime" :disabled="isReadonly"/>
                     </div>
                   </div>
                 </div>
@@ -62,7 +62,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">董事长性别</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="chairmanSex" :value="chairmanSex" placeholder="请输入董事长性别" readonly @click="onClickSelectChairmanSex">
+                      <input type="text" name="chairmanSex" :value="chairmanSex" placeholder="请输入董事长性别" :disabled="isReadonly" @click="onClickSelectChairmanSex">
                     </div>
                   </div>
                 </div>
@@ -72,7 +72,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">董事长出生日期</div>
                     <div class="item-input-wrap">
-                      <input type="text" placeholder="请选择董事长出生日期" name="chairmanBirth" readonly="readonly" id="chairmanBirth" :disabled="isReadonly"/>
+                      <input type="text" placeholder="请选择董事长出生日期" name="chairmanBirthday" id="chairmanBirthday" :disabled="isReadonly"/>
                     </div>
                   </div>
                 </div>
@@ -163,13 +163,25 @@
                   <div class="item-inner">
                     <div class="item-title item-label">本年度是否与万通签订销售协议</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="isSigned" :value="isSigned" placeholder="请选择本年度是否与万通签订销售协议" readonly @click="onClickSelectIsSigned">
+                      <input type="text" name="isSigned" :value="isSigned" placeholder="请选择本年度是否与万通签订销售协议" :disabled="isReadonly" @click="onClickSelectIsSigned">
                     </div>
                   </div>
                 </div>
               </li>
             </ul>
           </form>
+          <div class="timeline">
+            <div class="timeline-item" v-for="item in timelines" :key="item.audit_date">
+              <div class="timeline-item-date">{{item.audit_date}}</div>
+              <div class="timeline-item-divider"></div>
+              <div class="timeline-item-content">
+                <div class="timeline-item-inner">
+                  <div class="timeline-item-title">{{item.roleName}}：{{item.audit_user_name}}</div>
+                  <div class="timeline-item-subtitle">{{item.audioRes}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="block" v-if="!isReadonly">
             <div class="row">
               <f7-button fill class="col btn-save" @click="onSave">保存</f7-button>
@@ -204,7 +216,7 @@
     data() {
       return {
         listId: this.$route.params.id || '',
-        mapAddr: '',
+        shopAddr: '',
         longitude: '',
         latitude: '',
         shopTypeSelectList: ['国有', '股份', '个体'],
@@ -212,7 +224,8 @@
         chairmanSexSelectList: ['男', '女'],
         chairmanSex: '',
         isSignedSelectList: ['签订', '未签订'],
-        isSigned: ''
+        isSigned: '',
+        timelines: []
       }
     },
     mounted() {
@@ -221,6 +234,17 @@
       if (this.listId && this.listId !== '0') {
         fetch('get', api.chaintotalInfoGetDetail + this.listId, {}, this).then((res) => {
           app.form.fillFromData('#apply-form', res.data)
+          this.shopType = res.data.shopType
+          this.chairmanSex = res.data.chairmanSex
+          if (res.data.isSigned === '1') {
+            this.isSigned = '未签订'
+          } else if (res.data.isSigned === '0') {
+            this.isSigned = '签订'
+          }
+          this.shopAddr = res.data.shopAddr
+        })
+        fetch('get', api.chainTotalAuditInfo + this.listId, {}, this).then((res) => {
+          this.timelines = res.data
         })
       }
       if (this.$route.name === 'lszb-view') {
@@ -269,8 +293,8 @@
           }
         }
       })
-      self.chairmanBirthDatePiker = app.picker.create({
-        inputEl: '#chairmanBirth',
+      self.chairmanBirthdayDatePiker = app.picker.create({
+        inputEl: '#chairmanBirthday',
         toolbar: true,
         rotateEffect: true,
         routableModals: false,
@@ -314,7 +338,7 @@
     },
     destroyed() {
       this.cooperationTimeDatePiker && this.cooperationTimeDatePiker.destroy()
-      this.chairmanBirthDatePiker && this.chairmanBirthDatePiker.destroy()
+      this.chairmanBirthdayDatePiker && this.chairmanBirthdayDatePiker.destroy()
     },
     computed: {
       isReadonly () {
@@ -365,7 +389,7 @@
         this.$router.go(-1)
       },
       addrChange(addrObj) {
-        this.mapAddr = addrObj.addr
+        this.shopAddr = addrObj.addr
         this.longitude = addrObj.lng
         this.latitude = addrObj.lat
       }
