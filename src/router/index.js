@@ -144,12 +144,12 @@ export default new Router({
       component: YhsqList
     },
     {
-      path: '/yhsq/:id',
+      path: '/yhsq/:id/:formType',
       name: 'yhsq',
       component: Yhsq
     },
     {
-      path: '/yhsq-view/:id',
+      path: '/yhsq-view/:id/:formType',
       name: 'yhsq-view',
       component: Yhsq
     },
@@ -189,7 +189,7 @@ export default new Router({
       component: YhsqspList
     },
     {
-      path: '/yhsqsp/:id/:auditId/:auditStep/:auditStatus',
+      path: '/yhsqsp/:id/:auditId/:auditStep/:auditStatus/:formType',
       name: 'yhsqsp',
       component: Yhsqsp
     },

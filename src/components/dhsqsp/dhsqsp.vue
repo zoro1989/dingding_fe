@@ -80,7 +80,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">调货产品数量</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="goodsNumber" v-model="goodsNumber" placeholder="无" :disabled="!((auditStatus === '待审核' || auditStatus === 'wait') && (auditStep === '3' || auditStep === '4'))">
+                      <input type="text" name="goodsNumber" placeholder="无" readonly>
                     </div>
                   </div>
                 </div>
@@ -188,7 +188,6 @@
         auditStatus: this.$route.params.auditStatus || '',
         timelines: [],
         isPass: true,
-        goodsNumber: 0,
         auditUsers: [],
         maxAuditUsersCount: 0,
         pageNoAuditUser: 1,
@@ -202,7 +201,6 @@
       const app = self.$f7
       if (this.tableId && this.tableId !== '0') {
         fetch('get', api.arrangeGoodsInfoGetDetail + this.tableId, {}, this).then((res) => {
-          this.goodsNumber = res.data.goodsNumber
           app.form.fillFromData('#apply-form', res.data)
         })
         fetch('get', api.arrangeGoodsAuditInfo + this.tableId, {}, this).then((res) => {
@@ -259,7 +257,6 @@
           formData['auditStep'] = this.auditStep
           formData['auditResult'] = formData['auditResult'] ? '1' : '0'
           formData['auditType'] = 'arrangeGoods'
-          formData['goodsNumber'] = this.goodsNumber
           fetch('post', api.terminalAuditForm, formData, this).then((res) => {
             this.$router.replace('/dhsqsp-list')
           })

@@ -20,7 +20,7 @@
               <div slot="inner-start">
                 <div class="item-title-row" slot="before-title">
                   <div class="item-title">客商名称：{{item.merchantsName}}</div>
-                  <div class="item-after" @click="onView(item.id)">
+                  <div class="item-after" @click="onView(item)">
                     <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
                   </div>
                 </div>
@@ -31,7 +31,7 @@
                 <div class="item-text" :class="auditStatusColor(item.auditStatus)">{{auditStatusDisp(item.auditStatus)}}</div>
               </div>
               <f7-swipeout-actions right>
-                <f7-swipeout-button v-if="item.auditStatus === '1' || item.auditStatus === '2'" color="orange" @click="onEdit(item.id)">编辑</f7-swipeout-button>
+                <f7-swipeout-button v-if="item.auditStatus === '1' || item.auditStatus === '2'" color="orange" @click="onEdit(item)">编辑</f7-swipeout-button>
                 <f7-swipeout-button color="red" v-if="item.auditStatus === '1'" @click="onDelete(item.id)">删除</f7-swipeout-button>
                 <f7-swipeout-button color="blue" v-if="item.auditStatus === '1' || item.auditStatus === '2'" @click="onAudit(item, '提交')">审批</f7-swipeout-button>
                 <f7-swipeout-button color="blue" v-if="item.auditStatus === '4'" @click="onAudit(item, '结束')">结束</f7-swipeout-button>
@@ -111,9 +111,9 @@
           return '结束流程'
         }
       },
-      onView(id) {
+      onView(item) {
         this.$router.push({
-            path: `/yhsq-view/${id}`
+            path: `/yhsq-view/${item.id}/${item.formType}`
           }
         )
       },
@@ -129,15 +129,15 @@
           })
         })
       },
-      onEdit(id) {
+      onEdit(item) {
         this.$router.push({
-            path: `/yhsq/${id}`
+            path: `/yhsq/${item.id}/${item.formType}`
           }
         )
       },
       addApply() {
         this.$router.push({
-            path: `/yhsq/0`
+            path: `/yhsq/0/1`
           }
         )
       },

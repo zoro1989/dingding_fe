@@ -105,36 +105,41 @@
                   </div>
                 </div>
               </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">比例</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="scale" placeholder="无" readonly>
+              <div class="card" v-if="!formType || formType === '1'">
+                <div class="card-header">政策后实际采购扣率（按零售价计算）</div>
+                <div class="card-content card-content-padding">
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">比例</div>
+                        <div class="item-input-wrap">
+                          <input type="text" name="scale" placeholder="无" readonly>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">形式</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="shape" id="shape" placeholder="无" readonly>
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">形式</div>
+                        <div class="item-input-wrap">
+                          <input type="text" name="shape" id="shape" placeholder="无" readonly>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">备注</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="remark" placeholder="无" readonly>
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">备注</div>
+                        <div class="item-input-wrap">
+                          <input type="text" name="remark" placeholder="无" readonly>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </li>
                 </div>
-              </li>
+              </div>
             </ul>
           </form>
           <div class="timeline">
@@ -224,7 +229,8 @@
         pageNoAuditUser: 1,
         pageSize: 10,
         auditUserId: '',
-        auditUserName: ''
+        auditUserName: '',
+        formType: this.$route.params.formType || ''
       }
     },
     mounted() {

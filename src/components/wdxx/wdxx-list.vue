@@ -111,7 +111,7 @@
               break
             case 'requireGoods':
               this.$router.push({
-                  path: `/yhsqsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
+                  path: `/yhsqsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}/1`
                 }
               )
               break

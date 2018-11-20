@@ -12,69 +12,46 @@
       <div class="tabs-animated-wrap">
         <div class="tabs">
           <div id="tab-1" class="page-content tab tab-active">
-            <div class="list-group-title">
-              <span>通知公告</span>
-              <span @click="OnClick('tzgg-list')">more>></span>
-            </div>
-            <f7-list media-list class="content-list">
-              <f7-list-item
-                v-for="item in list1"
-                :key="item.id"
-                @click="onAudit1(item)"
-              >
-                <div slot="inner-start">
-                  <div class="item-title-row" slot="before-title">
-                    <div class="item-title">{{item.title}}</div>
-                    <div class="item-after">
-                      <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
-                    </div>
-                  </div>
-                  <div class="item-subtitle">{{item.createTime}}</div>
-                </div>
-              </f7-list-item>
-            </f7-list>
-            <div class="list-group-title">
-              <span>我的消息</span>
-              <span @click="OnClick('wdxx-list')">more>></span>
-            </div>
-            <f7-list media-list class="content-list">
-              <f7-list-item
-                v-for="item in list2"
-                :key="item.id"
-                @click="onAudit2(item)"
-              >
-                <div slot="inner-start">
-                  <div class="item-title-row" slot="before-title">
-                    <div class="item-title">{{item.title || item.content}}</div>
-                    <div class="item-after" v-if="item.type !== '生日提醒'">
-                      <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
-                    </div>
-                  </div>
-                  <div class="item-subtitle">{{item.type}}</div>
-                  <div class="item-subtitle">{{item.name}}</div>
-                  <div class="item-text">{{item.auditDate}}</div>
-                  <div class="item-text" :class="auditStatusColor(item.audit_status)">{{auditStatusDisp(item.audit_status)}}</div>
-                </div>
-              </f7-list-item>
-            </f7-list>
-          </div>
-          <div id="tab-2" class="page-content tab">
-            <div class="list-group-title">我的申请</div>
+            <div class="list-group-title">通知公告</div>
             <div class="block">
               <div class="row">
                 <div class="link-box">
+                  <f7-button fill color="orange" class="button-link" @click="OnClick('tzgg-list')">
+                    <i class="fa fa-address-card-o"></i>
+                  </f7-button>
+                  <span>通知公告</span>
+                </div>
+              </div>
+            </div>
+            <div class="list-group-title">我的消息</div>
+            <div class="block">
+              <div class="row">
+                <div class="link-box">
+                  <f7-button fill color="pink" class="button-link" @click="OnClick('wdxx-list')">
+                    <i class="fa fa-pencil"></i>
+                  </f7-button>
+                  <span>我的消息</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="tab-2" class="page-content tab">
+            <div class="list-group-title">我的申请</div>
+            <div class="block" v-if="isHasKsgl">
+              <div class="row">
+                <div class="link-box" v-if="isHasZdylsq">
                   <f7-button fill class="button-link" @click="OnClick('apply-list')">
                     <i class="fa fa-address-card-o"></i>
                   </f7-button>
                   <span>终端医疗申请</span>
                 </div>
-                <div class="link-box">
+                <div class="link-box" v-if="isHasLszbsq">
                   <f7-button fill class="button-link" @click="OnClick('lszb-list')">
                     <i class="fa fa-institution"></i>
                   </f7-button>
                   <span>连锁总部申请</span>
                 </div>
-                <div class="link-box">
+                <div class="link-box" v-if="isHasLsmdsq">
                   <f7-button fill class="button-link" @click="OnClick('lsmd-list')">
                     <i class="fa fa-object-group"></i>
                   </f7-button>
@@ -83,21 +60,21 @@
               </div>
             </div>
             <div class="list-group-title">我的审批</div>
-            <div class="block">
+            <div class="block" v-if="isHasKsgl">
               <div class="row">
-                <div class="link-box">
+                <div class="link-box" v-if="isHasZdylsp">
                   <f7-button color="green" fill class="button-link" @click="OnClick('zdylsp-list')">
                     <i class="fa fa-pencil"></i>
                   </f7-button>
                   <span>终端医疗审批</span>
                 </div>
-                <div class="link-box">
+                <div class="link-box" v-if="isHasLszbsp">
                   <f7-button color="green" fill class="button-link" @click="OnClick('lszbsp-list')">
                     <i class="fa fa-share-alt"></i>
                   </f7-button>
                   <span>连锁总部审批</span>
                 </div>
-                <div class="link-box">
+                <div class="link-box" v-if="isHasLsmdsp">
                   <f7-button color="green" fill class="button-link" @click="OnClick('lsmdsp-list')">
                     <i class="fa fa-gift"></i>
                   </f7-button>
@@ -108,21 +85,21 @@
           </div>
           <div id="tab-3" class="page-content tab">
             <div class="list-group-title">我的申请</div>
-            <div class="block">
+            <div class="block" v-if="isHasYhgl">
               <div class="row">
-                <div class="link-box">
+                <div class="link-box" v-if="isHasYhsq">
                   <f7-button fill class="button-link" @click="OnClick('yhsq-list')">
                     <i class="fa fa-address-card-o"></i>
                   </f7-button>
                   <span>要货申请</span>
                 </div>
-                <div class="link-box">
+                <div class="link-box" v-if="isHasDhsq">
                   <f7-button fill class="button-link" @click="OnClick('dhsq-list')">
                     <i class="fa fa-address-card-o"></i>
                   </f7-button>
                   <span>调货申请</span>
                 </div>
-                <div class="link-box">
+                <div class="link-box" v-if="isHasThsq">
                   <f7-button fill class="button-link" @click="OnClick('thsq-list')">
                     <i class="fa fa-address-card-o"></i>
                   </f7-button>
@@ -131,21 +108,21 @@
               </div>
             </div>
             <div class="list-group-title">我的审批</div>
-            <div class="block">
+            <div class="block" v-if="isHasDhgl">
               <div class="row">
-                <div class="link-box">
+                <div class="link-box"  v-if="isHasYhsp">
                   <f7-button color="green" fill class="button-link" @click="OnClick('yhsqsp-list')">
                     <i class="fa fa-pencil"></i>
                   </f7-button>
                   <span>要货审批</span>
                 </div>
-                <div class="link-box">
+                <div class="link-box" v-if="isHasDhsp">
                   <f7-button color="green" fill class="button-link" @click="OnClick('dhsqsp-list')">
                     <i class="fa fa-pencil"></i>
                   </f7-button>
                   <span>调货审批</span>
                 </div>
-                <div class="link-box">
+                <div class="link-box" v-if="isHasThsp">
                   <f7-button color="green" fill class="button-link" @click="OnClick('thsqsp-list')">
                     <i class="fa fa-pencil"></i>
                   </f7-button>
@@ -163,16 +140,14 @@
   import { api } from '@/config'
   import fetch from 'utils/fetch'
   import * as dd from 'dingtalk-jsapi'
-  import { f7Navbar, f7BlockTitle, f7Button, f7Page, f7List, f7ListItem } from 'framework7-vue'
+  import { f7Navbar, f7BlockTitle, f7Button, f7Page } from 'framework7-vue'
   import EventBus from 'common/js/event-bus'
   export default {
     components: {
       f7Navbar,
       f7BlockTitle,
       f7Button,
-      f7Page,
-      f7List,
-      f7ListItem
+      f7Page
     },
     computed: {
       isHasKsgl() {
@@ -274,9 +249,7 @@
     },
     data() {
       return {
-        authData: [],
-        list1: [],
-        list2: []
+        authData: []
       }
     },
     created() {
@@ -312,113 +285,17 @@
           })
         })
     },
-    mounted() {
-      fetch('get', api.noticeInfoList, {page: 1, limit: 10}, this).then((res) => {
-        this.list1 = res.data
-      })
-      fetch('get', api.msgList, {page: 1, limit: 10}, this).then((res) => {
-        this.list2 = res.data
-      })
-    },
     methods: {
       OnClick(link) {
         this.$router.push(link)
-      },
-      onAudit1(item) {
-        this.$router.push({
-            path: `/tzgg/${item.id}`
-          }
-        )
-      },
-      onAudit2(item) {
-        if (item.type !== '生日提醒') {
-          switch (item.auditType) {
-            case 'merchantTerminal':
-              this.$router.push({
-                  path: `/zdylsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
-                }
-              )
-              break
-            case 'chainTotal':
-              this.$router.push({
-                  path: `/lszbsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
-                }
-              )
-              break
-            case 'chainCustom':
-              this.$router.push({
-                  path: `/lsmdsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
-                }
-              )
-              break
-            case 'requireGoods':
-              this.$router.push({
-                  path: `/yhsqsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}/1`
-                }
-              )
-              break
-            case 'arrangeGoods':
-              this.$router.push({
-                  path: `/dhsqsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
-                }
-              )
-              break
-            case 'returnGoods':
-              this.$router.push({
-                  path: `/thsqsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
-                }
-              )
-              break
-          }
-        }
-      },
-      auditStatusColor(auditStatus) {
-        if (auditStatus === 'no') {
-          return 'text-color-red'
-        } else if (auditStatus === 'yes') {
-          return 'text-color-green'
-        } else if (auditStatus === 'wait') {
-          return 'text-color-blue'
-        }
-      },
-      auditStatusDisp(auditStatus) {
-        if (auditStatus === 'no') {
-          return '审核不通过'
-        } else if (auditStatus === 'yes') {
-          return '审核通过'
-        } else if (auditStatus === 'wait') {
-          return '待审核'
-        }
       }
     }
   }
 </script>
 <style scoped lang="stylus">
   .home
-    background: #fff!important
-    position: absolute
-    z-index: 2
-    top: 0
-    left: 0
-    right: 0
-    bottom: 0
-    .wrapper
-      position: absolute
-      top: 44px
-      left: 0
-      right: 0
-      bottom: 0
-      background: #fff
-      z-index: 1
-      overflow: scroll
-      -webkit-overflow-scrolling: touch
     .toolbar
       position: absolute
-    .content-list
-      min-height: 200px
-    .list-group-title
-      display: flex
-      justify-content: space-between
     .page-content
       padding-top: 0!important
     .fa

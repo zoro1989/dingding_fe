@@ -207,7 +207,7 @@
         selectList: ['买赠', '礼品赠送', '抽奖', '圆桌会议', '分销活动', '检测活动'],
         shape: '',
         timelines: [],
-        formType: ''
+        formType: this.$route.params.formType || ''
       }
     },
     mounted() {
@@ -216,7 +216,6 @@
       if (this.listId && this.listId !== '0') {
         fetch('get', api.requireGoodsInfoGetDetail + this.listId, {}, this).then((res) => {
           app.form.fillFromData('#apply-form', res.data)
-          this.formType = res.data.formType
           this.merchantsName = res.data.merchantsName
           this.goodsName = res.data.goodsName
           this.goodsSpecifications = res.data.goodsSpecifications
