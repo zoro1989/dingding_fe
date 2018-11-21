@@ -4,9 +4,15 @@
     <div class="wrapper">
       <div class="toolbar tabbar">
         <div class="toolbar-inner">
-          <a href="#tab-1" class="tab-link tab-link-active">首页</a>
-          <a href="#tab-2" class="tab-link">客商管理</a>
-          <a href="#tab-3" class="tab-link">销售管理</a>
+          <a href="#tab-1" class="tab-link tab-link-active">
+            <i class="fa fa-home" style="font-size: 22px"></i><span style="font-size: 12px">首页</span>
+          </a>
+          <a href="#tab-2" class="tab-link">
+            <i class="fa fa-handshake-o" style="font-size: 22px"></i><span style="font-size: 12px">客商管理</span>
+          </a>
+          <a href="#tab-3" class="tab-link">
+            <i class="fa fa-dollar" style="font-size: 22px"></i><span style="font-size: 12px">销售管理</span>
+          </a>
         </div>
       </div>
       <div class="tabs-animated-wrap">
@@ -112,19 +118,19 @@
               <div class="row">
                 <div class="link-box">
                   <f7-button fill class="button-link" @click="OnClick('yhsq-list')">
-                    <i class="fa fa-address-card-o"></i>
+                    <i class="fa fa-cubes"></i>
                   </f7-button>
                   <span>要货申请</span>
                 </div>
                 <div class="link-box">
                   <f7-button fill class="button-link" @click="OnClick('dhsq-list')">
-                    <i class="fa fa-address-card-o"></i>
+                    <i class="fa fa-truck"></i>
                   </f7-button>
                   <span>调货申请</span>
                 </div>
                 <div class="link-box">
                   <f7-button fill class="button-link" @click="OnClick('thsq-list')">
-                    <i class="fa fa-address-card-o"></i>
+                    <i class="fa fa-trash-o"></i>
                   </f7-button>
                   <span>退货申请</span>
                 </div>
@@ -135,19 +141,19 @@
               <div class="row">
                 <div class="link-box">
                   <f7-button color="green" fill class="button-link" @click="OnClick('yhsqsp-list')">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-cubes"></i>
                   </f7-button>
                   <span>要货审批</span>
                 </div>
                 <div class="link-box">
                   <f7-button color="green" fill class="button-link" @click="OnClick('dhsqsp-list')">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-truck"></i>
                   </f7-button>
                   <span>调货审批</span>
                 </div>
                 <div class="link-box">
                   <f7-button color="green" fill class="button-link" @click="OnClick('thsqsp-list')">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-trash-o"></i>
                   </f7-button>
                   <span>退货审批</span>
                 </div>
@@ -322,6 +328,163 @@
     },
     methods: {
       OnClick(link) {
+        if (link === 'apply-list') {
+          let index = this.authData.findIndex((item) => {
+            return item.id === '0jk7pgdqa000011pi3cv'
+          })
+          if (index < 0) {
+            let toast = this.$f7.toast.create({
+              text: '您无权使用该功能！',
+              position: 'center',
+              closeTimeout: 2000
+            })
+            toast.open()
+            return
+          }
+        } else if (link === 'lszb-list') {
+          let index = this.authData.findIndex((item) => {
+            return item.id === '0jk7pm6k7000011t9q6j'
+          })
+          if (index < 0) {
+            let toast = this.$f7.toast.create({
+              text: '您无权使用该功能！',
+              position: 'center',
+              closeTimeout: 2000
+            })
+            toast.open()
+            return
+          }
+        } else if (link === 'lsmd-list') {
+          let index = this.authData.findIndex((item) => {
+            return item.id === '0jk7pmt6i000021uu5t2'
+          })
+          if (index < 0) {
+            let toast = this.$f7.toast.create({
+              text: '您无权使用该功能！',
+              position: 'center',
+              closeTimeout: 2000
+            })
+            toast.open()
+            return
+          }
+        } else if (link === 'zdylsp-list') {
+          let index = this.authData.findIndex((item) => {
+            return item.id === '0jk7pnsco000011xwbro'
+          })
+          if (index < 0) {
+            let toast = this.$f7.toast.create({
+              text: '您无权使用该功能！',
+              position: 'center',
+              closeTimeout: 2000
+            })
+            toast.open()
+            return
+          }
+        } else if (link === 'lszbsp-list') {
+          let index = this.authData.findIndex((item) => {
+            return item.id === '0jk7prp8t000011i4c67'
+          })
+          if (index < 0) {
+            let toast = this.$f7.toast.create({
+              text: '您无权使用该功能！',
+              position: 'center',
+              closeTimeout: 2000
+            })
+            toast.open()
+            return
+          }
+        } else if (link === 'lsmdsp-list') {
+          let index = this.authData.findIndex((item) => {
+            return item.id === '0jk7psfq300001hj9faf'
+          })
+          if (index < 0) {
+            let toast = this.$f7.toast.create({
+              text: '您无权使用该功能！',
+              position: 'center',
+              closeTimeout: 2000
+            })
+            toast.open()
+            return
+          }
+        } else if (link === 'yhsq-list') {
+          let index = this.authData.findIndex((item) => {
+            return item.id === '0jkasigwb000011inick'
+          })
+          if (index < 0) {
+            let toast = this.$f7.toast.create({
+              text: '您无权使用该功能！',
+              position: 'center',
+              closeTimeout: 2000
+            })
+            toast.open()
+            return
+          }
+        } else if (link === 'yhsqsp-list') {
+          let index = this.authData.findIndex((item) => {
+            return item.id === '0jkasj7zb000011fseg8'
+          })
+          if (index < 0) {
+            let toast = this.$f7.toast.create({
+              text: '您无权使用该功能！',
+              position: 'center',
+              closeTimeout: 2000
+            })
+            toast.open()
+            return
+          }
+        } else if (link === 'dhsq-list') {
+          let index = this.authData.findIndex((item) => {
+            return item.id === '0jkaskf1d000011q3g7e'
+          })
+          if (index < 0) {
+            let toast = this.$f7.toast.create({
+              text: '您无权使用该功能！',
+              position: 'center',
+              closeTimeout: 2000
+            })
+            toast.open()
+            return
+          }
+        } else if (link === 'dhsqsp-list') {
+          let index = this.authData.findIndex((item) => {
+            return item.id === '0jkaskrs500002bicwf7'
+          })
+          if (index < 0) {
+            let toast = this.$f7.toast.create({
+              text: '您无权使用该功能！',
+              position: 'center',
+              closeTimeout: 2000
+            })
+            toast.open()
+            return
+          }
+        } else if (link === 'thsq-list') {
+          let index = this.authData.findIndex((item) => {
+            return item.id === '0jkaslcc90000413c4v2'
+          })
+          if (index < 0) {
+            let toast = this.$f7.toast.create({
+              text: '您无权使用该功能！',
+              position: 'center',
+              closeTimeout: 2000
+            })
+            toast.open()
+            return
+          }
+        } else if (link === 'thsqsp-list') {
+          let index = this.authData.findIndex((item) => {
+            return item.id === '0jkaslny4000011g8mws'
+          })
+          if (index < 0) {
+            let toast = this.$f7.toast.create({
+              text: '您无权使用该功能！',
+              position: 'center',
+              closeTimeout: 2000
+            })
+            toast.open()
+            return
+          }
+        }
         this.$router.push(link)
       },
       onAudit1(item) {
