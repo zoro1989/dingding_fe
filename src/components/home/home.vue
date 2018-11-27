@@ -8,10 +8,16 @@
             <i class="fa fa-home" style="font-size: 22px"></i><span style="font-size: 12px">首页</span>
           </a>
           <a href="#tab-2" class="tab-link">
-            <i class="fa fa-handshake-o" style="font-size: 22px"></i><span style="font-size: 12px">客商管理</span>
+            <i class="fa fa-handshake-o" style="font-size: 22px">
+              <span v-if="merchantTerminalUnApproveCount + chainTotalUnApproveCount + chainCustomUnApproveCount > 0" class="badge color-red"></span>
+            </i>
+            <span style="font-size: 12px">客商管理</span>
           </a>
           <a href="#tab-3" class="tab-link">
-            <i class="fa fa-dollar" style="font-size: 22px"></i><span style="font-size: 12px">销售管理</span>
+            <i class="fa fa-dollar" style="font-size: 22px">
+              <span v-if="requireGoodsUnApproveCount + arrangeGoodsUnApproveCount + returnGoodsUnApproveCount" class="badge color-red"></span>
+            </i>
+            <span style="font-size: 12px">销售管理</span>
           </a>
         </div>
       </div>
@@ -93,18 +99,21 @@
               <div class="row">
                 <div class="link-box">
                   <f7-button color="green" fill class="button-link" @click="OnClick('zdylsp-list')">
+                    <span v-if="merchantTerminalUnApproveCount > 0" class="badge color-red">{{merchantTerminalUnApproveCount}}</span>
                     <i class="fa fa-pencil"></i>
                   </f7-button>
                   <span>终端医疗审批</span>
                 </div>
                 <div class="link-box">
                   <f7-button color="green" fill class="button-link" @click="OnClick('lszbsp-list')">
+                    <span v-if="chainTotalUnApproveCount > 0" class="badge color-red">{{chainTotalUnApproveCount}}</span>
                     <i class="fa fa-share-alt"></i>
                   </f7-button>
                   <span>连锁总部审批</span>
                 </div>
                 <div class="link-box">
                   <f7-button color="green" fill class="button-link" @click="OnClick('lsmdsp-list')">
+                    <span v-if="chainCustomUnApproveCount > 0" class="badge color-red">{{chainCustomUnApproveCount}}</span>
                     <i class="fa fa-gift"></i>
                   </f7-button>
                   <span>连锁门店审批</span>
@@ -141,18 +150,21 @@
               <div class="row">
                 <div class="link-box">
                   <f7-button color="green" fill class="button-link" @click="OnClick('yhsqsp-list')">
+                    <span v-if="requireGoodsUnApproveCount > 0" class="badge color-red">{{requireGoodsUnApproveCount}}</span>
                     <i class="fa fa-cubes"></i>
                   </f7-button>
                   <span>要货审批</span>
                 </div>
                 <div class="link-box">
                   <f7-button color="green" fill class="button-link" @click="OnClick('dhsqsp-list')">
+                    <span v-if="arrangeGoodsUnApproveCount > 0" class="badge color-red">{{arrangeGoodsUnApproveCount}}</span>
                     <i class="fa fa-truck"></i>
                   </f7-button>
                   <span>调货审批</span>
                 </div>
                 <div class="link-box">
                   <f7-button color="green" fill class="button-link" @click="OnClick('thsqsp-list')">
+                    <span v-if="returnGoodsUnApproveCount > 0" class="badge color-red">{{returnGoodsUnApproveCount}}</span>
                     <i class="fa fa-trash-o"></i>
                   </f7-button>
                   <span>退货审批</span>
@@ -282,7 +294,13 @@
       return {
         authData: [],
         list1: [],
-        list2: []
+        list2: [],
+        merchantTerminalUnApproveCount: 0,
+        chainTotalUnApproveCount: 0,
+        chainCustomUnApproveCount: 0,
+        requireGoodsUnApproveCount: 0,
+        arrangeGoodsUnApproveCount: 0,
+        returnGoodsUnApproveCount: 0
       }
     },
     created() {
@@ -324,6 +342,24 @@
       })
       fetch('get', api.msgList, {page: 1, limit: 10}, this).then((res) => {
         this.list2 = res.data
+      })
+      fetch('get', api.findMerchantTerminalUnApproveCount, {}, this).then((res) => {
+        this.merchantTerminalUnApproveCount = res.data
+      })
+      fetch('get', api.findChainTotalUnApproveCount, {}, this).then((res) => {
+        this.chainTotalUnApproveCount = res.data
+      })
+      fetch('get', api.findChainCustomUnApproveCount, {}, this).then((res) => {
+        this.chainCustomUnApproveCount = res.data
+      })
+      fetch('get', api.findRequireGoodsUnApproveCount, {}, this).then((res) => {
+        this.requireGoodsUnApproveCount = res.data
+      })
+      fetch('get', api.findArrangeGoodsUnApproveCount, {}, this).then((res) => {
+        this.arrangeGoodsUnApproveCount = res.data
+      })
+      fetch('get', api.findReturnGoodsUnApproveCount, {}, this).then((res) => {
+        this.returnGoodsUnApproveCount = res.data
       })
     },
     methods: {
@@ -577,6 +613,14 @@
       -webkit-overflow-scrolling: touch
     .toolbar
       position: absolute
+      .fa
+        position: relative
+        .badge
+          height: 10px
+          padding: 0 5px
+          position: absolute
+          right: -15px
+          top: -2px
     .content-list
       min-height: 200px
     .list-group-title
@@ -592,6 +636,12 @@
       flex-direction: column
       align-items: center
       margin: 0 10px
+      .button-link
+        overflow: inherit
+        .badge
+          position: absolute
+          right: -8px
+          top: -8px
     .button-link
       width: 50px!important
       height: 50px!important

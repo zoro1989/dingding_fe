@@ -83,7 +83,14 @@ const api = {
   findRequireGoodsUserBaseInfo: apiPath + 'merchants/requireGoods/info/findRequireGoodsUserBaseInfo',
 
   // 开票人列表
-  findNextApproveUserByOpenPage: apiPath + 'merchants/auditInfo/info/findNextApproveUserByOpenPage'
+  findNextApproveUserByOpenPage: apiPath + 'merchants/auditInfo/info/findNextApproveUserByOpenPage',
+  // 获取待审批的数量
+  findArrangeGoodsUnApproveCount: apiPath + 'merchants/auditInfo/info/arrangeGoods/unApproveCount',
+  findRequireGoodsUnApproveCount: apiPath + 'merchants/auditInfo/info/requireGoods/unApproveCount',
+  findChainCustomUnApproveCount: apiPath + 'merchants/auditInfo/info/chainCustom/unApproveCount',
+  findChainTotalUnApproveCount: apiPath + 'merchants/auditInfo/info/chainTotal/unApproveCount',
+  findMerchantTerminalUnApproveCount: apiPath + 'merchants/auditInfo/info/merchantTerminal/unApproveCount',
+  findReturnGoodsUnApproveCount: apiPath + 'merchants/auditInfo/info/returnGoods/unApproveCount'
 }
 
 const apiDict = {
