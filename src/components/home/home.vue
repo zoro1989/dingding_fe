@@ -25,10 +25,16 @@
         <div class="tabs">
           <div id="tab-1" class="page-content tab tab-active">
             <div class="list-group-title">
-              <span>通知公告</span>
+              <span><i class="fa fa-bell" style="font-size: 14px; color: #E6A23C; padding-right: 3px;"></i>通知公告</span>
               <span @click="OnClick('tzgg-list')">more>></span>
             </div>
-            <f7-list media-list class="content-list">
+            <div class="no-box" v-if="list1.length === 0">
+              <div>
+                <img class="no-msg" width="50" :src="NoMessage">
+                <div class="no-msg-text">暂无通知</div>
+              </div>
+            </div>
+            <f7-list v-if="list1.length !== 0" media-list class="content-list">
               <f7-list-item
                 v-for="item in list1"
                 :key="item.id"
@@ -46,10 +52,16 @@
               </f7-list-item>
             </f7-list>
             <div class="list-group-title">
-              <span>我的消息</span>
+              <span><i class="fa fa-commenting" style="font-size: 14px; color: #4cd964; padding-right: 3px;"></i>我的消息</span>
               <span @click="OnClick('wdxx-list')">more>></span>
             </div>
-            <f7-list media-list class="content-list">
+            <div class="no-box" v-if="list2.length === 0">
+              <div>
+                <img class="no-msg" width="50" :src="NoMessage">
+                <div class="no-msg-text">暂无消息</div>
+              </div>
+            </div>
+            <f7-list v-if="list2.length !== 0" media-list class="content-list">
               <f7-list-item
                 v-for="item in list2"
                 :key="item.id"
@@ -183,6 +195,7 @@
   import * as dd from 'dingtalk-jsapi'
   import { f7Navbar, f7BlockTitle, f7Button, f7Page, f7List, f7ListItem } from 'framework7-vue'
   import EventBus from 'common/js/event-bus'
+  import NoMessage from './no-message.png'
   export default {
     components: {
       f7Navbar,
@@ -292,6 +305,7 @@
     },
     data() {
       return {
+        NoMessage,
         authData: [],
         list1: [],
         list2: [],
@@ -611,6 +625,16 @@
       z-index: 1
       overflow: scroll
       -webkit-overflow-scrolling: touch
+    .no-box
+      height: 200px
+      text-align: center
+      width: 100%
+      display: flex
+      align-items: center
+      justify-content: center
+      .no-msg-text
+        font-size: 12px
+        color: #7d7e80
     .toolbar
       position: absolute
       .fa
