@@ -107,7 +107,7 @@
         } else if (auditStatus === '3') {
           return '审核中'
         } else if (auditStatus === '4') {
-          return '确认结束流程'
+          return '确认收货'
         } else if (auditStatus === '5') {
           return '结束流程'
         }
