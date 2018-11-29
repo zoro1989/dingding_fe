@@ -309,7 +309,7 @@
       onSave() {
         const app = this.$f7
         if (this.tableId && this.auditId && this.auditStep) {
-          if (this.auditStep === '3' && (!this.auditUserId || !this.auditUserName)) {
+          if (this.isPass && this.auditStep === '3' && (!this.auditUserId || !this.auditUserName)) {
             let toast = this.$f7.toast.create({
               text: '请选择开票人！',
               position: 'center',
@@ -322,7 +322,7 @@
           formData['tableId'] = this.tableId
           formData['id'] = this.auditId
           formData['auditStep'] = this.auditStep
-          formData['auditResult'] = formData['auditResult'] ? '1' : '0'
+          formData['auditResult'] = this.isPass ? '1' : '0'
           formData['auditType'] = 'chainTotal'
           fetch('post', api.terminalAuditForm, formData, this).then((res) => {
             this.$router.replace('/lszbsp-list')
