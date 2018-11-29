@@ -80,7 +80,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">产品批号</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="goodsBatchNumber" placeholder="请输入产品批号" :disabled="isReadonly">
+                      <input type="text" name="goodsBatchNumber" :value="goodsBatchNumber" placeholder="请输入产品批号" disabled>
                     </div>
                   </div>
                 </div>
@@ -111,7 +111,7 @@
                   <li>
                     <div class="item-content item-input">
                       <div class="item-inner">
-                        <div class="item-title item-label">比例</div>
+                        <div class="item-title item-label">比例(%)</div>
                         <div class="item-input-wrap">
                           <input type="text" name="scale" placeholder="请输入比例" :disabled="isReadonly">
                         </div>
@@ -204,6 +204,7 @@
         merchantsName: '',
         goodsName: '',
         goodsSpecifications: '',
+        goodsBatchNumber: '',
         selectList: ['买赠', '礼品赠送', '抽奖', '圆桌会议', '分销活动', '检测活动'],
         shape: '',
         timelines: [],
@@ -219,6 +220,7 @@
           this.merchantsName = res.data.merchantsName
           this.goodsName = res.data.goodsName
           this.goodsSpecifications = res.data.goodsSpecifications
+          this.goodsBatchNumber = res.data.goodsBatchNumber
           this.shape = res.data.shape
         })
         fetch('get', api.requireGoodsAuditInfo + this.listId, {}, this).then((res) => {
@@ -282,6 +284,7 @@
       selectGoods(good) {
         this.goodsName = good.goods_name
         this.goodsSpecifications = good.goods_spec
+        this.goodsBatchNumber = good.wenhao
       },
       searchMoreGoods() {
         if (this.goods.length >= this.maxGoodsCount) {

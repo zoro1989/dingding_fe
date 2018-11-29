@@ -90,7 +90,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">退货产品批号</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="goodsBatchNumber" placeholder="请输入退货产品批号" :disabled="isReadonly">
+                      <input type="text" name="goodsBatchNumber" :value="goodsBatchNumber" placeholder="请输入退货产品批号" disabled>
                     </div>
                   </div>
                 </div>
@@ -166,6 +166,7 @@
         merchantsName: '',
         goodsName: '',
         goodsSpecifications: '',
+        goodsBatchNumber: '',
         timelines: []
       }
     },
@@ -178,6 +179,7 @@
           this.merchantsName = res.data.merchantsName
           this.goodsName = res.data.goodsName
           this.goodsSpecifications = res.data.goodsSpecifications
+          this.goodsBatchNumber = res.data.goodsBatchNumber
         })
         fetch('get', api.returnGoodsAuditInfo + this.listId, {}, this).then((res) => {
           this.timelines = res.data
@@ -240,6 +242,7 @@
       selectGoods(good) {
         this.goodsName = good.goods_name
         this.goodsSpecifications = good.goods_spec
+        this.goodsBatchNumber = good.wenhao
       },
       searchMoreGoods() {
         if (this.goods.length >= this.maxGoodsCount) {
