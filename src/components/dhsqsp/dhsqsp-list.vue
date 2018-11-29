@@ -84,7 +84,7 @@
       },
       onAudit(item) {
         this.$router.push({
-            path: `/dhsqsp/${item.id}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
+            path: `/dhsqsp/${item.id}/${item.audit_id}/${item.audit_step}/${item.audit_status}/${item.form_type}`
           }
         )
       },

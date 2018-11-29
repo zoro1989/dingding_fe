@@ -155,8 +155,12 @@
             </form>
           </div>
           <div class="block" v-if="auditStatus === '待审核' || auditStatus === 'wait'">
-            <div class="row">
+            <div class="row" v-if="formType !== '3'">
               <f7-button fill class="col btn-save" @click="onSave">保存</f7-button>
+              <f7-button outline class="col btn-cancel" @click="onCancel">取消</f7-button>
+            </div>
+            <div class="row" v-if="formType === '3'">
+              <f7-button fill class="col btn-save" @click="onAudit">确认收货</f7-button>
               <f7-button outline class="col btn-cancel" @click="onCancel">取消</f7-button>
             </div>
           </div>
@@ -193,7 +197,8 @@
         pageNoAuditUser: 1,
         pageSize: 10,
         auditUserId: '',
-        auditUserName: ''
+        auditUserName: '',
+        formType: this.$route.params.formType || ''
       }
     },
     mounted() {
@@ -242,7 +247,7 @@
       onSave() {
         const app = this.$f7
         if (this.tableId && this.auditId && this.auditStep) {
-          if (this.auditStep === '3' && (!this.auditUserId || !this.auditUserName)) {
+          if (this.isPass && this.auditStep === '3' && (!this.auditUserId || !this.auditUserName)) {
             let toast = this.$f7.toast.create({
               text: '请选择开票人！',
               position: 'center',
@@ -255,12 +260,35 @@
           formData['tableId'] = this.tableId
           formData['id'] = this.auditId
           formData['auditStep'] = this.auditStep
-          formData['auditResult'] = formData['auditResult'] ? '1' : '0'
+          formData['auditResult'] = this.isPass ? '1' : '0'
           formData['auditType'] = 'returnGoods'
           fetch('post', api.terminalAuditForm, formData, this).then((res) => {
             this.$router.replace('/thsqsp-list')
           })
         }
+      },
+      onAudit(item, txt) {
+        const app = this.$f7
+        let _this = this
+        app.dialog.confirm('确定要收货吗?', '提示', function () {
+          let params = {
+            tableId: this.tableId,
+            id: this.auditStatus === '2' ? this.auditId : undefined,
+            auditStep: this.auditStep,
+            auditResult: '1',
+            auditStatus: this.auditStatus,
+            auditType: 'returnGoods'
+          }
+          fetch('post', api.terminalAudit, params, _this).then((res) => {
+            let toast = app.toast.create({
+              text: '已确认收货！',
+              position: 'center',
+              closeTimeout: 2000
+            })
+            toast.open()
+            this.$router.replace('/thsqsp-list')
+          })
+        })
       },
       onCancel() {
         this.$router.go(-1)

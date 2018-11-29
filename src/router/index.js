@@ -199,7 +199,7 @@ export default new Router({
       component: DhsqspList
     },
     {
-      path: '/dhsqsp/:id/:auditId/:auditStep/:auditStatus',
+      path: '/dhsqsp/:id/:auditId/:auditStep/:auditStatus/:formType',
       name: 'dhsqsp',
       component: Dhsqsp
     },
@@ -209,7 +209,7 @@ export default new Router({
       component: ThsqspList
     },
     {
-      path: '/thsqsp/:id/:auditId/:auditStep/:auditStatus',
+      path: '/thsqsp/:id/:auditId/:auditStep/:auditStatus/:formType',
       name: 'thsqsp',
       component: Thsqsp
     }

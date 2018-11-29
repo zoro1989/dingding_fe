@@ -83,7 +83,7 @@
       },
       onAudit(item) {
         this.$router.push({
-            path: `/thsqsp/${item.id}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
+            path: `/thsqsp/${item.id}/${item.audit_id}/${item.audit_step}/${item.audit_status}/${item.form_type}`
           }
         )
       },
