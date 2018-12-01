@@ -111,19 +111,19 @@
               break
             case 'requireGoods':
               this.$router.push({
-                  path: `/yhsqsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}/1`
+                  path: `/yhsqsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}/${item.formType}`
                 }
               )
               break
             case 'arrangeGoods':
               this.$router.push({
-                  path: `/dhsqsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
+                  path: `/dhsqsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}/${item.formType}`
                 }
               )
               break
             case 'returnGoods':
               this.$router.push({
-                  path: `/thsqsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}`
+                  path: `/thsqsp/${item.tableId}/${item.audit_id}/${item.audit_step}/${item.audit_status}/${item.formType}`
                 }
               )
               break

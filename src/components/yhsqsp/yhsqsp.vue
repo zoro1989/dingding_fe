@@ -157,7 +157,7 @@
           <div v-if="auditStatus === '待审核' || auditStatus === 'wait'">
             <form class="list" id="audit-form">
               <ul>
-                <li class="item-content item-input">
+                <li class="item-content item-input" v-if="!(formType === '1' || (formType === '2' && auditStep === '1'))">
                   <div class="item-inner">
                     <div class="item-title item-label">审核是否通过</div>
                     <div class="item-input-wrap">
@@ -169,7 +169,7 @@
                     </div>
                   </div>
                 </li>
-                <li class="item-content item-input">
+                <li class="item-content item-input" v-if="!(formType === '1' || (formType === '2' && auditStep === '1'))">
                   <div class="item-inner">
                     <div class="item-title item-label">审批意见</div>
                     <div class="item-input-wrap">
@@ -177,7 +177,7 @@
                     </div>
                   </div>
                 </li>
-                <li class="item-content item-input" v-if="auditStep === '3'">
+                <li class="item-content item-input" v-if="(existUser === '1' && auditStep === '3') || existUser === '2'">
                   <div class="item-inner">
                     <div class="item-title item-label">开票员</div>
                     <div class="item-input-wrap">
@@ -191,11 +191,13 @@
           </div>
           <div class="block" v-if="auditStatus === '待审核' || auditStatus === 'wait'">
             <div class="row" v-if="formType !== '3'">
-              <f7-button fill class="col btn-save" @click="onSave">保存</f7-button>
+              <f7-button fill color="orange" v-if="formType === '1' || (formType === '2' && auditStep === '1')" class="col btn-save" @click="onEdit">编辑</f7-button>
+              <f7-button fill class="col btn-save" v-if="formType === '1' || (formType === '2' && auditStep === '1')" @click="onAudit('审批')">提交审批</f7-button>
+              <f7-button fill class="col btn-save" v-if="!(formType === '1' || (formType === '2' && auditStep === '1'))" @click="onSave">提交</f7-button>
               <f7-button outline class="col btn-cancel" @click="onCancel">取消</f7-button>
             </div>
             <div class="row" v-if="formType === '3'">
-              <f7-button fill class="col btn-save" @click="onAudit">确认收货</f7-button>
+              <f7-button fill class="col btn-save" @click="onAudit('收货')">确认收货</f7-button>
               <f7-button outline class="col btn-cancel" @click="onCancel">取消</f7-button>
             </div>
           </div>
@@ -234,7 +236,8 @@
         pageSize: 10,
         auditUserId: '',
         auditUserName: '',
-        formType: this.$route.params.formType || ''
+        formType: this.$route.params.formType || '',
+        existUser: ''
       }
     },
     mounted() {
@@ -249,10 +252,12 @@
           this.timelines = res.data
         })
       }
-
-      fetch('get', api.findNextApproveUserByOpenPage, {page: this.pageNoAuditUser, limit: this.pageSize}, this).then((res) => {
-        this.auditUsers = res.data
-        this.maxAuditUsersCount = res.count
+      fetch('get', api.checkNextApproveUserExist, {auditStep: this.auditStep, tableId: this.tableId, auditType: 'requireGoods'}, this).then((res) => {
+        this.existUser = res.data.existUser
+        fetch('get', api.findNextApproveUserByOpenPage, {page: this.pageNoAuditUser, limit: this.pageSize, auditUserId: res.data.trustUserId}, this).then((res) => {
+          this.auditUsers = res.data
+          this.maxAuditUsersCount = res.count
+        })
       })
     },
     methods: {
@@ -284,7 +289,16 @@
       onSave() {
         const app = this.$f7
         if (this.tableId && this.auditId && this.auditStep) {
-          if (this.isPass && this.auditStep === '3' && (!this.auditUserId || !this.auditUserName)) {
+          if (this.existUser === '0') {
+            let toast = this.$f7.toast.create({
+              text: '未找到下一步审批人！',
+              position: 'center',
+              closeTimeout: 2000
+            })
+            toast.open()
+            return
+          }
+          if (this.isPass && ((this.auditStep === '3' && this.existUser === '1') || this.existUser === '2') && (!this.auditUserId || !this.auditUserName)) {
             let toast = this.$f7.toast.create({
               text: '请选择开票人！',
               position: 'center',
@@ -305,28 +319,52 @@
           })
         }
       },
-      onAudit(item, txt) {
+      onAudit(txt) {
         const app = this.$f7
         let _this = this
-        app.dialog.confirm('确定要收货吗?', '提示', function () {
-          let params = {
-            tableId: this.tableId,
-            id: this.auditStatus === '2' ? this.auditId : undefined,
-            auditStep: this.auditStep,
-            auditResult: '1',
-            auditStatus: this.auditStatus,
-            auditType: 'requireGoods'
-          }
-          fetch('post', api.terminalAudit, params, _this).then((res) => {
-            let toast = app.toast.create({
-              text: '已确认收货！',
+        let params = {
+          tableId: this.tableId,
+          id: this.auditId,
+          auditStep: this.auditStep,
+          auditResult: '1',
+          auditStatus: this.auditStatus,
+          auditType: 'requireGoods'
+        }
+        if (this.formType === '1' || (this.formType === '2' && this.auditStep === '1')) {
+          if (!this.auditUserId || !this.auditUserName) {
+            let toast = this.$f7.toast.create({
+              text: '请选择开票人！',
               position: 'center',
               closeTimeout: 2000
             })
             toast.open()
-            this.$router.replace('/yhsqsp-list')
+            return
+          } else {
+            params.auditUserId = this.auditUserId
+            params.auditUserName = this.auditUserName
+            params.auditStatus = '2'
+          }
+        }
+        if (this.formType === '3') {
+          params.auditStatus = '4'
+        }
+        app.dialog.confirm('确定要' + txt + '吗?', '提示', function () {
+          fetch('post', api.terminalAudit, params, _this).then((res) => {
+            let toast = app.toast.create({
+              text: '已完成' + txt + '！',
+              position: 'center',
+              closeTimeout: 2000
+            })
+            toast.open()
+            _this.$router.replace('/yhsqsp-list')
           })
         })
+      },
+      onEdit() {
+        this.$router.push({
+            path: `/yhsq/${this.tableId}/${this.formType}`
+          }
+        )
       },
       onCancel() {
         this.$router.go(-1)

@@ -40,11 +40,13 @@
           </f7-list>
         </cube-scroll>
       </div>
+      <audituser-select-list v-if="auditUsers.length > 0" :list="auditUsers" ref="auditUsers" @onSelectItem="selectAuditUser" @searchMore="searchMoreAuditUser"></audituser-select-list>
     </div>
   </transition>
 </template>
 <script>
   import { f7Navbar, f7NavTitle, f7Link, f7NavLeft, f7NavRight, f7Page, f7List, f7ListItem, f7SwipeoutActions, f7SwipeoutButton } from 'framework7-vue'
+  import AudituserSelectList from 'base/audituser-select-list/audituser-select-list'
   import { api } from '@/config'
   import fetch from 'utils/fetch'
   export default {
@@ -58,7 +60,8 @@
       f7List,
       f7ListItem,
       f7SwipeoutActions,
-      f7SwipeoutButton
+      f7SwipeoutButton,
+      AudituserSelectList
     },
     data() {
       return {
@@ -72,7 +75,11 @@
             txt: ''
           }
         },
-        maxCount: 0
+        maxCount: 0,
+        auditUsers: [],
+        maxAuditUsersCount: 0,
+        pageNoAuditUser: 1,
+        auditParam: null
       }
     },
     created() {
@@ -141,21 +148,68 @@
           }
         )
       },
+      selectAuditUser(item) {
+        if (this.auditParam !== null) {
+          this.auditParam.auditUserId = item.auditUserId
+          this.auditParam.auditUserName = item.auditUserName
+          const app = this.$f7
+          let _this = this
+          app.dialog.confirm('您下一步是否要提交到开票员' + item.auditUserName + '审批吗?', '提示', function () {
+            fetch('post', api.terminalAudit, _this.auditParam, _this).then((res) => {
+              _this.pageNo = 1
+              _this.initData()
+            })
+          })
+        }
+      },
+      searchMoreAuditUser() {
+        if (this.auditUsers.length >= this.maxAuditUsersCount) {
+          return
+        }
+        this.pageNoAuditUser++
+        fetch('get', api.findNextApproveUserByOpenPage, {page: this.pageNoAuditUser, limit: this.pageSize}, this).then((res) => {
+          this.auditUsers = this.auditUsers.concat(res.data)
+        })
+      },
       onAudit(item, txt) {
         const app = this.$f7
         let _this = this
         app.dialog.confirm('确定要' + txt + '审批吗?', '提示', function () {
-          let params = {
-            tableId: item.id,
-            id: item.auditStatus === '2' ? item.auditId : undefined,
-            auditStep: item.auditStep,
-            auditResult: '1',
-            auditStatus: item.auditStatus,
-            auditType: 'requireGoods'
-          }
-          fetch('post', api.terminalAudit, params, _this).then((res) => {
-            _this.pageNo = 1
-            _this.initData()
+          fetch('get', api.checkNextApproveUserExist, {auditStep: item.auditStep, tableId: item.id, auditType: 'requireGoods'}, this).then((res) => {
+            let params = {
+              tableId: item.id,
+              id: item.auditStatus === '2' ? item.auditId : undefined,
+              auditStep: item.auditStep,
+              auditResult: '1',
+              auditStatus: item.auditStatus,
+              auditType: 'requireGoods'
+            }
+            _this.auditParam = params
+            let existUser = res.data.existUser
+            let trustUserId = res.data.trustUserId
+            if (existUser === '2') {
+              fetch('get', api.findNextApproveUserByOpenPage, {page: _this.pageNoAuditUser, limit: _this.pageSize, auditUserId: trustUserId}, _this).then((res) => {
+                _this.auditUsers = res.data
+                _this.maxAuditUsersCount = res.count
+                if (_this.auditUsers.length > 0) {
+                  _this.$nextTick(() => {
+                    _this.$refs.auditUsers.show()
+                  })
+                } else {
+                  let toast = _this.$f7.toast.create({
+                    text: '没有检索到下级审批人数据！',
+                    position: 'center',
+                    closeTimeout: 2000
+                  })
+                  toast.open()
+                }
+              })
+            } else {
+              fetch('post', api.terminalAudit, params, _this).then((res) => {
+                _this.pageNo = 1
+                _this.initData()
+              })
+            }
           })
         })
       },

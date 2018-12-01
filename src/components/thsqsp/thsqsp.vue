@@ -273,10 +273,9 @@
         app.dialog.confirm('确定要收货吗?', '提示', function () {
           let params = {
             tableId: this.tableId,
-            id: this.auditStatus === '2' ? this.auditId : undefined,
             auditStep: this.auditStep,
             auditResult: '1',
-            auditStatus: this.auditStatus,
+            auditStatus: '4',
             auditType: 'returnGoods'
           }
           fetch('post', api.terminalAudit, params, _this).then((res) => {

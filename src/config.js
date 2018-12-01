@@ -90,7 +90,9 @@ const api = {
   findChainCustomUnApproveCount: apiPath + 'merchants/auditInfo/info/chainCustom/unApproveCount',
   findChainTotalUnApproveCount: apiPath + 'merchants/auditInfo/info/chainTotal/unApproveCount',
   findMerchantTerminalUnApproveCount: apiPath + 'merchants/auditInfo/info/merchantTerminal/unApproveCount',
-  findReturnGoodsUnApproveCount: apiPath + 'merchants/auditInfo/info/returnGoods/unApproveCount'
+  findReturnGoodsUnApproveCount: apiPath + 'merchants/auditInfo/info/returnGoods/unApproveCount',
+  // 获取权限
+  checkNextApproveUserExist: apiPath + 'merchants/auditInfo/info/checkNextApproveUserExist'
 }
 
 const apiDict = {

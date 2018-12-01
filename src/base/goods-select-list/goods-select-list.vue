@@ -22,7 +22,7 @@
         <cube-scroll @pulling-up="searchMore" :options="scrollOptions" :data="list">
           <f7-list media-list class="search-list searchbar-found">
             <f7-list-item @click="onSelectGoods(item)"
-                          v-for="(item, index) in list" :key="index" :title="item.goods_name" :subtitle="item.goods_spec">
+                          v-for="(item, index) in list" :key="index" :title="item.goods_name" :subtitle="item.goods_spec" :text="item.wenhao">
             </f7-list-item>
           </f7-list>
         </cube-scroll>
