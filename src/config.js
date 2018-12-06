@@ -5,6 +5,7 @@ let apiPath = '/'
 const api = {
   // 登录
   authLogin: apiPath + 'dingtalk/auth/login',
+  authConfig: apiPath + 'dingtalk/auth/config',
   dingtalkAuth: apiPath + 'dingtalk/auth/',
   selfFunc: apiPath + 'api/base/self/func',
   // 同步位置

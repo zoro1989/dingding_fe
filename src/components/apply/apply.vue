@@ -20,7 +20,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">药店类别</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="shopType" :value="shopType" placeholder="请输入药店类别" :disabled="isReadonly" @click="onClickSelect">
+                      <input type="text" name="shopType" :value="shopType" placeholder="请输入药店类别" readonly :disabled="isReadonly" @click="onClickSelect">
                     </div>
                   </div>
                 </div>
@@ -30,7 +30,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">药店地址</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="shopAddr" :value="shopAddr" id="shopAddr" placeholder="请输入药店地址" @click="onClickAddr" :disabled="isReadonly">
+                      <input type="text" name="shopAddr" :value="shopAddr" id="shopAddr" placeholder="请输入药店地址" @click="onClickAddr" readonly :disabled="isReadonly">
                       <input name="longitude" type="hidden" :value="longitude"/>
                       <input name="latitude" type="hidden" :value="latitude"/>
                     </div>
@@ -62,7 +62,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">药店合作时间</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="cooperationTime" placeholder="请选择药店合作时间" :disabled="isReadonly" id="cooperationTime"/>
+                      <input type="text" name="cooperationTime" placeholder="请选择药店合作时间" :disabled="isReadonly" readonly id="cooperationTime"/>
                     </div>
                   </div>
                 </div>
@@ -92,7 +92,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">药店负责人生日</div>
                     <div class="item-input-wrap">
-                      <input type="text" placeholder="请选择药店负责人生日" name="shopUserBirth" :disabled="isReadonly" id="shopUserBirth"/>
+                      <input type="text" placeholder="请选择药店负责人生日" name="shopUserBirth" readonly :disabled="isReadonly" id="shopUserBirth"/>
                     </div>
                   </div>
                 </div>
@@ -110,6 +110,10 @@
                 </div>
               </div>
             </div>
+          </div>
+          <div style="text-align: center">
+            <f7-button v-if="!isReadonly" fill style="margin: 0 15px" @click="onPutLicense">上传营业执照</f7-button>
+            <img :src="licensePath" width="90">
           </div>
           <div class="block" v-if="!isReadonly">
             <div class="row">
@@ -130,6 +134,7 @@
   import AutoSelectList from 'base/auto-select-list/auto-select-list'
   import { api } from '@/config'
   import fetch from 'utils/fetch'
+  import * as dd from 'dingtalk-jsapi'
   export default {
     components: {
       f7Page,
@@ -148,7 +153,8 @@
         latitude: '',
         selectList: ['单体', '医疗'],
         shopType: '',
-        timelines: []
+        timelines: [],
+        licensePath: ''
       }
     },
     mounted() {
@@ -159,6 +165,7 @@
           app.form.fillFromData('#apply-form', res.data)
           this.shopType = res.data.shopType
           this.shopAddr = res.data.shopAddr
+          this.licensePath = res.data.licensePath
         })
         fetch('get', api.terminalAuditInfo + this.listId, {}, this).then((res) => {
           this.timelines = res.data
@@ -263,6 +270,40 @@
       }
     },
     methods: {
+      onPutLicense() {
+        fetch('get', api.authConfig, {url: window.location.href.split('#')[0]}, this).then((res) => {
+          let config = res.data
+          config.jsApiList = []
+          config.jsApiList.push('biz.util.uploadImage')
+          console.log(config)
+          dd.config(config)
+          dd.error(function(err) {
+            alert('dd error: ' + JSON.stringify(err))
+          })
+          let _this = this
+          dd.ready(function() {
+            dd.biz.util.uploadImage({
+              compression: true, // (是否压缩，默认为true压缩)
+              multiple: false, // 是否多选，默认false
+              max: 3, // 最多可选个数
+              quality: 50, // 图片压缩质量,
+              resize: 50, // 图片缩放率
+              onSuccess: function(result) {
+                // onSuccess将在图片上传成功之后调用
+                /*
+                 [
+                 'http://gtms03.alicdn.com/tps/i3/TB1VF6uGFXXXXalaXXXmh5R_VXX-237-236.png'
+                 ]
+                 */
+                if (result.length > 0) {
+                  _this.licensePath = result[0]
+                }
+              },
+              onFail: function (err) { console.log(err) }
+            })
+          })
+        })
+      },
       onClickAddr() {
         this.$refs.addrSelect.show()
       },
@@ -275,6 +316,7 @@
       onSave() {
         const app = this.$f7
         let formData = app.form.convertToData('#apply-form')
+        formData['licensePath'] = this.licensePath
         if (this.listId && this.listId !== '0') {
           fetch('put', api.terminalInfo + this.listId, formData, this).then((res) => {
             this.$router.replace('/apply-list')

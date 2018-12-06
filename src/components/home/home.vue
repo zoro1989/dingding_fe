@@ -318,14 +318,12 @@
       }
     },
     created() {
-      if (!EventBus.isNeedLogin) {
-        fetch('get', api.selfFunc, {}, this).then((res) => {
-          console.log(res.data)
-          this.authData = res.data
-        })
-        return
-      }
-      let _this = this
+      fetch('get', api.selfFunc, {}, this).then((res) => {
+        console.log(res.data)
+        this.authData = res.data
+      })
+      if (EventBus.isNeedLogin) {
+        let _this = this
         dd.ready(function() {
           dd.runtime.permission.requestAuthCode({
             corpId: 'ding9cb5b465af827a4935c2f4657eb6378f',
@@ -349,6 +347,7 @@
             _this.$router.replace('/login')
           })
         })
+      }
     },
     mounted() {
       fetch('get', api.noticeInfoList, {page: 1, limit: 10}, this).then((res) => {

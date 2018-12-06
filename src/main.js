@@ -8,6 +8,10 @@ import 'common/stylus/index.styl'
 import { Scroll } from 'cube-ui'
 import Framework7 from 'framework7/framework7.esm.bundle'
 import Framework7Vue from 'framework7-vue'
+/* eslint-disable no-unused-vars */
+// import VConsole from 'vconsole'
+/* eslint-disable no-new */
+// new VConsole()
 Framework7.use(Framework7Vue)
 Vue.use(Scroll)
 
