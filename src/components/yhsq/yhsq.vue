@@ -10,7 +10,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">客商名称</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="merchantsName" :value="merchantsName" placeholder="请选择客商名称" :disabled="isReadonly" @click="onClickMerchant">
+                      <input type="text" name="merchantsName" :value="merchantsName" placeholder="请选择客商名称" :disabled="isReadonly" readonly @click="onClickMerchant">
                     </div>
                   </div>
                 </div>
@@ -50,7 +50,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">产品名称</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="goodsName" :value="goodsName" placeholder="请选择产品名称" :disabled="isReadonly" @click="onClickGood">
+                      <input type="text" name="goodsName" :value="goodsName" placeholder="请选择产品名称" :disabled="isReadonly" readonly @click="onClickGood">
                     </div>
                   </div>
                 </div>
@@ -123,7 +123,7 @@
                       <div class="item-inner">
                         <div class="item-title item-label">形式</div>
                         <div class="item-input-wrap">
-                          <input type="text" name="shape" :value="shape" placeholder="请选择形式" :disabled="isReadonly" @click="onClickSelect">
+                          <input type="text" name="shape" :value="shape" placeholder="请选择形式" :disabled="isReadonly" readonly @click="onClickSelect">
                         </div>
                       </div>
                     </div>

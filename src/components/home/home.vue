@@ -1,6 +1,11 @@
 <template>
   <div class="home">
-    <f7-navbar title="万通营销" class="header-bar"></f7-navbar>
+    <f7-navbar>
+      <f7-nav-title>万通营销</f7-nav-title>
+      <!--<f7-nav-right>-->
+        <!--<f7-link @click="logout">退出</f7-link>-->
+      <!--</f7-nav-right>-->
+    </f7-navbar>
     <div class="wrapper">
       <div class="toolbar tabbar">
         <div class="toolbar-inner">
@@ -9,13 +14,13 @@
           </a>
           <a href="#tab-2" class="tab-link">
             <i class="fa fa-handshake-o" style="font-size: 22px">
-              <span v-if="merchantTerminalUnApproveCount + chainTotalUnApproveCount + chainCustomUnApproveCount > 0" class="badge color-red"></span>
+              <span v-if="isTab1" class="badge color-red"></span>
             </i>
             <span style="font-size: 12px">客商管理</span>
           </a>
           <a href="#tab-3" class="tab-link">
             <i class="fa fa-dollar" style="font-size: 22px">
-              <span v-if="requireGoodsUnApproveCount + arrangeGoodsUnApproveCount + returnGoodsUnApproveCount" class="badge color-red"></span>
+              <span v-if="isTab2" class="badge color-red"></span>
             </i>
             <span style="font-size: 12px">销售管理</span>
           </a>
@@ -90,19 +95,19 @@
                   <f7-button fill class="button-link" @click="OnClick('apply-list')">
                     <i class="fa fa-address-card-o"></i>
                   </f7-button>
-                  <span>终端医疗申请</span>
+                  <span>终端医疗</span>
                 </div>
                 <div class="link-box">
                   <f7-button fill class="button-link" @click="OnClick('lszb-list')">
                     <i class="fa fa-institution"></i>
                   </f7-button>
-                  <span>连锁总部申请</span>
+                  <span>连锁总部</span>
                 </div>
                 <div class="link-box">
                   <f7-button fill class="button-link" @click="OnClick('lsmd-list')">
                     <i class="fa fa-object-group"></i>
                   </f7-button>
-                  <span>连锁门店申请</span>
+                  <span>连锁门店</span>
                 </div>
               </div>
             </div>
@@ -111,24 +116,24 @@
               <div class="row">
                 <div class="link-box">
                   <f7-button color="green" fill class="button-link" @click="OnClick('zdylsp-list')">
-                    <span v-if="merchantTerminalUnApproveCount > 0" class="badge color-red">{{merchantTerminalUnApproveCount}}</span>
+                    <span v-if="isHasZdylsp && merchantTerminalUnApproveCount > 0" class="badge color-red">{{merchantTerminalUnApproveCount}}</span>
                     <i class="fa fa-pencil"></i>
                   </f7-button>
-                  <span>终端医疗审批</span>
+                  <span>终端医疗</span>
                 </div>
                 <div class="link-box">
                   <f7-button color="green" fill class="button-link" @click="OnClick('lszbsp-list')">
-                    <span v-if="chainTotalUnApproveCount > 0" class="badge color-red">{{chainTotalUnApproveCount}}</span>
+                    <span v-if="isHasLszbsp && chainTotalUnApproveCount > 0" class="badge color-red">{{chainTotalUnApproveCount}}</span>
                     <i class="fa fa-share-alt"></i>
                   </f7-button>
-                  <span>连锁总部审批</span>
+                  <span>连锁总部</span>
                 </div>
                 <div class="link-box">
                   <f7-button color="green" fill class="button-link" @click="OnClick('lsmdsp-list')">
-                    <span v-if="chainCustomUnApproveCount > 0" class="badge color-red">{{chainCustomUnApproveCount}}</span>
+                    <span v-if="isHasLsmdsp && chainCustomUnApproveCount > 0" class="badge color-red">{{chainCustomUnApproveCount}}</span>
                     <i class="fa fa-gift"></i>
                   </f7-button>
-                  <span>连锁门店审批</span>
+                  <span>连锁门店</span>
                 </div>
               </div>
             </div>
@@ -162,21 +167,21 @@
               <div class="row">
                 <div class="link-box">
                   <f7-button color="green" fill class="button-link" @click="OnClick('yhsqsp-list')">
-                    <span v-if="requireGoodsUnApproveCount > 0" class="badge color-red">{{requireGoodsUnApproveCount}}</span>
+                    <span v-if="isHasYhsp && requireGoodsUnApproveCount > 0" class="badge color-red">{{requireGoodsUnApproveCount}}</span>
                     <i class="fa fa-cubes"></i>
                   </f7-button>
                   <span>要货审批</span>
                 </div>
                 <div class="link-box">
                   <f7-button color="green" fill class="button-link" @click="OnClick('dhsqsp-list')">
-                    <span v-if="arrangeGoodsUnApproveCount > 0" class="badge color-red">{{arrangeGoodsUnApproveCount}}</span>
+                    <span v-if="isHasDhsp && arrangeGoodsUnApproveCount > 0" class="badge color-red">{{arrangeGoodsUnApproveCount}}</span>
                     <i class="fa fa-truck"></i>
                   </f7-button>
                   <span>调货审批</span>
                 </div>
                 <div class="link-box">
                   <f7-button color="green" fill class="button-link" @click="OnClick('thsqsp-list')">
-                    <span v-if="returnGoodsUnApproveCount > 0" class="badge color-red">{{returnGoodsUnApproveCount}}</span>
+                    <span v-if="isHasThsp && returnGoodsUnApproveCount > 0" class="badge color-red">{{returnGoodsUnApproveCount}}</span>
                     <i class="fa fa-trash-o"></i>
                   </f7-button>
                   <span>退货审批</span>
@@ -193,9 +198,10 @@
   import { api } from '@/config'
   import fetch from 'utils/fetch'
   import * as dd from 'dingtalk-jsapi'
-  import { f7Navbar, f7BlockTitle, f7Button, f7Page, f7List, f7ListItem } from 'framework7-vue'
+  import { f7Navbar, f7BlockTitle, f7Button, f7Page, f7List, f7ListItem, f7NavRight, f7Link, f7NavTitle } from 'framework7-vue'
   import EventBus from 'common/js/event-bus'
   import NoMessage from './no-message.png'
+  import Cookies from 'js-cookie'
   export default {
     components: {
       f7Navbar,
@@ -203,9 +209,38 @@
       f7Button,
       f7Page,
       f7List,
-      f7ListItem
+      f7ListItem,
+      f7NavRight,
+      f7Link,
+      f7NavTitle
     },
     computed: {
+      isTab1() {
+        let ret = 0
+        if (this.isHasZdylsp) {
+          ret += this.merchantTerminalUnApproveCount
+        }
+        if (this.isHasLszbsp) {
+          ret += this.chainTotalUnApproveCount
+        }
+        if (this.isHasLsmdsp) {
+          ret += this.chainCustomUnApproveCount
+        }
+        return ret > 0
+      },
+      isTab2() {
+        let ret = 0
+        if (this.isHasYhsp) {
+          ret += this.requireGoodsUnApproveCount
+        }
+        if (this.isHasDhsp) {
+          ret += this.arrangeGoodsUnApproveCount
+        }
+        if (this.isHasThsp) {
+          ret += this.returnGoodsUnApproveCount
+        }
+        return ret > 0
+      },
       isHasKsgl() {
         let index = this.authData.findIndex((item) => {
           return item.id === '0ji3z9knz0000482qc50'
@@ -353,7 +388,7 @@
       fetch('get', api.noticeInfoList, {page: 1, limit: 10}, this).then((res) => {
         this.list1 = res.data
       })
-      fetch('get', api.msgList, {page: 1, limit: 10}, this).then((res) => {
+      fetch('get', api.msgList, {page: 1, limit: 10, top: 1}, this).then((res) => {
         this.list2 = res.data
       })
       fetch('get', api.findMerchantTerminalUnApproveCount, {}, this).then((res) => {
@@ -601,6 +636,11 @@
         } else if (auditStatus === 'wait') {
           return '待审核'
         }
+      },
+      logout() {
+        Cookies.remove('token')
+        Cookies.remove('token-test')
+        this.$router.replace('/login')
       }
     }
   }
