@@ -361,7 +361,7 @@
         let _this = this
         dd.ready(function() {
           dd.runtime.permission.requestAuthCode({
-            corpId: 'ding9cb5b465af827a4935c2f4657eb6378f',
+            corpId: 'dingabd6050b5675cc3035c2f4657eb6378f',
             onSuccess: function(result) {
               console.log(result)
               fetch('post', api.dingtalkAuth, {code: result.code}, this).then((res) => {

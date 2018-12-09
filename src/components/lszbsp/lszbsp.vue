@@ -215,6 +215,9 @@
               </ul>
             </form>
           </div>
+          <div style="text-align: center">
+            <img :src="licensePath" style="margin: 20px 0" width="90" @click="showBigImage">
+          </div>
           <div class="block" v-if="auditStatus === '待审核' || auditStatus === 'wait'">
             <div class="row">
               <f7-button fill class="col btn-save" @click="onSave">保存</f7-button>
@@ -232,6 +235,7 @@
   import AudituserSelectList from 'base/audituser-select-list/audituser-select-list'
   import { api } from '@/config'
   import fetch from 'utils/fetch'
+  import * as dd from 'dingtalk-jsapi'
   export default {
     components: {
       f7Page,
@@ -255,7 +259,8 @@
         pageSize: 10,
         auditUserId: '',
         auditUserName: '',
-        isSigned: ''
+        isSigned: '',
+        licensePath: ''
       }
     },
     mounted() {
@@ -264,6 +269,7 @@
       if (this.tableId && this.tableId !== '0') {
         fetch('get', api.chaintotalInfoGetDetail + this.tableId, {}, this).then((res) => {
           app.form.fillFromData('#apply-form', res.data)
+          this.licensePath = res.data.licensePath
           if (res.data.isSigned === '1') {
             this.isSigned = '未签订'
           } else if (res.data.isSigned === '0') {
@@ -331,6 +337,28 @@
       },
       onCancel() {
         this.$router.go(-1)
+      },
+      showBigImage() {
+        fetch('get', api.authConfig, {url: window.location.href.split('#')[0]}, this).then((res) => {
+          let config = res.data
+          config.jsApiList = []
+          config.jsApiList.push('biz.util.previewImage')
+          dd.config(config)
+          dd.error(function(err) {
+            alert('dd error: ' + JSON.stringify(err))
+          })
+          let _this = this
+          dd.ready(function() {
+            dd.biz.util.previewImage({
+              urls: [_this.licensePath],
+              current: _this.licensePath,
+              onSuccess: function(result) {
+                /**/
+              },
+              onFail: function(err) { console.log(err) }
+            })
+          })
+        })
       }
     }
   }

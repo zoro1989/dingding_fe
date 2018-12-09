@@ -114,7 +114,7 @@
           </div>
           <div style="text-align: center">
             <f7-button v-if="!isReadonly" fill style="margin: 0 15px" @click="onPutLicense">上传营业执照</f7-button>
-            <img :src="licensePath" width="90">
+            <img :src="licensePath" style="margin: 20px 0" width="90" @click="showBigImage">
           </div>
           <div class="block" v-if="!isReadonly">
             <div class="row">
@@ -262,6 +262,29 @@
                 }
               },
               onFail: function (err) { console.log(err) }
+            })
+          })
+        })
+      },
+      showBigImage() {
+        fetch('get', api.authConfig, {url: window.location.href.split('#')[0]}, this).then((res) => {
+          let config = res.data
+          config.jsApiList = []
+          config.jsApiList.push('biz.util.previewImage')
+          console.log(config)
+          dd.config(config)
+          dd.error(function(err) {
+            alert('dd error: ' + JSON.stringify(err))
+          })
+          let _this = this
+          dd.ready(function() {
+            dd.biz.util.previewImage({
+              urls: [_this.licensePath],
+              current: _this.licensePath,
+              onSuccess: function(result) {
+                /**/
+              },
+              onFail: function(err) { console.log(err) }
             })
           })
         })
