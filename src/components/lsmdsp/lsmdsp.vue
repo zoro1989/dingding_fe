@@ -98,6 +98,9 @@
               </li>
             </ul>
           </form>
+          <div style="text-align: center">
+            <img :src="licensePath" style="margin: 20px 0" width="90" @click="showBigImage">
+          </div>
           <div class="timeline">
             <div class="timeline-item" v-for="item in timelines" :key="item.audit_date">
               <div class="timeline-item-date">{{item.audit_date}}</div>
@@ -144,9 +147,6 @@
                 </li>
               </ul>
             </form>
-          </div>
-          <div style="text-align: center">
-            <img :src="licensePath" style="margin: 20px 0" width="90" @click="showBigImage">
           </div>
           <div class="block" v-if="auditStatus === '待审核' || auditStatus === 'wait'">
             <div class="row">
