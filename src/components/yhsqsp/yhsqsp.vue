@@ -254,7 +254,11 @@
       }
       fetch('get', api.checkNextApproveUserExist, {auditStep: this.auditStep, tableId: this.tableId, auditType: 'requireGoods'}, this).then((res) => {
         this.existUser = res.data.existUser
-        fetch('get', api.findNextApproveUserByOpenPage, {page: this.pageNoAuditUser, limit: this.pageSize, auditUserId: res.data.trustUserId}, this).then((res) => {
+        let trustUserId = res.data.trustUserId
+        if (this.auditStep === '3') {
+          trustUserId = ''
+        }
+        fetch('get', api.findNextApproveUserByOpenPage, {page: this.pageNoAuditUser, limit: this.pageSize, auditUserId: trustUserId}, this).then((res) => {
           this.auditUsers = res.data
           this.maxAuditUsersCount = res.count
         })
