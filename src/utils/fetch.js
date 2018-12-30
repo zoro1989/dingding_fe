@@ -3,12 +3,12 @@ import { apiStatus } from '@/config'
 import EventBus from 'common/js/event-bus'
 
 axios.defaults.withCredentials = true
-let fetch = (type, url, params, vm, data = false, isFormat = true) => {
+let fetch = (type, url, params, vm, isFormData = true, showMessage = false) => {
   let service = axios.create({
     timeout: 20000
   })
 
-  axios.defaults.headers.post['Content-Type'] = isFormat ? 'application/x-www-form-urlencoded;charset=utf-8' : 'application/json;charset=utf-8'
+  axios.defaults.headers.post['Content-Type'] = isFormData ? 'multipart/form-data;charset=utf-8' : 'application/json;charset=utf-8'
   service.interceptors.request.use(config => {
     // 需要token的在这里生成
     // config.headers['X-Token'] = 'tokenStr'
@@ -52,22 +52,17 @@ let fetch = (type, url, params, vm, data = false, isFormat = true) => {
     url: url,
     method: type
   }
-  if (data) {
+  if (type === 'get') {
     p.params = params
-    if (isFormat) {
-      let qs = require('qs')
-      data = qs.stringify(data)
-    }
-    p.data = data
   } else {
-    if (type === 'get') {
-      p.params = params
-    } else {
-      if (isFormat) {
-        let qs = require('qs')
-        params = qs.stringify(params)
+    if (isFormData) {
+      let fd = new FormData()
+      for (let o in params) {
+        fd.append(o, params[o])
       }
-      p.data = params
+      p.data = fd
+    } else {
+      p.data = JSON.stringify(params)
     }
   }
 

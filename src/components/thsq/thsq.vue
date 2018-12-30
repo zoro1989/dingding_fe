@@ -11,6 +11,7 @@
                     <div class="item-title item-label">客商名称</div>
                     <div class="item-input-wrap">
                       <input type="text" name="merchantsName" :value="merchantsName" placeholder="请选择客商名称" :disabled="isReadonly" readonly @click="onClickMerchant">
+                      <invalid-msg :value="merchantsName" ref="validMerchantsName"></invalid-msg>
                     </div>
                   </div>
                 </div>
@@ -20,7 +21,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">门店名称</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="storeName" placeholder="请输入门店名称" :disabled="isReadonly">
+                      <input type="text" name="storeName" placeholder="请输入门店名称" :disabled="isReadonly" required validate>
                     </div>
                   </div>
                 </div>
@@ -30,7 +31,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">退货人姓名</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="returnGoodsName" placeholder="请输入退货人姓名" :value="autoData.userName" :disabled="isReadonly">
+                      <input type="text" name="returnGoodsName" placeholder="请输入退货人姓名" :value="autoData.userName" :disabled="isReadonly" required validate>
                     </div>
                   </div>
                 </div>
@@ -40,7 +41,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">退货人分公司</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="returnGoodsOffice" placeholder="请输入退货人分公司" :value="autoData.officeName" :disabled="isReadonly">
+                      <input type="text" name="returnGoodsOffice" placeholder="请输入退货人分公司" :value="autoData.officeName" :disabled="isReadonly" required validate>
                     </div>
                   </div>
                 </div>
@@ -50,7 +51,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">退货人支公司</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="returnGoodsBranchOffice" placeholder="请输入退货人支公司" :value="autoData.branchOfficeName" :disabled="isReadonly">
+                      <input type="text" name="returnGoodsBranchOffice" placeholder="请输入退货人支公司" :value="autoData.branchOfficeName" :disabled="isReadonly" required validate>
                     </div>
                   </div>
                 </div>
@@ -61,6 +62,7 @@
                     <div class="item-title item-label">退货产品名称</div>
                     <div class="item-input-wrap">
                       <input type="text" name="goodsName" :value="goodsName" placeholder="请选择产品名称" :disabled="isReadonly" readonly @click="onClickGood">
+                      <invalid-msg :value="goodsName" ref="validGoodsName"></invalid-msg>
                     </div>
                   </div>
                 </div>
@@ -80,7 +82,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">退货产品数量</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="goodsNumber" placeholder="请输入退货产品数量" :disabled="isReadonly">
+                      <input type="text" name="goodsNumber" placeholder="请输入退货产品数量" :disabled="isReadonly" required validate>
                     </div>
                   </div>
                 </div>
@@ -100,7 +102,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">退货原因</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="returnRemarks" placeholder="请输入退货原因" :disabled="isReadonly">
+                      <input type="text" name="returnRemarks" placeholder="请输入退货原因" :disabled="isReadonly" required validate>
                     </div>
                   </div>
                 </div>
@@ -138,6 +140,7 @@
   import GoodsSelectList from 'base/goods-select-list/goods-select-list'
   import { api } from '@/config'
   import fetch from 'utils/fetch'
+  import InvalidMsg from 'base/invalid-msg/invalid-msg'
   export default {
     components: {
       f7Page,
@@ -146,7 +149,8 @@
       f7Button,
       f7Searchbar,
       MerchantSelectList,
-      GoodsSelectList
+      GoodsSelectList,
+      InvalidMsg
     },
     data() {
       return {
@@ -255,6 +259,12 @@
       },
       onSave() {
         const app = this.$f7
+        app.input.validateInputs('#apply-form')
+        this.$refs.validMerchantsName.valid()
+        this.$refs.validGoodsName.valid()
+        if (document.querySelectorAll('#apply-form .item-input-error-message').length > 0) {
+          return
+        }
         let formData = app.form.convertToData('#apply-form')
         if (this.listId && this.listId !== '0') {
           fetch('put', api.returnGoodsInfo + this.listId, formData, this).then((res) => {

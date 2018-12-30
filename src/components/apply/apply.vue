@@ -10,7 +10,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">药店名称</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="shopName" placeholder="请输入药店名称" :disabled="isReadonly">
+                      <input type="text" name="shopName" placeholder="请输入药店名称" :disabled="isReadonly" required validate>
                     </div>
                   </div>
                 </div>
@@ -21,6 +21,7 @@
                     <div class="item-title item-label">药店类别</div>
                     <div class="item-input-wrap">
                       <input type="text" name="shopType" :value="shopType" placeholder="请输入药店类别" readonly :disabled="isReadonly" @click="onClickSelect">
+                      <invalid-msg :value="shopType" ref="validShopType"></invalid-msg>
                     </div>
                   </div>
                 </div>
@@ -31,6 +32,7 @@
                     <div class="item-title item-label">药店地址</div>
                     <div class="item-input-wrap">
                       <input type="text" name="shopAddr" :value="shopAddr" id="shopAddr" placeholder="请输入药店地址" @click="onClickAddr" readonly :disabled="isReadonly">
+                      <invalid-msg :value="shopAddr" ref="validShopAddr"></invalid-msg>
                       <input name="longitude" type="hidden" :value="longitude"/>
                       <input name="latitude" type="hidden" :value="latitude"/>
                     </div>
@@ -42,7 +44,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">药店负责人姓名</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="shopUser" placeholder="请输入药店负责人姓名" :disabled="isReadonly">
+                      <input type="text" name="shopUser" placeholder="请输入药店负责人姓名" :disabled="isReadonly" required validate>
                     </div>
                   </div>
                 </div>
@@ -52,7 +54,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">药店负责人电话</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="shopUserPhone" placeholder="请输入药店负责人电话" :disabled="isReadonly">
+                      <input type="text" name="shopUserPhone" placeholder="请输入药店负责人电话" :disabled="isReadonly" required validate>
                     </div>
                   </div>
                 </div>
@@ -72,7 +74,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">上年度销售额</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="generates" placeholder="请输入上年度销售额" :disabled="isReadonly">
+                      <input type="text" name="generates" placeholder="请输入上年度销售额" :disabled="isReadonly" required validate>
                     </div>
                   </div>
                 </div>
@@ -82,7 +84,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">营业员人数</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="personCount" placeholder="请输入营业员人数" :disabled="isReadonly">
+                      <input type="text" name="personCount" placeholder="请输入营业员人数" :disabled="isReadonly" required validate>
                     </div>
                   </div>
                 </div>
@@ -97,8 +99,68 @@
                   </div>
                 </div>
               </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">统一社会信用代码</div>
+                    <div class="item-input-wrap">
+                      <input type="text" name="licenseCode" placeholder="请输入统一社会信用代码" :disabled="isReadonly" required validate>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">省份</div>
+                    <div class="item-input-wrap">
+                      <cube-select
+                        @change="changePro"
+                        name="licensePro"
+                        placeholder="请输入省份"
+                        :disabled="isReadonly"
+                        v-model="licensePro"
+                        :options="provinces">
+                      </cube-select>
+                      <invalid-msg :value="licensePro" ref="validLicensePro"></invalid-msg>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">地市</div>
+                    <div class="item-input-wrap">
+                      <cube-select
+                        placeholder="请输入地市"
+                        name="licenseCity"
+                        :disabled="isReadonly"
+                        v-model="licenseCity"
+                        :options="citys">
+                      </cube-select>
+                      <invalid-msg :value="licenseCity" ref="validLicenseCity"></invalid-msg>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">详细地址</div>
+                    <div class="item-input-wrap">
+                      <input type="text" name="licenseAddr" placeholder="请输入营业执照详细地址" :disabled="isReadonly" required validate>
+                    </div>
+                  </div>
+                </div>
+              </li>
             </ul>
           </form>
+          <div style="text-align: center; margin-top: 10px">
+            <f7-button v-if="!isReadonly" fill style="margin: 0 15px" @click="onPutLicense">上传营业执照</f7-button>
+            <img :src="licensePath" style="margin: 20px 0" width="90" @click="showBigImage">
+            <invalid-msg :value="licensePath" ref="validImg"></invalid-msg>
+          </div>
           <div class="timeline">
             <div class="timeline-item" v-for="item in timelines" :key="item.audit_date">
               <div class="timeline-item-date">{{item.audit_date}}</div>
@@ -110,10 +172,6 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div style="text-align: center">
-            <f7-button v-if="!isReadonly" fill style="margin: 0 15px" @click="onPutLicense">上传营业执照</f7-button>
-            <img :src="licensePath" style="margin: 20px 0" width="90" @click="showBigImage">
           </div>
           <div class="block" v-if="!isReadonly">
             <div class="row">
@@ -135,6 +193,7 @@
   import { api } from '@/config'
   import fetch from 'utils/fetch'
   import * as dd from 'dingtalk-jsapi'
+  import InvalidMsg from 'base/invalid-msg/invalid-msg'
   export default {
     components: {
       f7Page,
@@ -143,7 +202,8 @@
       f7Button,
       AddrSelect,
       AutoSelectList,
-      f7Searchbar
+      f7Searchbar,
+      InvalidMsg
     },
     data() {
       return {
@@ -154,7 +214,11 @@
         selectList: ['单体', '医疗'],
         shopType: '',
         timelines: [],
-        licensePath: ''
+        licensePath: '',
+        provinces: [],
+        citys: [],
+        licensePro: '',
+        licenseCity: ''
       }
     },
     mounted() {
@@ -171,6 +235,13 @@
           this.timelines = res.data
         })
       }
+      fetch('get', api.getLinceseProvinceDict, {}, this).then((res) => {
+        this.provinces = res.data.map((item) => {
+          item.value = item.id + ''
+          item.text = item.name + ''
+          return item
+        })
+      })
       if (this.$route.name === 'apply-view') {
         return
       }
@@ -338,8 +409,19 @@
       },
       onSave() {
         const app = this.$f7
+        app.input.validateInputs('#apply-form')
+        this.$refs.validShopType.valid()
+        this.$refs.validShopAddr.valid()
+        this.$refs.validImg.valid()
+        this.$refs.validLicensePro.valid()
+        this.$refs.validLicenseCity.valid()
+        if (document.querySelectorAll('#apply-form .item-input-error-message').length > 0) {
+          return
+        }
         let formData = app.form.convertToData('#apply-form')
         formData['licensePath'] = this.licensePath
+        formData['licensePro'] = this.licensePro
+        formData['licenseCity'] = this.licenseCity
         if (this.listId && this.listId !== '0') {
           fetch('put', api.terminalInfo + this.listId, formData, this).then((res) => {
             this.$router.replace('/apply-list')
@@ -357,6 +439,15 @@
         this.shopAddr = addrObj.addr
         this.longitude = addrObj.lng
         this.latitude = addrObj.lat
+      },
+      changePro(value) {
+        fetch('get', api.getLinceseCityDict, {provinceId: value}, this).then((res) => {
+          this.citys = res.data.map((item) => {
+            item.value = item.id + ''
+            item.text = item.name + ''
+            return item
+          })
+        })
       }
     }
   }

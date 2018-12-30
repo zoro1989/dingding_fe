@@ -11,6 +11,7 @@
                     <div class="item-title item-label">客商名称</div>
                     <div class="item-input-wrap">
                       <input type="text" name="merchantsName" :value="merchantsName" placeholder="请选择客商名称" :disabled="isReadonly" readonly @click="onClickMerchant">
+                      <invalid-msg :value="merchantsName" ref="validMerchantsName"></invalid-msg>
                     </div>
                   </div>
                 </div>
@@ -20,7 +21,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">要货人姓名</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="requireGoodsName" placeholder="请输入要货人姓名" :value="autoData.userName" :disabled="isReadonly">
+                      <input type="text" name="requireGoodsName" placeholder="请输入要货人姓名" :value="autoData.userName" :disabled="isReadonly" required validate>
                     </div>
                   </div>
                 </div>
@@ -30,7 +31,7 @@
                   <div class="item-inner">
                     <div class="item-title item-label">要货人分公司</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="requireGoodsOffice" placeholder="请输入要货人分公司" :value="autoData.officeName" :disabled="isReadonly">
+                      <input type="text" name="requireGoodsOffice" placeholder="请输入要货人分公司" :value="autoData.officeName" :disabled="isReadonly" required validate>
                     </div>
                   </div>
                 </div>
@@ -40,80 +41,21 @@
                   <div class="item-inner">
                     <div class="item-title item-label">要货人支公司</div>
                     <div class="item-input-wrap">
-                      <input type="text" name="requireGoodsBranchOffice" placeholder="请输入要货人支公司" :value="autoData.branchOfficeName" :disabled="isReadonly">
+                      <input type="text" name="requireGoodsBranchOffice" placeholder="请输入要货人支公司" :value="autoData.branchOfficeName" :disabled="isReadonly" required validate>
                     </div>
                   </div>
                 </div>
               </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">产品名称</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="goodsName" :value="goodsName" placeholder="请选择产品名称" :disabled="isReadonly" readonly @click="onClickGood">
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">产品规格</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="goodsSpecifications" :value="goodsSpecifications" placeholder="请输入退货产品规格" disabled>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">产品数量</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="goodsNumber" placeholder="请输入产品数量" :disabled="isReadonly">
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">产品批号</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="goodsBatchNumber" :value="goodsBatchNumber" placeholder="请输入产品批号" disabled>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">开票价格</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="invoicePrice" placeholder="请输入开票价格" :disabled="isReadonly">
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">零售价格</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="retailPrice" placeholder="请输入零售价格" :disabled="isReadonly">
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <div class="card" v-if="!formType || formType === '1'">
-                <div class="card-header">政策后实际采购扣率（按零售价计算）</div>
+              <div class="card" v-for="(item, index) in details" :key="index">
+                <div class="card-header">产品{{index + 1}}<i v-if="!isReadonly" @click="deleteGood(index)" class="fa fa-trash" style="color: red; font-size: 24px; position: absolute; right: 15px; z-index: 2"></i></div>
                 <div class="card-content card-content-padding">
                   <li>
                     <div class="item-content item-input">
                       <div class="item-inner">
-                        <div class="item-title item-label">比例(%)</div>
+                        <div class="item-title item-label">产品名称</div>
                         <div class="item-input-wrap">
-                          <input type="text" name="scale" placeholder="请输入比例" :disabled="isReadonly">
+                          <input type="text" v-model="item.goodsName" placeholder="请选择产品名称" :disabled="isReadonly" readonly @click="onClickGood(index)">
+                          <invalid-msg :value="item.goodsName" ref="validGoodsName"></invalid-msg>
                         </div>
                       </div>
                     </div>
@@ -121,9 +63,9 @@
                   <li>
                     <div class="item-content item-input">
                       <div class="item-inner">
-                        <div class="item-title item-label">形式</div>
+                        <div class="item-title item-label">产品规格</div>
                         <div class="item-input-wrap">
-                          <input type="text" name="shape" :value="shape" placeholder="请选择形式" :disabled="isReadonly" readonly @click="onClickSelect">
+                          <input type="text" v-model="item.goodsSpecifications" placeholder="请输入退货产品规格" disabled>
                         </div>
                       </div>
                     </div>
@@ -131,15 +73,82 @@
                   <li>
                     <div class="item-content item-input">
                       <div class="item-inner">
-                        <div class="item-title item-label">备注</div>
+                        <div class="item-title item-label">产品批号</div>
                         <div class="item-input-wrap">
-                          <input type="text" name="remark" placeholder="请输入备注" :disabled="isReadonly">
+                          <input type="text" v-model="item.goodsBatchNumber" placeholder="请输入产品批号" disabled>
                         </div>
                       </div>
                     </div>
                   </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">产品数量</div>
+                        <div class="item-input-wrap">
+                          <input type="text" v-model="item.goodsNumber" placeholder="请输入产品数量" :disabled="isReadonly" required validate>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">开票价格</div>
+                        <div class="item-input-wrap">
+                          <input type="text" v-model="item.invoicePrice" placeholder="请输入开票价格" :disabled="isReadonly" required validate>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">零售价格</div>
+                        <div class="item-input-wrap">
+                          <input type="text" v-model="item.retailPrice" placeholder="请输入零售价格" :disabled="isReadonly" required validate>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <div class="card" v-if="!formType || formType === '1'">
+                    <div class="card-header">政策后实际采购扣率(按零售价计算)</div>
+                    <div class="card-content card-content-padding">
+                      <li>
+                        <div class="item-content item-input">
+                          <div class="item-inner">
+                            <div class="item-title item-label">比例(%)</div>
+                            <div class="item-input-wrap">
+                              <input type="text" v-model="item.scale" placeholder="请输入比例" :disabled="isReadonly" required validate>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content item-input">
+                          <div class="item-inner">
+                            <div class="item-title item-label">形式</div>
+                            <div class="item-input-wrap">
+                              <input type="text" v-model="item.shape" placeholder="请选择形式" :disabled="isReadonly" readonly @click="onClickSelect(index)">
+                              <invalid-msg :value="item.shape" ref="validShape"></invalid-msg>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content item-input">
+                          <div class="item-inner">
+                            <div class="item-title item-label">备注</div>
+                            <div class="item-input-wrap">
+                              <input type="text" v-model="item.remark" placeholder="请输入备注" :disabled="isReadonly" required validate>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </div>
+                  </div>
                 </div>
               </div>
+              <f7-button v-if="!isReadonly" outline class="col" style="margin: 0 20px" @click="addGood">添加商品</f7-button>
             </ul>
           </form>
           <div class="timeline">
@@ -175,6 +184,7 @@
   import AutoSelectList from 'base/auto-select-list/auto-select-list'
   import { api } from '@/config'
   import fetch from 'utils/fetch'
+  import InvalidMsg from 'base/invalid-msg/invalid-msg'
   export default {
     components: {
       f7Page,
@@ -184,7 +194,8 @@
       MerchantSelectList,
       GoodsSelectList,
       AutoSelectList,
-      f7Searchbar
+      f7Searchbar,
+      InvalidMsg
     },
     data() {
       return {
@@ -208,7 +219,10 @@
         selectList: ['买赠', '礼品赠送', '抽奖', '圆桌会议', '分销活动', '检测活动'],
         shape: '',
         timelines: [],
-        formType: this.$route.params.formType || ''
+        formType: this.$route.params.formType || '',
+        details: [],
+        selectGoodIndex: -1,
+        selectShapeIndex: -1
       }
     },
     mounted() {
@@ -222,6 +236,7 @@
           this.goodsSpecifications = res.data.goodsSpecifications
           this.goodsBatchNumber = res.data.goodsBatchNumber
           this.shape = res.data.shape
+          this.details = res.data.details
         })
         fetch('get', api.requireGoodsAuditInfo + this.listId, {}, this).then((res) => {
           this.timelines = res.data
@@ -269,8 +284,9 @@
           this.merchants = this.merchants.concat(res.data)
         })
       },
-      onClickGood() {
+      onClickGood(index) {
         if (this.goods.length > 0) {
+          this.selectGoodIndex = index
           this.$refs.goods.show()
         } else {
           let toast = this.$f7.toast.create({
@@ -282,9 +298,9 @@
         }
       },
       selectGoods(good) {
-        this.goodsName = good.goods_name
-        this.goodsSpecifications = good.goods_spec
-        this.goodsBatchNumber = good.wenhao
+        this.details[this.selectGoodIndex].goodsName = good.goods_name
+        this.details[this.selectGoodIndex].goodsSpecifications = good.goods_spec
+        this.details[this.selectGoodIndex].goodsBatchNumber = good.wenhao
       },
       searchMoreGoods() {
         if (this.goods.length >= this.maxGoodsCount) {
@@ -295,27 +311,54 @@
           this.goods = this.goods.concat(res.data)
         })
       },
-      onClickSelect() {
+      onClickSelect(index) {
+        this.selectShapeIndex = index
         this.$refs.selectList.show()
       },
       selectedItem(item) {
-        this.shape = item
+        this.details[this.selectShapeIndex].shape = item
       },
       onSave() {
         const app = this.$f7
-        let formData = app.form.convertToData('#apply-form')
-        if (this.listId && this.listId !== '0') {
-          fetch('put', api.requireGoodsInfo + this.listId, formData, this).then((res) => {
-            this.$router.replace('/yhsq-list')
-          })
-        } else {
-          fetch('post', api.requireGoodsInfoSave, formData, this).then((res) => {
-            this.$router.replace('/yhsq-list')
-          })
+        app.input.validateInputs('#apply-form')
+        this.$refs.validMerchantsName.valid()
+        this.$refs.validGoodsName && this.$refs.validGoodsName.forEach((item) => {
+          item.valid()
+        })
+        this.$refs.validShape && this.$refs.validShape.forEach((item) => {
+          item.valid()
+        })
+        if (document.querySelectorAll('#apply-form .item-input-error-message').length > 0) {
+          return
         }
+        let formData = app.form.convertToData('#apply-form')
+        formData.details = this.details
+        console.log(formData)
+        if (this.listId && this.listId !== '0') {
+          formData.id = this.listId
+        }
+        fetch('post', api.requireGoodsSaveDetail, formData, this, false).then((res) => {
+          this.$router.replace('/yhsq-list')
+        })
       },
       onCancel() {
         this.$router.go(-1)
+      },
+      addGood() {
+        this.details.push({
+          goodsName: '',
+          goodsSpecifications: '',
+          goodsBatchNumber: '',
+          goodsNumber: '',
+          invoicePrice: '',
+          retailPrice: '',
+          scale: '',
+          shape: '',
+          remark: ''
+        })
+      },
+      deleteGood(index) {
+        this.details.splice(index, 1)
       }
     }
   }

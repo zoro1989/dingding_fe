@@ -50,6 +50,7 @@ const api = {
   msgList: apiPath + 'api/msg/top',
 
   // 要货管理
+  requireGoodsSaveDetail: apiPath + 'merchants/requireGoods/info/saveWithGoodsDetail',
   requireGoodsInfo: apiPath + 'merchants/requireGoods/info/',
   requireGoodsInfoSave: apiPath + 'merchants/requireGoods/info/save',
   requireGoodsInfoGetDetail: apiPath + 'merchants/requireGoods/info/',
@@ -93,7 +94,10 @@ const api = {
   findMerchantTerminalUnApproveCount: apiPath + 'merchants/auditInfo/info/merchantTerminal/unApproveCount',
   findReturnGoodsUnApproveCount: apiPath + 'merchants/auditInfo/info/returnGoods/unApproveCount',
   // 获取权限
-  checkNextApproveUserExist: apiPath + 'merchants/auditInfo/info/checkNextApproveUserExist'
+  checkNextApproveUserExist: apiPath + 'merchants/auditInfo/info/checkNextApproveUserExist',
+  // 获取省市
+  getLinceseProvinceDict: apiPath + 'merchants/terminal/info/getLinceseProvinceDict',
+  getLinceseCityDict: apiPath + 'merchants/terminal/info/getLinceseCityDict'
 }
 
 const apiDict = {
