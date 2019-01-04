@@ -2,7 +2,7 @@
   <transition name="slide">
     <div class="apply">
       <div class="apply-form">
-        <div>
+        <div class="page-content">
           <form class="list" id="apply-form">
             <ul>
               <li>
@@ -194,6 +194,7 @@
   import fetch from 'utils/fetch'
   import * as dd from 'dingtalk-jsapi'
   import InvalidMsg from 'base/invalid-msg/invalid-msg'
+  import $ from 'dom7'
   export default {
     components: {
       f7Page,
@@ -415,22 +416,25 @@
         this.$refs.validImg.valid()
         this.$refs.validLicensePro.valid()
         this.$refs.validLicenseCity.valid()
-        if (document.querySelectorAll('#apply-form .item-input-error-message').length > 0) {
-          return
-        }
-        let formData = app.form.convertToData('#apply-form')
-        formData['licensePath'] = this.licensePath
-        formData['licensePro'] = this.licensePro
-        formData['licenseCity'] = this.licenseCity
-        if (this.listId && this.listId !== '0') {
-          fetch('put', api.terminalInfo + this.listId, formData, this).then((res) => {
-            this.$router.replace('/apply-list')
-          })
-        } else {
-          fetch('post', api.terminalInfoSave, formData, this).then((res) => {
-            this.$router.replace('/apply-list')
-          })
-        }
+        this.$nextTick(() => {
+          if (document.querySelectorAll('#apply-form .item-input-invalid').length > 0) {
+            app.input.scrollIntoView($('#apply-form .item-input-invalid').parent(), 500, false, true)
+            return
+          }
+          let formData = app.form.convertToData('#apply-form')
+          formData['licensePath'] = this.licensePath
+          formData['licensePro'] = this.licensePro
+          formData['licenseCity'] = this.licenseCity
+          if (this.listId && this.listId !== '0') {
+            fetch('put', api.terminalInfo + this.listId, formData, this).then((res) => {
+              this.$router.replace('/apply-list')
+            })
+          } else {
+            fetch('post', api.terminalInfoSave, formData, this).then((res) => {
+              this.$router.replace('/apply-list')
+            })
+          }
+        })
       },
       onCancel() {
         this.$router.go(-1)

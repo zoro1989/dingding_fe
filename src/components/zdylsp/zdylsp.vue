@@ -238,14 +238,16 @@
       onSave() {
         const app = this.$f7
         if (this.tableId && this.auditId && this.auditStep) {
-          if (this.isPass && this.auditStep === '3' && (!this.auditUserId || !this.auditUserName)) {
-            let toast = this.$f7.toast.create({
-              text: '请选择开票人！',
-              position: 'center',
-              closeTimeout: 2000
-            })
-            toast.open()
-            return
+          if (this.auditStatus === '待审核' || this.auditStatus === 'wait') {
+            if (this.isPass && this.auditStep === '3' && (!this.auditUserId || !this.auditUserName)) {
+              let toast = this.$f7.toast.create({
+                text: '请选择开票人！',
+                position: 'center',
+                closeTimeout: 2000
+              })
+              toast.open()
+              return
+            }
           }
           let formData = app.form.convertToData('#audit-form')
           formData['tableId'] = this.tableId
@@ -253,7 +255,7 @@
           formData['auditStep'] = this.auditStep
           formData['auditResult'] = this.isPass ? '1' : '0'
           formData['auditType'] = 'merchantTerminal'
-          fetch('post', api.terminalAuditForm, formData, this).then((res) => {
+          fetch('post', api.terminalAuditForm, formData, this, false).then((res) => {
             this.$router.replace('/zdylsp-list')
           })
         }

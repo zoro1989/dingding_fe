@@ -1,6 +1,6 @@
 <template>
-  <div class="item-input-invalid">
-    <div class="item-input-error-message" v-if="show">{{show}}</div>
+  <div class="item-input-invalid" v-if="show">
+    <div class="item-input-error-message">{{show}}</div>
   </div>
 </template>
 <script>

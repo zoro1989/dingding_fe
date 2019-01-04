@@ -2,7 +2,7 @@
   <transition name="slide">
     <div class="yhsq">
       <div class="apply-form">
-        <div>
+        <div class="page-content">
           <form class="list" id="apply-form">
             <ul>
               <li>
@@ -86,6 +86,16 @@
                         <div class="item-title item-label">产品数量</div>
                         <div class="item-input-wrap">
                           <input type="text" v-model="item.goodsNumber" placeholder="请输入产品数量" :disabled="isReadonly" required validate>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li v-if="isReadonly">
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">实发商品数量</div>
+                        <div class="item-input-wrap">
+                          <input type="text" v-model="item.realGoodsNum" :disabled="isReadonly" placeholder="请输入实发商品数量" required validate>
                         </div>
                       </div>
                     </div>
@@ -185,6 +195,7 @@
   import { api } from '@/config'
   import fetch from 'utils/fetch'
   import InvalidMsg from 'base/invalid-msg/invalid-msg'
+  import $ from 'dom7'
   export default {
     components: {
       f7Page,
@@ -328,17 +339,19 @@
         this.$refs.validShape && this.$refs.validShape.forEach((item) => {
           item.valid()
         })
-        if (document.querySelectorAll('#apply-form .item-input-error-message').length > 0) {
-          return
-        }
-        let formData = app.form.convertToData('#apply-form')
-        formData.details = this.details
-        console.log(formData)
-        if (this.listId && this.listId !== '0') {
-          formData.id = this.listId
-        }
-        fetch('post', api.requireGoodsSaveDetail, formData, this, false).then((res) => {
-          this.$router.replace('/yhsq-list')
+        this.$nextTick(() => {
+          if (document.querySelectorAll('#apply-form .item-input-invalid').length > 0) {
+            app.input.scrollIntoView($('#apply-form .item-input-invalid').parent(), 500, false, true)
+            return
+          }
+          let formData = app.form.convertToData('#apply-form')
+          formData.details = this.details
+          if (this.listId && this.listId !== '0') {
+            formData.id = this.listId
+          }
+          fetch('post', api.requireGoodsSaveDetail, formData, this, false).then((res) => {
+            this.$router.replace('/yhsq-list')
+          })
         })
       },
       onCancel() {

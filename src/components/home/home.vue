@@ -362,9 +362,9 @@
         dd.ready(function() {
           dd.runtime.permission.requestAuthCode({
             // 新
-//            corpId: 'dingabd6050b5675cc3035c2f4657eb6378f',
+            corpId: 'dingabd6050b5675cc3035c2f4657eb6378f',
             // 旧
-            corpId: 'ding9cb5b465af827a4935c2f4657eb6378f',
+//            corpId: 'ding9cb5b465af827a4935c2f4657eb6378f',
             onSuccess: function(result) {
               console.log(result)
               fetch('post', api.dingtalkAuth, {code: result.code}, this).then((res) => {

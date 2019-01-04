@@ -2,7 +2,7 @@
   <transition name="slide">
     <div class="thsq">
       <div class="apply-form">
-        <div>
+        <div class="page-content">
           <form class="list" id="apply-form">
             <ul>
               <li>
@@ -141,6 +141,7 @@
   import { api } from '@/config'
   import fetch from 'utils/fetch'
   import InvalidMsg from 'base/invalid-msg/invalid-msg'
+  import $ from 'dom7'
   export default {
     components: {
       f7Page,
@@ -262,19 +263,22 @@
         app.input.validateInputs('#apply-form')
         this.$refs.validMerchantsName.valid()
         this.$refs.validGoodsName.valid()
-        if (document.querySelectorAll('#apply-form .item-input-error-message').length > 0) {
-          return
-        }
-        let formData = app.form.convertToData('#apply-form')
-        if (this.listId && this.listId !== '0') {
-          fetch('put', api.returnGoodsInfo + this.listId, formData, this).then((res) => {
-            this.$router.replace('/thsq-list')
-          })
-        } else {
-          fetch('post', api.returnGoodsInfoSave, formData, this).then((res) => {
-            this.$router.replace('/thsq-list')
-          })
-        }
+        this.$nextTick(() => {
+          if (document.querySelectorAll('#apply-form .item-input-invalid').length > 0) {
+            app.input.scrollIntoView($('#apply-form .item-input-invalid').parent(), 500, false, true)
+            return
+          }
+          let formData = app.form.convertToData('#apply-form')
+          if (this.listId && this.listId !== '0') {
+            fetch('put', api.returnGoodsInfo + this.listId, formData, this).then((res) => {
+              this.$router.replace('/thsq-list')
+            })
+          } else {
+            fetch('post', api.returnGoodsInfoSave, formData, this).then((res) => {
+              this.$router.replace('/thsq-list')
+            })
+          }
+        })
       },
       onCancel() {
         this.$router.go(-1)

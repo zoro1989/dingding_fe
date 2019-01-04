@@ -21,8 +21,8 @@
                     <span>查看</span><i class="fa fa-angle-right text-color-gray"></i>
                   </div>
                 </div>
-                <div class="item-subtitle">产品名称：{{item.goods_name}}</div>
-                <div class="item-text">要货人名称：{{item.require_goods_name}}</div>
+                <!--<div class="item-subtitle">产品名称：{{item.goods_name}}</div>-->
+                <div class="item-subtitle">要货人名称：{{item.require_goods_name}}</div>
                 <div class="item-text">要货人分公司：{{item.require_goods_office}}</div>
                 <div class="item-text">要货人支公司：{{item.require_goods_branch_office}}</div>
                 <div class="item-text" :class="auditStatusColor(item.audit_status)">{{item.audit_status}}</div>

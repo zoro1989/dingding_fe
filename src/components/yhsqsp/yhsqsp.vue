@@ -2,7 +2,7 @@
   <transition name="slide">
     <div class="yhsqsp">
       <div class="apply-form">
-        <div>
+        <div class="page-content">
           <form class="list" id="apply-form">
             <ul>
               <li>
@@ -45,75 +45,15 @@
                   </div>
                 </div>
               </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">产品名称</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="goodsName" placeholder="无" readonly>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">产品规格</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="goodsSpecifications" placeholder="无" readonly>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">产品数量</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="goodsNumber" v-model="goodsNumber" placeholder="无" :disabled="!((auditStatus === '待审核' || auditStatus === 'wait') && (auditStep === '3' || auditStep === '4'))">
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">产品批号</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="goodsBatchNumber" placeholder="无" readonly>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">开票价格</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="invoicePrice" placeholder="无" readonly>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">零售价格</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="retailPrice" placeholder="无" readonly>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <div class="card" v-if="!formType || formType === '1'">
-                <div class="card-header">政策后实际采购扣率（按零售价计算）</div>
+              <div class="card" v-for="(item, index) in details" :key="index">
+                <div class="card-header">产品{{index + 1}}</div>
                 <div class="card-content card-content-padding">
                   <li>
                     <div class="item-content item-input">
                       <div class="item-inner">
-                        <div class="item-title item-label">比例</div>
+                        <div class="item-title item-label">产品名称</div>
                         <div class="item-input-wrap">
-                          <input type="text" name="scale" placeholder="无" readonly>
+                          <input type="text" v-model="item.goodsName" placeholder="无" readonly>
                         </div>
                       </div>
                     </div>
@@ -121,9 +61,9 @@
                   <li>
                     <div class="item-content item-input">
                       <div class="item-inner">
-                        <div class="item-title item-label">形式</div>
+                        <div class="item-title item-label">产品规格</div>
                         <div class="item-input-wrap">
-                          <input type="text" name="shape" id="shape" placeholder="无" readonly>
+                          <input type="text" v-model="item.goodsSpecifications" placeholder="无" readonly>
                         </div>
                       </div>
                     </div>
@@ -131,13 +71,88 @@
                   <li>
                     <div class="item-content item-input">
                       <div class="item-inner">
-                        <div class="item-title item-label">备注</div>
+                        <div class="item-title item-label">产品数量</div>
                         <div class="item-input-wrap">
-                          <input type="text" name="remark" placeholder="无" readonly>
+                          <input type="text" name="goodsNumber" v-model="item.goodsNumber" placeholder="无" :disabled="!((auditStatus === '待审核' || auditStatus === 'wait') && (auditStep === '3' || auditStep === '4'))" required validate>
                         </div>
                       </div>
                     </div>
                   </li>
+                  <li v-if="auditStep === '3' || auditStep === '4' || auditStep === '5'">
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">实发商品数量</div>
+                        <div class="item-input-wrap">
+                          <input type="text" name="realGoodsNum" v-model="item.realGoodsNum" :disabled="auditStep === '5'" placeholder="无" required validate>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">产品批号</div>
+                        <div class="item-input-wrap">
+                          <input type="text" v-model="item.goodsBatchNumber" placeholder="无" readonly>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">开票价格</div>
+                        <div class="item-input-wrap">
+                          <input type="text" v-model="item.invoicePrice" placeholder="无" readonly>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">零售价格</div>
+                        <div class="item-input-wrap">
+                          <input type="text" v-model="item.retailPrice" placeholder="无" readonly>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <div class="card" v-if="!formType || formType === '1'">
+                    <div class="card-header">政策后实际采购扣率（按零售价计算）</div>
+                    <div class="card-content card-content-padding">
+                      <li>
+                        <div class="item-content item-input">
+                          <div class="item-inner">
+                            <div class="item-title item-label">比例</div>
+                            <div class="item-input-wrap">
+                              <input type="text" v-model="item.scale" placeholder="无" readonly>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content item-input">
+                          <div class="item-inner">
+                            <div class="item-title item-label">形式</div>
+                            <div class="item-input-wrap">
+                              <input type="text" v-model="item.shape" placeholder="无" readonly>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content item-input">
+                          <div class="item-inner">
+                            <div class="item-title item-label">备注</div>
+                            <div class="item-input-wrap">
+                              <input type="text" v-model="item.remark" placeholder="无" readonly>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </div>
+                  </div>
                 </div>
               </div>
             </ul>
@@ -157,7 +172,7 @@
           <div v-if="auditStatus === '待审核' || auditStatus === 'wait'">
             <form class="list" id="audit-form">
               <ul>
-                <li class="item-content item-input" v-if="!(formType === '1' || (formType === '2' && auditStep === '1'))">
+                <li class="item-content item-input" v-if="((existUser === '1' && auditStep === '3') || existUser === '2') || !(formType === '1' || (formType === '2' && auditStep === '1'))">
                   <div class="item-inner">
                     <div class="item-title item-label">审核是否通过</div>
                     <div class="item-input-wrap">
@@ -169,7 +184,7 @@
                     </div>
                   </div>
                 </li>
-                <li class="item-content item-input" v-if="!(formType === '1' || (formType === '2' && auditStep === '1'))">
+                <li class="item-content item-input" v-if="((existUser === '1' && auditStep === '3') || existUser === '2') || !(formType === '1' || (formType === '2' && auditStep === '1'))">
                   <div class="item-inner">
                     <div class="item-title item-label">审批意见</div>
                     <div class="item-input-wrap">
@@ -177,7 +192,7 @@
                     </div>
                   </div>
                 </li>
-                <li class="item-content item-input" v-if="(existUser === '1' && auditStep === '3') || existUser === '2'">
+                <li class="item-content item-input" v-if="isPass && ((existUser === '1' && auditStep === '3') || existUser === '2')">
                   <div class="item-inner">
                     <div class="item-title item-label">开票员</div>
                     <div class="item-input-wrap">
@@ -212,6 +227,7 @@
   import AudituserSelectList from 'base/audituser-select-list/audituser-select-list'
   import { api } from '@/config'
   import fetch from 'utils/fetch'
+  import $ from 'dom7'
   export default {
     components: {
       f7Page,
@@ -229,7 +245,6 @@
         auditStatus: this.$route.params.auditStatus || '',
         timelines: [],
         isPass: true,
-        goodsNumber: 0,
         auditUsers: [],
         maxAuditUsersCount: 0,
         pageNoAuditUser: 1,
@@ -237,7 +252,8 @@
         auditUserId: '',
         auditUserName: '',
         formType: this.$route.params.formType || '',
-        existUser: ''
+        existUser: '',
+        details: []
       }
     },
     mounted() {
@@ -245,8 +261,8 @@
       const app = self.$f7
       if (this.tableId && this.tableId !== '0') {
         fetch('get', api.requireGoodsInfoGetDetail + this.tableId, {}, this).then((res) => {
-          this.goodsNumber = res.data.goodsNumber
           app.form.fillFromData('#apply-form', res.data)
+          this.details = res.data.details
         })
         fetch('get', api.requireGoodsAuditInfo + this.tableId, {}, this).then((res) => {
           this.timelines = res.data
@@ -292,75 +308,93 @@
       },
       onSave() {
         const app = this.$f7
-        if (this.tableId && this.auditId && this.auditStep) {
-          if (this.existUser === '0') {
-            let toast = this.$f7.toast.create({
-              text: '未找到下一步审批人！',
-              position: 'center',
-              closeTimeout: 2000
-            })
-            toast.open()
+        app.input.validateInputs('#apply-form')
+        this.$nextTick(() => {
+          if (document.querySelectorAll('#apply-form .item-input-invalid').length > 0) {
+            app.input.scrollIntoView($('#apply-form .item-input-invalid').parent(), 500, false, true)
             return
           }
-          if (this.isPass && ((this.auditStep === '3' && this.existUser === '1') || this.existUser === '2') && (!this.auditUserId || !this.auditUserName)) {
-            let toast = this.$f7.toast.create({
-              text: '请选择开票人！',
-              position: 'center',
-              closeTimeout: 2000
+          if (this.tableId && this.auditId && this.auditStep) {
+            if (this.existUser === '0') {
+              let toast = this.$f7.toast.create({
+                text: '未找到下一步审批人！',
+                position: 'center',
+                closeTimeout: 2000
+              })
+              toast.open()
+              return
+            }
+            if ((this.auditStatus === '待审核' || this.auditStatus === 'wait') && !(this.formType === '1' || (this.formType === '2' && this.auditStep === '1'))) {
+              if (this.isPass && ((this.auditStep === '3' && this.existUser === '1') || this.existUser === '2') && (!this.auditUserId || !this.auditUserName)) {
+                let toast = this.$f7.toast.create({
+                  text: '请选择开票人！',
+                  position: 'center',
+                  closeTimeout: 2000
+                })
+                toast.open()
+                return
+              }
+            }
+            let formData = app.form.convertToData('#audit-form')
+            formData['details'] = this.details
+            formData['tableId'] = this.tableId
+            formData['id'] = this.auditId
+            formData['auditStep'] = this.auditStep
+            formData['auditResult'] = this.isPass ? '1' : '0'
+            formData['auditType'] = 'requireGoods'
+            fetch('post', api.terminalAuditForm, formData, this, false).then((res) => {
+              this.$router.replace('/yhsqsp-list')
             })
-            toast.open()
-            return
           }
-          let formData = app.form.convertToData('#audit-form')
-          formData['tableId'] = this.tableId
-          formData['id'] = this.auditId
-          formData['auditStep'] = this.auditStep
-          formData['auditResult'] = this.isPass ? '1' : '0'
-          formData['auditType'] = 'requireGoods'
-          formData['goodsNumber'] = this.goodsNumber
-          fetch('post', api.terminalAuditForm, formData, this).then((res) => {
-            this.$router.replace('/yhsqsp-list')
-          })
-        }
+        })
       },
       onAudit(txt) {
         const app = this.$f7
-        let _this = this
-        let params = {
-          tableId: this.tableId,
-          id: this.auditId,
-          auditStep: this.auditStep,
-          auditResult: '1',
-          auditStatus: this.auditStatus,
-          auditType: 'requireGoods'
-        }
-        if (this.formType === '1' || (this.formType === '2' && this.auditStep === '1')) {
-          if (!this.auditUserId || !this.auditUserName) {
-            let toast = this.$f7.toast.create({
-              text: '请选择开票人！',
-              position: 'center',
-              closeTimeout: 2000
-            })
-            toast.open()
+        app.input.validateInputs('#apply-form')
+        this.$nextTick(() => {
+          if (document.querySelectorAll('#apply-form .item-input-invalid').length > 0) {
+            app.input.scrollIntoView($('#apply-form .item-input-invalid').parent(), 500, false, true)
             return
-          } else {
-            params.auditUserId = this.auditUserId
-            params.auditUserName = this.auditUserName
-            params.auditStatus = '2'
           }
-        }
-        if (this.formType === '3') {
-          params.auditStatus = '4'
-        }
-        app.dialog.confirm('确定要' + txt + '吗?', '提示', function () {
-          fetch('post', api.terminalAudit, params, _this).then((res) => {
-            let toast = app.toast.create({
-              text: '已完成' + txt + '！',
-              position: 'center',
-              closeTimeout: 2000
+          let _this = this
+          let params = {
+            tableId: this.tableId,
+            id: this.auditId,
+            auditStep: this.auditStep,
+            auditResult: '1',
+//          auditStatus: this.auditStatus,
+            auditType: 'requireGoods'
+          }
+          if ((this.auditStatus === '待审核' || this.auditStatus === 'wait') && ((this.existUser === '1' && this.auditStep === '3') || this.existUser === '2')) {
+            if (this.isPass) {
+              if (!this.auditUserId || !this.auditUserName) {
+                let toast = this.$f7.toast.create({
+                  text: '请选择开票人！',
+                  position: 'center',
+                  closeTimeout: 2000
+                })
+                toast.open()
+                return
+              } else {
+                params.auditUserId = this.auditUserId
+                params.auditUserName = this.auditUserName
+//              params.auditStatus = '2'
+              }
+            }
+          }
+//        if (this.formType === '3') {
+//          params.auditStatus = '4'
+//        }
+          app.dialog.confirm('确定要' + txt + '吗?', '提示', function () {
+            fetch('post', api.terminalAuditForm, params, _this, false).then((res) => {
+              let toast = app.toast.create({
+                text: '已完成' + txt + '！',
+                position: 'center',
+                closeTimeout: 2000
+              })
+              toast.open()
+              _this.$router.replace('/yhsqsp-list')
             })
-            toast.open()
-            _this.$router.replace('/yhsqsp-list')
           })
         })
       },

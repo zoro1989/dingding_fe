@@ -2,7 +2,7 @@
   <transition name="slide">
     <div class="lszb">
       <div class="apply-form">
-        <div>
+        <div class="page-content">
           <form class="list" id="apply-form">
             <ul>
               <li>
@@ -267,6 +267,7 @@
   import fetch from 'utils/fetch'
   import * as dd from 'dingtalk-jsapi'
   import InvalidMsg from 'base/invalid-msg/invalid-msg'
+  import $ from 'dom7'
   export default {
     components: {
       f7Page,
@@ -512,27 +513,30 @@
         this.$refs.validImg.valid()
         this.$refs.validLicensePro.valid()
         this.$refs.validLicenseCity.valid()
-        if (document.querySelectorAll('#apply-form .item-input-error-message').length > 0) {
-          return
-        }
-        let formData = app.form.convertToData('#apply-form')
-        formData['licensePath'] = this.licensePath
-        if (formData['isSigned'] === '签订') {
-          formData['isSigned'] = '0'
-        } else if (formData['isSigned'] === '未签订') {
-          formData['isSigned'] = '1'
-        }
-        formData['licensePro'] = this.licensePro
-        formData['licenseCity'] = this.licenseCity
-        if (this.listId && this.listId !== '0') {
-          fetch('put', api.chaintotalInfo + this.listId, formData, this).then((res) => {
-            this.$router.replace('/lszb-list')
-          })
-        } else {
-          fetch('post', api.chaintotalInfoSave, formData, this).then((res) => {
-            this.$router.replace('/lszb-list')
-          })
-        }
+        this.$nextTick(() => {
+          if (document.querySelectorAll('#apply-form .item-input-invalid').length > 0) {
+            app.input.scrollIntoView($('#apply-form .item-input-invalid').parent(), 500, false, true)
+            return
+          }
+          let formData = app.form.convertToData('#apply-form')
+          formData['licensePath'] = this.licensePath
+          if (formData['isSigned'] === '签订') {
+            formData['isSigned'] = '0'
+          } else if (formData['isSigned'] === '未签订') {
+            formData['isSigned'] = '1'
+          }
+          formData['licensePro'] = this.licensePro
+          formData['licenseCity'] = this.licenseCity
+          if (this.listId && this.listId !== '0') {
+            fetch('put', api.chaintotalInfo + this.listId, formData, this).then((res) => {
+              this.$router.replace('/lszb-list')
+            })
+          } else {
+            fetch('post', api.chaintotalInfoSave, formData, this).then((res) => {
+              this.$router.replace('/lszb-list')
+            })
+          }
+        })
       },
       onCancel() {
         this.$router.go(-1)
